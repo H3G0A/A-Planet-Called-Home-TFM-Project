@@ -12,7 +12,7 @@ public class OrbLauncher : MonoBehaviour
     private Quaternion _initialLauncherRotation;
     void Awake()
     {
-        _initialLauncherRotation = transform.localRotation;
+        _initialLauncherRotation = transform.rotation;
     }
 
     // Update is called once per frame
