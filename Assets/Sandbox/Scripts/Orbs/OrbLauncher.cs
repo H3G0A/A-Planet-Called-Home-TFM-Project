@@ -43,7 +43,8 @@ public class OrbLauncher : MonoBehaviour
         GameObject _orbInstance = GameObject.Instantiate(_orb, _firePoint.position, Quaternion.identity);
 
         Vector3 _forceVector = _firePoint.forward * _force;
-        _orbInstance.GetComponent<Rigidbody>().AddForce(_forceVector);
+        Rigidbody _rb = _orbInstance.GetComponent<Rigidbody>();
+        _rb.AddForce(_forceVector, ForceMode.Impulse);
 
         ResetLauncher();
     }
