@@ -1,29 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static GlobalParameters;
 
 public abstract class OrbBehaviour : MonoBehaviour
 {
-    const string ORB_TAG = "Orb";
+    //List of object TAGS which their collisions will be ignored by the orb
+    List<string> _ignoreCollisions = new(){ 
+                                            ORB_TAG, PLAYER_TAG
+                                        };
 
-    //Destroy after a while if has not collided
-    private void Start()
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    private void Start()//Destroy after a while if has not collided
     {
         Destroy(this.gameObject, 10);
     }
 
-    //Apply orb effect on collision and destroy gameObject
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (!other.gameObject.CompareTag(ORB_TAG)) //Avoid collision between orbs
+        if (!_ignoreCollisions.Contains(collision.collider.tag)) //Avoid collision between orbs
         {
-            DisableObject();
+            Debug.Log(collision.gameObject.name);
+            DisableOrb();
             ApplyEffect();
             Destroy(this.gameObject);
-        }   
+        }
     }
 
-    private void DisableObject()
+    private void DisableOrb()
     {
         this.gameObject.GetComponent<MeshRenderer>().enabled = false;
         this.gameObject.GetComponent<Collider>().enabled = false;
