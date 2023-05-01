@@ -7,18 +7,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 399412948, guid: 7be1190a44bcc214ab0f291142553597, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 399412948, guid: 7be1190a44bcc214ab0f291142553597, type: 3}
-      propertyPath: m_Interpolate
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 399412948, guid: 7be1190a44bcc214ab0f291142553597, type: 3}
-      propertyPath: m_CollisionDetection
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 7927450882420344652, guid: 7be1190a44bcc214ab0f291142553597, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -91,4 +79,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _force: 10
-  _radius: 3
+  _radius: 5

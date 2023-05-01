@@ -17,11 +17,7 @@ public class ImpactReceiver : MonoBehaviour
 
     private void Update()
     {
-        if(impact.magnitude > 0.2)
-        {
-            _charController.Move(impact * Time.deltaTime);
-            impact = Vector3.Lerp(impact, Vector3.zero, 5 * Time.deltaTime);
-        }
+        ManageImpact();
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -30,5 +26,14 @@ public class ImpactReceiver : MonoBehaviour
     {
         dir.Normalize();
         impact += dir * force / mass;
+    }
+
+    private void ManageImpact()
+    {
+        if (impact.magnitude > 0.2)
+        {
+            _charController.Move(impact * Time.deltaTime);
+            impact = Vector3.Lerp(impact, Vector3.zero, 5 * Time.deltaTime);
+        }
     }
 }

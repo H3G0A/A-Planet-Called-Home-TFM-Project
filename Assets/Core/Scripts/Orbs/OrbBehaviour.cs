@@ -12,7 +12,7 @@ public abstract class OrbBehaviour : MonoBehaviour
 
     ////////////////////////////////////////////////////////////////////////////////////
 
-    private void Start()//Destroy after a while if has not collided
+    private void Start() //Destroy after a while if has not collided
     {
         Destroy(this.gameObject, 10);
     }
@@ -21,7 +21,6 @@ public abstract class OrbBehaviour : MonoBehaviour
     {
         if (!_ignoreCollisions.Contains(collision.collider.tag)) //Avoid collision between orbs
         {
-            Debug.Log(collision.gameObject.name);
             DisableOrb();
             ApplyEffect();
             Destroy(this.gameObject);

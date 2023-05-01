@@ -6,6 +6,7 @@ public class DispersionOrb : OrbBehaviour
 {
     [SerializeField] float _force;
     [SerializeField] float _radius;
+    ImpactReceiver _impactReceiver;
 
     protected override void ApplyEffect() //The orb pushes all objects inside radius away
     {
@@ -18,44 +19,49 @@ public class DispersionOrb : OrbBehaviour
             {
                 Vector3 _forceDirection = CalculateForceDirection(this.transform.position, col.transform.position);
 
-                Debug.Log("box: " + col.transform.position);
-                Debug.Log("orb: " + this.transform.position);
-                Debug.Log("direction" + _forceDirection);
-
-                rb.AddForce(_forceDirection * _force, ForceMode.VelocityChange); //VelocityChange disregards the object mass so it does not care that its mas is high
+                rb.AddForce(_forceDirection * _force, ForceMode.Impulse); //VelocityChange disregards the object mass so it does not care that its mas is high
             }
             else if (col.gameObject.CompareTag(GlobalParameters.PLAYER_TAG)) //Range hits player
             {
                 CharacterController _charController = col.GetComponent<CharacterController>();
                 
-                Vector3 _forceDirection = (this.transform.position - col.transform.TransformPoint(_charController.center));
+                Vector3 _forceDirection = (col.transform.TransformPoint(_charController.center) - this.transform.position);
 
-                col.GetComponent<ImpactReceiver>().AddImpact(_forceDirection, _force);
+                if (!_impactReceiver)
+                {
+                    _impactReceiver = col.GetComponent<ImpactReceiver>();
+                }
 
-                Debug.Log("direction" + _forceDirection);
-                //Debug.Log(col.transform.TransformPoint(_charController.center));
-                //Debug.Log("direction" + _forceDirection);
-
-                //_charController.Move(_forceDirection * _force);
+                _impactReceiver.AddImpact(_forceDirection, _force);
             }
         }
     }
 
-    private Vector3 CalculateForceDirection(Vector3 explosionCenter, Vector3 objectPosition) 
+    private Vector3 CalculateForceDirection(Vector3 explosionCenter, Vector3 objectPosition) //Direction when pushing a non-player object
     {
         Vector3 _forceDirection = objectPosition - explosionCenter;
-        
-        _forceDirection.y = 0; //Disable vertical push
 
-        if(Mathf.Abs(_forceDirection.x) > Mathf.Abs(_forceDirection.z)) //Push only the greatest of the axis
-        {
-            _forceDirection.z = 0;
-        }
-        else
+        //Push only in the direction of the strongest axis
+        float _YAxis = Mathf.Abs(_forceDirection.y);
+        float _XAxis = Mathf.Abs(_forceDirection.x);
+        float _ZAxis = Mathf.Abs(_forceDirection.z);
+
+        if ((_YAxis > _XAxis) && (_YAxis > _ZAxis)) //If "y" is the strongest axis, then don't move the object
         {
             _forceDirection.x = 0;
+            _forceDirection.z = 0;
         }
+        //else if (_XAxis > _ZAxis) 
+        //{
+        //    _forceDirection.z = 0;
+        //}
+        //else
+        //{
+        //    _forceDirection.x = 0;
+        //}
 
+        _forceDirection.y = 0; //Disable vertical push
+        
         return _forceDirection.normalized;
     }
 }
