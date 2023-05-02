@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TestOrb : OrbBehaviour
 {
-    protected override void ApplyEffect()
+    protected override void ApplyEffect(Collision collision)
     {
         Debug.Log("Apply orb effect");
     }

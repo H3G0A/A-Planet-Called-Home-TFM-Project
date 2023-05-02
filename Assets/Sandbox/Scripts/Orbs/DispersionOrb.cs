@@ -8,7 +8,7 @@ public class DispersionOrb : OrbBehaviour
     [SerializeField] float _radius;
     ImpactReceiver _impactReceiver;
 
-    protected override void ApplyEffect() //The orb pushes all objects inside radius away
+    protected override void ApplyEffect(Collision collision) //The orb pushes all objects inside radius away
     {
         Collider[] _colliders = Physics.OverlapSphere(transform.position, _radius); //Store every collider in range
         
