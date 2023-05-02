@@ -36,12 +36,14 @@ namespace StarterAssets
 		[Header("Player Grounded")]
 		[Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
 		public bool Grounded = true;
+		public bool Sliped = false;
 		[Tooltip("Useful for rough ground")]
 		public float GroundedOffset = -0.14f;
 		[Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
 		public float GroundedRadius = 0.5f;
 		[Tooltip("What layers the character uses as ground")]
 		public LayerMask GroundLayers;
+		public LayerMask SlipLayers;
 
 		[Header("Cinemachine")]
 		[Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
@@ -114,6 +116,7 @@ namespace StarterAssets
 		{
 			JumpAndGravity();
 			GroundedCheck();
+			SlipCheck();
 			Move();
 		}
 
@@ -128,6 +131,14 @@ namespace StarterAssets
 			Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
 			Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
 		}
+
+		private void SlipCheck(){
+            // set sphere position, with offset
+            Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
+            Sliped = Physics.CheckSphere(spherePosition, GroundedRadius, SlipLayers, QueryTriggerInteraction.Ignore);
+            //this.GetComponent<Rigidbody>().AddForce(-transform.forward * 500, ForceMode.Acceleration);
+        }
+
 
 		private void CameraRotation()
 		{
@@ -153,8 +164,11 @@ namespace StarterAssets
 
 		private void Move()
 		{
-			// set target speed based on move speed, sprint speed and if sprint is pressed
 			float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+			if(Sliped){
+				targetSpeed = MoveSpeed * 2.0f;
+			}
+			// set target speed based on move speed, sprint speed and if sprint is pressed
 
 			// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 

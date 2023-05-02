@@ -22,7 +22,7 @@ public abstract class OrbBehaviour : MonoBehaviour
         if (!_ignoreCollisions.Contains(collision.collider.tag)) //Avoid collision between orbs
         {
             DisableOrb();
-            ApplyEffect();
+            ApplyEffect(collision);
             Destroy(this.gameObject);
         }
     }
@@ -32,5 +32,5 @@ public abstract class OrbBehaviour : MonoBehaviour
         this.gameObject.GetComponent<MeshRenderer>().enabled = false;
         this.gameObject.GetComponent<Collider>().enabled = false;
     }
-    protected abstract void ApplyEffect();
+    protected abstract void ApplyEffect(Collision collision);
 }
