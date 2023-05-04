@@ -16,7 +16,7 @@ public class FirstPersonController : MonoBehaviour
 	[SerializeField] float _speedChangeRate = 10.0f;
 
 	[Space(10)]
-	[SerializeField] Vector3 _finalMovement = Vector3.zero;
+	[SerializeField] Vector3 _finalInputMovement = Vector3.zero;
 
 	[Space(10)]
 	[Tooltip("The height the player can jump")]
@@ -101,15 +101,17 @@ public class FirstPersonController : MonoBehaviour
 
     void Update()
     {
+		//Ice orb
+		SlipCheck();
+
 		//Player movement
 		GroundCheck();
 		ManageGravity();
 		ManageJump();
 		ManageMovement();
-		ApplyMovement();
 
-		//Ice orb
-		SlipCheck();
+		//Apply movement once everything else has been set
+		ApplyMovement();
     }
 
     void LateUpdate()
@@ -143,7 +145,7 @@ public class FirstPersonController : MonoBehaviour
 		if (_move == Vector2.zero) _targetSpeed = 0.0f;
 
 		// a reference to the players current horizontal velocity
-		float _currentHorizontalSpeed = new Vector3(_finalMovement.x, 0.0f, _finalMovement.z).magnitude;
+		float _currentHorizontalSpeed = new Vector3(_finalInputMovement.x, 0.0f, _finalInputMovement.z).magnitude;
 
 		float _speedOffset = 0.1f;
 
@@ -167,8 +169,8 @@ public class FirstPersonController : MonoBehaviour
 
 
 		// move the player
-		_finalMovement = (_inputDirection.normalized * _speed + new Vector3(0.0f, _verticalVelocity, 0.0f));
-		MoveCharacter(_finalMovement * Time.deltaTime);
+		_finalInputMovement = (_inputDirection.normalized * _speed + new Vector3(0.0f, _verticalVelocity, 0.0f));
+		MoveCharacter(_finalInputMovement * Time.deltaTime);
 	}
 
 	private void ManageGravity()
