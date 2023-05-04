@@ -7,7 +7,7 @@ public class SlipOrb : OrbBehaviour
     [SerializeField] GameObject SlipZone;
     [SerializeField] float _radius;
 
-    protected override void ApplyEffect(Collision collision) //The orb change the weigth of the object that impacts.
+    protected override void ApplyEffect(Collision collision)
     {        
         Collider[] _colliders = Physics.OverlapSphere(transform.position, _radius); //Store every collider in range
         foreach(Collider col in _colliders)

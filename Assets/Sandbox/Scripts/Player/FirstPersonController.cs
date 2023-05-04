@@ -11,8 +11,11 @@ public class FirstPersonController : MonoBehaviour
 	[SerializeField] float _moveSpeed = 4.0f;
 	[Tooltip("Sprint speed of the character in m/s")]
 	[SerializeField] float _sprintSpeed = 6.0f;
+	[SerializeField] float _slipMultiplier = 2f;
 	[Tooltip("Acceleration and deceleration")]
 	[SerializeField] float _speedChangeRate = 10.0f;
+
+	[Space(10)]
 	[SerializeField] Vector3 _finalMovement = Vector3.zero;
 
 	[Space(10)]
@@ -29,6 +32,7 @@ public class FirstPersonController : MonoBehaviour
 	[Header("Player Grounded")]
 	[Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
 	[SerializeField] bool _grounded = true;
+	[SerializeField] bool _sliped = false;
 	[Tooltip("Useful for rough ground")]
 	[SerializeField] float _groundedOffset = 0.05f;
 	[Tooltip("Half the side of the grounded checkbox. Should match the radius of the CharacterController")]
@@ -37,6 +41,7 @@ public class FirstPersonController : MonoBehaviour
 	[SerializeField] float _groundedCastDistance = 0.1f;
 	[Tooltip("What layers the character uses as ground")]
 	[SerializeField] LayerMask _groundLayers;
+	[SerializeField] LayerMask _slipLayers;
 
 	[Header("Cinemachine")]
 	[Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
@@ -96,12 +101,15 @@ public class FirstPersonController : MonoBehaviour
 
     void Update()
     {
+		//Player movement
 		GroundCheck();
 		ManageGravity();
 		ManageJump();
 		ManageMovement();
-
 		ApplyMovement();
+
+		//Ice orb
+		SlipCheck();
     }
 
     void LateUpdate()
@@ -115,10 +123,18 @@ public class FirstPersonController : MonoBehaviour
 		_grounded = Physics.BoxCast(_boxCenter, _groundedBoxSize / 2, -transform.up, transform.rotation, _groundedCastDistance, _groundLayers);
 	}
 
+	private void SlipCheck()
+	{
+		Vector3 _boxCenter = new(transform.position.x, transform.position.y + _groundedOffset, transform.position.z);
+		_sliped = Physics.BoxCast(_boxCenter, _groundedBoxSize / 2, -transform.up, transform.rotation, _groundedCastDistance, _slipLayers, QueryTriggerInteraction.Ignore);
+	}
+
 	private void ManageMovement()
     {
 		// set target speed based on move speed, sprint speed and if sprint is pressed
 		float _targetSpeed = _sprint ? _sprintSpeed : _moveSpeed;
+
+		_targetSpeed = _sliped ? _targetSpeed * _slipMultiplier : _targetSpeed;
 
 		// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -244,16 +260,6 @@ public class FirstPersonController : MonoBehaviour
 		_jumpAction.performed += ctx => _jump = true;
 	}
 
-	private void OnApplicationFocus(bool hasFocus)
-	{
-		SetCursorState(cursorLocked);
-	}
-
-	private void SetCursorState(bool newState)
-	{
-		Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
-	}
-
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private void OnDrawGizmosSelected()
@@ -266,5 +272,15 @@ public class FirstPersonController : MonoBehaviour
 
 		Gizmos.DrawCube(new(transform.position.x, transform.position.y + _groundedOffset, transform.position.z), 
 						new(_groundedBoxSize.x, _groundedBoxSize.y + _groundedCastDistance*2, _groundedBoxSize.z));
+	}
+
+	private void OnApplicationFocus(bool hasFocus)
+	{
+		SetCursorState(cursorLocked);
+	}
+
+	private void SetCursorState(bool newState)
+	{
+		Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
 	}
 }
