@@ -11,7 +11,9 @@ public class OrbLauncher : MonoBehaviour
     [SerializeField] private float _force = 1000;
     [SerializeField] private Transform _firePoint;
     [SerializeField] Camera _mainCamera;
-    private Quaternion _initialLauncherRotation;
+
+    private Quaternion _initialRotation;
+    private Quaternion _aimRotation;
     
     //Player input
     private PlayerInput _playerInput;
@@ -22,13 +24,14 @@ public class OrbLauncher : MonoBehaviour
 
     void Awake()
     {
-        _initialLauncherRotation = transform.rotation;
         _playerInput = transform.parent.GetComponentInParent<PlayerInput>();
         _shootAction = _playerInput.actions[SHOOT_ACTION];
         _aimAction = _playerInput.actions[AIM_ACTION];
 
+        _initialRotation = transform.localRotation;
+        
         SetInputCallbacks();
-        Aim();
+        Aim(); //Provisionally aim midscreen
     }
 
     private void Aim()
@@ -37,25 +40,31 @@ public class OrbLauncher : MonoBehaviour
         transform.Rotate(90, 0, 0);
 
     }
+
+    private void Rest()
+    {
+        transform.localRotation = _initialRotation;
+    }
+
     private void ShootOrb()
     {
-        GameObject _orbInstance = GameObject.Instantiate(_orb, _firePoint.position, _firePoint.rotation);
+        
 
+        // Instantiate and give initial speed boost
+        GameObject _orbInstance = GameObject.Instantiate(_orb, _firePoint.position, _firePoint.rotation);
+        
         Vector3 _forceVector = _firePoint.forward * _force;
         Rigidbody _rb = _orbInstance.GetComponent<Rigidbody>();
         _rb.AddForce(_forceVector, ForceMode.Impulse);
-
-        ResetLauncher();
-    }
-
-    private void ResetLauncher()
-    {
-        
     }
 
     private void SetInputCallbacks()
     {
-        _aimAction.performed += context => Aim();
-        _shootAction.performed += context => ShootOrb();
+        // AIMING
+        _aimAction.performed += ctx => Aim();
+        //_aimAction.canceled += ctx => Rest();
+
+        //SHOOTING
+        _shootAction.performed += ctx => ShootOrb();
     }
 }

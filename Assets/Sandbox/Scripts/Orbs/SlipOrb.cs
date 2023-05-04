@@ -15,7 +15,7 @@ public class SlipOrb : OrbBehaviour
             Rigidbody rb = col.GetComponent<Rigidbody>();
             if(rb != null) //Range hits RigidBody
             {
-                 Instantiate(SlipZone, this.transform.localPosition, col.transform.localRotation);
+                 Instantiate(SlipZone, this.transform.localPosition, Quaternion.identity);
             }
         }
     }
