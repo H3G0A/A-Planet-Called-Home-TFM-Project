@@ -45,9 +45,9 @@ namespace StarterAssets
 			SprintInput(value.isPressed);
 		}
 
-		public void OnShoot(InputValue value)
+		public void OnShoot(InputAction.CallbackContext ctx)
         {
-			shoot = value.isPressed;
+			shoot = ctx.performed;
         }
 #endif
 

@@ -5,35 +5,45 @@ using UnityEngine;
 public class ImpactReceiver : MonoBehaviour
 {
     [SerializeField] float mass = 1;
-    Vector3 impact = Vector3.zero;
-    CharacterController _charController;
 
-    ////////////////////////////////////////////////////////////////////////////////
+    Vector3 _impact = Vector3.zero;
+    FirstPersonController _firstPersonController;
 
     private void Start()
     {
-        _charController = this.GetComponent<CharacterController>();
+        //_charController = this.GetComponent<CharacterController>();
+        _firstPersonController = this.GetComponent<FirstPersonController>();
     }
 
     private void Update()
     {
-        ManageImpact();
+        ManageForces();
     }
-
-    ////////////////////////////////////////////////////////////////////////////////
     
-    public void AddImpact(Vector3 dir, float force)
+    public void AddImpact(Vector3 dir, float force) //Simulate Rigidbody.AddForce()
     {
         dir.Normalize();
-        impact += dir * force / mass;
+        _impact += dir * force / mass;
     }
 
-    private void ManageImpact()
+    private void ManageForces()
     {
-        if (impact.magnitude > 0.2)
+        if (_impact.magnitude > 0.2)
         {
-            _charController.Move(impact * Time.deltaTime);
-            impact = Vector3.Lerp(impact, Vector3.zero, 5 * Time.deltaTime);
+            _firstPersonController.MoveCharacter(_impact * Time.deltaTime);
+            _impact = Vector3.Lerp(_impact, Vector3.zero, 5 * Time.deltaTime);
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Vector3 normal = collision.GetContact(0).normal;
+
+        Debug.Log(normal);
+
+        if(normal == -transform.up)
+        {
+            _impact.y = 0;
         }
     }
 }

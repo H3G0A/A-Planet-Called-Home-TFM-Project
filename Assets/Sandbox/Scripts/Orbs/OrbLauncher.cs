@@ -12,19 +12,23 @@ public class OrbLauncher : MonoBehaviour
     [SerializeField] private Transform _firePoint;
     [SerializeField] Camera _mainCamera;
     private Quaternion _initialLauncherRotation;
+    
+    //Player input
     private PlayerInput _playerInput;
+
+    //Input actions
     private InputAction _shootAction;
-
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    private InputAction _aimAction;
 
     void Awake()
     {
         _initialLauncherRotation = transform.rotation;
         _playerInput = transform.parent.GetComponentInParent<PlayerInput>();
         _shootAction = _playerInput.actions[SHOOT_ACTION];
+        _aimAction = _playerInput.actions[AIM_ACTION];
 
         SetInputCallbacks();
+        Aim();
     }
 
     private void Aim()
@@ -48,9 +52,10 @@ public class OrbLauncher : MonoBehaviour
     {
         
     }
+
     private void SetInputCallbacks()
     {
-        _shootAction.started += context => Aim();
-        _shootAction.canceled += context => ShootOrb();
+        _aimAction.performed += context => Aim();
+        _shootAction.performed += context => ShootOrb();
     }
 }

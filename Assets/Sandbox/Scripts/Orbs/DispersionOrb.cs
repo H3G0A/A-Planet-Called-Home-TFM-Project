@@ -6,6 +6,8 @@ public class DispersionOrb : OrbBehaviour
 {
     [SerializeField] float _force;
     [SerializeField] float _radius;
+    [SerializeField] bool _diagonalPush = true;
+    [SerializeField] bool _verticalPush = false;
     ImpactReceiver _impactReceiver;
 
     protected override void ApplyEffect() //The orb pushes all objects inside radius away
@@ -19,7 +21,13 @@ public class DispersionOrb : OrbBehaviour
             {
                 Vector3 _forceDirection = CalculateForceDirection(this.transform.position, col.transform.position);
 
-                rb.AddForce(_forceDirection * _force, ForceMode.Impulse); //VelocityChange disregards the object mass so it does not care that its mas is high
+                if (_forceDirection.y > 0)
+                {
+                    _forceDirection.y *= 3;
+
+                }
+
+                rb.AddForce(_forceDirection * _force, ForceMode.Impulse);
             }
             else if (col.gameObject.CompareTag(GlobalParameters.PLAYER_TAG)) //Range hits player
             {
@@ -41,26 +49,27 @@ public class DispersionOrb : OrbBehaviour
     {
         Vector3 _forceDirection = objectPosition - explosionCenter;
 
-        //Push only in the direction of the strongest axis
-        float _YAxis = Mathf.Abs(_forceDirection.y);
-        float _XAxis = Mathf.Abs(_forceDirection.x);
-        float _ZAxis = Mathf.Abs(_forceDirection.z);
 
-        if ((_YAxis > _XAxis) && (_YAxis > _ZAxis)) //If "y" is the strongest axis, then don't move the object
+        if (!_diagonalPush)
         {
-            _forceDirection.x = 0;
-            _forceDirection.z = 0;
+            //Push only in the direction of the strongest axis
+            float _XAxis = Mathf.Abs(_forceDirection.x);
+            float _ZAxis = Mathf.Abs(_forceDirection.z);
+            
+            if (_XAxis > _ZAxis)
+            {
+                _forceDirection.z = 0;
+            }
+            else
+            {
+                _forceDirection.x = 0;
+            }
         }
-        //else if (_XAxis > _ZAxis) 
-        //{
-        //    _forceDirection.z = 0;
-        //}
-        //else
-        //{
-        //    _forceDirection.x = 0;
-        //}
 
-        _forceDirection.y = 0; //Disable vertical push
+        if (!_verticalPush) // Disable vertical movement
+        {
+            _forceDirection.y = 0; 
+        }
         
         return _forceDirection.normalized;
     }

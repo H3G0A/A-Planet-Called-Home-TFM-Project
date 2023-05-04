@@ -5,12 +5,10 @@ using static GlobalParameters;
 
 public abstract class OrbBehaviour : MonoBehaviour
 {
-    //List of object TAGS which their collisions will be ignored by the orb
+    //List of object TAGS which their collisions with the orb will be ignored
     List<string> _ignoreCollisions = new(){ 
                                             ORB_TAG, PLAYER_TAG
                                         };
-
-    ////////////////////////////////////////////////////////////////////////////////////
 
     private void Start() //Destroy after a while if has not collided
     {
@@ -19,7 +17,7 @@ public abstract class OrbBehaviour : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!_ignoreCollisions.Contains(collision.collider.tag)) //Avoid collision between orbs
+        if (!_ignoreCollisions.Contains(collision.collider.tag))
         {
             DisableOrb();
             ApplyEffect();
