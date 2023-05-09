@@ -32,16 +32,22 @@ public class FirstPersonController : MonoBehaviour
 	[Header("Player Grounded")]
 	[Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
 	[SerializeField] bool _grounded = true;
-	[SerializeField] bool _sliped = false;
+	[SerializeField] bool _onIce = false;
 	[Tooltip("Useful for rough ground")]
 	[SerializeField] float _groundedOffset = 0.05f;
-	[Tooltip("Half the side of the grounded checkbox. Should match the radius of the CharacterController")]
 	[SerializeField] Vector3 _groundedBoxSize = new(1, 0.1f, 1);
-	[Tooltip("Half the side of the grounded check. Should match the radius of the CharacterController")]
 	[SerializeField] float _groundedCastDistance = 0.1f;
 	[Tooltip("What layers the character uses as ground")]
 	[SerializeField] LayerMask _groundLayers;
-	[SerializeField] LayerMask _slipLayers;
+
+	[Space(10)]
+	[SerializeField] float _edgeCheckOffset = 0.05f;
+	[Tooltip("Should match the raius of the CharacterController")]
+	[SerializeField] float _edgeCheckLength = .5f;
+	[SerializeField] float _edgeSlipSpeed;
+
+	[Header("Player On Ice")]
+	[SerializeField] LayerMask _iceLayers;
 
 	[Header("Cinemachine")]
 	[Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
@@ -102,7 +108,7 @@ public class FirstPersonController : MonoBehaviour
     void Update()
     {
 		//Ice orb
-		SlipCheck();
+		OnIceCheck();
 
 		//Player movement
 		GroundCheck();
@@ -123,12 +129,42 @@ public class FirstPersonController : MonoBehaviour
     {
 		Vector3 _boxCenter = new(transform.position.x, transform.position.y + _groundedOffset, transform.position.z);
 		_grounded = Physics.BoxCast(_boxCenter, _groundedBoxSize / 2, -transform.up, transform.rotation, _groundedCastDistance, _groundLayers);
+
+        if (!_grounded && _controller.velocity.y <= 0)
+        {
+			SlipCheck(); //Check if stuck on edge
+        }
 	}
 
 	private void SlipCheck()
+    {
+		// Spawn a cross of 4 raycast to check for edged
+		Vector3 _spawnPoint = new(transform.position.x, transform.position.y + _edgeCheckOffset, transform.position.z);
+
+		Ray[] casts = new Ray[4];
+		casts[0] = new Ray(_spawnPoint, transform.forward);
+		casts[1] = new Ray(_spawnPoint, - transform.forward);
+		casts[2] = new Ray(_spawnPoint, transform.right);
+		casts[3] = new Ray(_spawnPoint, - transform.right);
+
+		// If edged are found, move the player in the opposite direction to make him fall
+		Vector3 slipDirection = Vector3.zero;
+		foreach(Ray cast in casts)
+        {
+			if(Physics.Raycast(cast, _edgeCheckLength, _groundLayers))
+            {
+				slipDirection += -cast.direction;
+            }
+        }
+
+		slipDirection.Normalize();
+		MoveCharacter(_edgeSlipSpeed * Time.deltaTime * slipDirection);
+	}
+
+	private void OnIceCheck()
 	{
 		Vector3 _boxCenter = new(transform.position.x, transform.position.y + _groundedOffset, transform.position.z);
-		_sliped = Physics.BoxCast(_boxCenter, _groundedBoxSize / 2, -transform.up, transform.rotation, _groundedCastDistance, _slipLayers, QueryTriggerInteraction.Ignore);
+		_onIce = Physics.BoxCast(_boxCenter, _groundedBoxSize / 2, -transform.up, transform.rotation, _groundedCastDistance, _iceLayers, QueryTriggerInteraction.Ignore);
 	}
 
 	private void ManageMovement()
@@ -136,7 +172,7 @@ public class FirstPersonController : MonoBehaviour
 		// set target speed based on move speed, sprint speed and if sprint is pressed
 		float _targetSpeed = _sprint ? _sprintSpeed : _moveSpeed;
 
-		_targetSpeed = _sliped ? _targetSpeed * _slipMultiplier : _targetSpeed;
+		_targetSpeed = _onIce ? _targetSpeed * _slipMultiplier : _targetSpeed;
 
 		// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -266,6 +302,7 @@ public class FirstPersonController : MonoBehaviour
 
 	private void OnDrawGizmosSelected()
     {
+		//GROUNDED CHECKBOX GIZMO
 		Color transparentGreen = new(0.0f, 1.0f, 0.0f, 0.35f);
 		Color transparentRed = new(1.0f, 0.0f, 0.0f, 0.35f);
 
@@ -274,6 +311,15 @@ public class FirstPersonController : MonoBehaviour
 
 		Gizmos.DrawCube(new(transform.position.x, transform.position.y + _groundedOffset, transform.position.z), 
 						new(_groundedBoxSize.x, _groundedBoxSize.y + _groundedCastDistance*2, _groundedBoxSize.z));
+
+		//EDGE CHECKS GIZMO
+		Vector3 _spawnPoint = new(transform.position.x, transform.position.y + _edgeCheckOffset, transform.position.z);
+
+		Gizmos.color = Color.yellow;
+		Gizmos.DrawRay(_spawnPoint, transform.forward * _edgeCheckLength);
+		Gizmos.DrawRay(_spawnPoint, - transform.forward * _edgeCheckLength);
+		Gizmos.DrawRay(_spawnPoint, transform.right * _edgeCheckLength);
+		Gizmos.DrawRay(_spawnPoint, - transform.right * _edgeCheckLength);
 	}
 
 	private void OnApplicationFocus(bool hasFocus)

@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlipOrb : OrbBehaviour
+public class IceOrb : OrbBehaviour
 {
-    [SerializeField] GameObject SlipZone;
+    [SerializeField] GameObject _iceZone;
     [SerializeField] float _radius;
 
     protected override void ApplyEffect(Collision collision)
@@ -15,7 +15,7 @@ public class SlipOrb : OrbBehaviour
             Rigidbody rb = col.GetComponent<Rigidbody>();
             if(rb != null) //Range hits RigidBody
             {
-                 Instantiate(SlipZone, this.transform.localPosition, Quaternion.identity);
+                 Instantiate(_iceZone, this.transform.localPosition, Quaternion.identity);
             }
         }
     }

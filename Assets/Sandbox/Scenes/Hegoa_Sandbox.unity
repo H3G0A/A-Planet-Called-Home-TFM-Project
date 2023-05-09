@@ -226,7 +226,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh25480
+  m_Name: pb_Mesh26820
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -395,7 +395,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh25500
+  m_Name: pb_Mesh26840
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1110,25 +1110,6 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 9005220659476430821, guid: 2d3a85ecde41a8246a79669975912b74, type: 3}
   m_PrefabInstance: {fileID: 2155047210713427620}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1266475536 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4791547317394412363, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-  m_PrefabInstance: {fileID: 6334482532202974741}
-  m_PrefabAsset: {fileID: 0}
---- !u!136 &1266475540
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1266475536}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1850335156
 GameObject:
   m_ObjectHideFlags: 0
@@ -1555,12 +1536,20 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1236055, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: mass
-      value: 5
+      value: 0.2
       objectReference: {fileID: 0}
-    - target: {fileID: 6334482532541443431, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      propertyPath: _orb
-      value: 
-      objectReference: {fileID: 6016317886622445584, guid: e303382b79774d948bfcbb9f1634ec15, type: 3}
+    - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+      propertyPath: _edgeSlipSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+      propertyPath: _edgeCheckLength
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+      propertyPath: _edgeCheckOffset
+      value: -0.07
+      objectReference: {fileID: 0}
     - target: {fileID: 6334482532541443431, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: _mainCamera
       value: 

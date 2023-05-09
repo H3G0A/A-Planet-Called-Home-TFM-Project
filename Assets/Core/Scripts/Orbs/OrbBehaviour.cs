@@ -17,7 +17,6 @@ public abstract class OrbBehaviour : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision.gameObject);
         if (!_ignoreCollisions.Contains(collision.collider.tag))
         {
             DisableOrb();
