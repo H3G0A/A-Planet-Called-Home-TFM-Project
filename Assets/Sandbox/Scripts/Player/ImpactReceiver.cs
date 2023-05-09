@@ -35,15 +35,13 @@ public class ImpactReceiver : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        Vector3 normal = collision.GetContact(0).normal;
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    Vector3 normal = collision.GetContact(0).normal;
 
-        Debug.Log(normal);
-
-        if(normal == -transform.up)
-        {
-            _impact.y = 0;
-        }
-    }
+    //    if(normal == -transform.up)
+    //    {
+    //        _impact.y = 0;
+    //    }
+    //}
 }
