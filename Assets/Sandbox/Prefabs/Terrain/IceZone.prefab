@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3947131424038484955}
   - component: {fileID: 3947131424038484952}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Projector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -115,3 +115,4 @@ MonoBehaviour:
   _iceLayers:
     serializedVersion: 2
     m_Bits: 8
+  _isPlayerOn: 0

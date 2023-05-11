@@ -76,6 +76,7 @@ public class FirstPersonController : MonoBehaviour
 	float _cinemachineTargetPitch;
 
 	// player
+	Vector3 _inputDirection;
 	float _speed;
 	Vector3 _cumulatedMovement;
 
@@ -200,14 +201,30 @@ public class FirstPersonController : MonoBehaviour
 		// a reference to the players current horizontal velocity
 		float _currentHorizontalSpeed = _horizontalVelocity.magnitude;
 
-		float _speedOffset = 0.1f;
 
+        if (_grounded) //Maintain momentum while airbone
+        {
+			Accelerate(_currentHorizontalSpeed, _targetSpeed);
+			
+			// Make the input for the movement into a vector3
+			_inputDirection = transform.right * _move.x + transform.forward * _move.y;
+        }
+
+		// move the player
+		_horizontalVelocity = _inputDirection.normalized * _speed;
+		AdjustForSlope(ref _horizontalVelocity);
+		MoveCharacter(_horizontalVelocity * Time.deltaTime);
+	}
+
+	private void Accelerate(float _currentSpeed, float _targetSpeed)
+    {
+		float _speedOffset = 0.1f;
 		// accelerate or decelerate to target speed
-		if (_currentHorizontalSpeed < _targetSpeed - _speedOffset || _currentHorizontalSpeed > _targetSpeed + _speedOffset)
+		if (_currentSpeed < _targetSpeed - _speedOffset || _currentSpeed > _targetSpeed + _speedOffset)
 		{
 			// creates curved result rather than a linear one giving a more organic speed change
 			// note T in Lerp is clamped, so we don't need to clamp our speed
-			_speed = Mathf.Lerp(_currentHorizontalSpeed, _targetSpeed * _move.magnitude, Time.deltaTime * _speedChangeRate);
+			_speed = Mathf.Lerp(_currentSpeed, _targetSpeed * _move.magnitude, Time.deltaTime * _speedChangeRate);
 
 			// round speed to 3 decimal places
 			_speed = Mathf.Round(_speed * 1000f) / 1000f;
@@ -216,14 +233,6 @@ public class FirstPersonController : MonoBehaviour
 		{
 			_speed = _targetSpeed;
 		}
-
-		// Make the input for the movement into a vector3
-		Vector3 _inputDirection = transform.right * _move.x + transform.forward * _move.y;
-
-		// move the player
-		_horizontalVelocity = _inputDirection.normalized * _speed;
-		AdjustForSlope(ref _horizontalVelocity);
-		MoveCharacter(_horizontalVelocity * Time.deltaTime);
 	}
 
 	private void ManageGravity()

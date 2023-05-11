@@ -12,16 +12,13 @@ public class IceZone : MonoBehaviour
     
     BoxCollider _zoneCollider;
     Projector _projector;
-    float _maxHeight;
-    float _minHeight;
+    float _maxHeight = 0;
+    float _minHeight = 0;
 
     FirstPersonController _FPController = null;
 
     private void Awake()
     {
-        _maxHeight = 0;
-        _minHeight = 0;
-
         _zoneCollider = GetComponent<BoxCollider>();
         _projector = GetComponentInChildren<Projector>();
         
@@ -89,15 +86,15 @@ public class IceZone : MonoBehaviour
     private void SetColliderBounds()
     {
         float _colliderHeight = _maxHeight - _minHeight;
-        _zoneCollider.size = new(_radius * 2, _colliderHeight, _radius * 2);
         //Some offset to ensure the player always hits the trigger
         float _triggerOffset = .3f;
-        _zoneCollider.center = new(_zoneCollider.center.x, _zoneCollider.center.x + _triggerOffset, _zoneCollider.center.z);
+        _zoneCollider.size = new(_radius * 2, _colliderHeight + _triggerOffset, _radius * 2);
+        //_zoneCollider.center = new(_zoneCollider.center.x, _zoneCollider.center.y, _zoneCollider.center.z);
         
         // Match projector size with collider
         _projector.orthographicSize = _radius;
-        _projector.transform.localPosition = new(0, (_colliderHeight * .5f) + _projector.nearClipPlane + _triggerOffset + .1f, 0);
-        _projector.farClipPlane = _colliderHeight + _projector.nearClipPlane + .1f;
+        _projector.transform.localPosition = new(0, (_colliderHeight * .5f) + (_triggerOffset * .5f) + _projector.nearClipPlane, 0);
+        _projector.farClipPlane = _colliderHeight + _projector.nearClipPlane + _triggerOffset;
     }
 
     private void OnDrawGizmosSelected()
