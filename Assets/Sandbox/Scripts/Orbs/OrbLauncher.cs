@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static GlobalParameters;
@@ -12,6 +13,7 @@ public class OrbLauncher : MonoBehaviour
     [SerializeField] private Transform _firePoint;
     [SerializeField] Camera _mainCamera;
     [SerializeField] private List<GameObject> _chargedOrbs;
+    [SerializeField] TMP_Text _orbText;
 
     private Quaternion _initialRotation;
     private Quaternion _aimRotation;
@@ -43,7 +45,9 @@ public class OrbLauncher : MonoBehaviour
     {
         _selectedOrb = _chargedOrbs[0];
         _indexOrb = 0;
+        changeOrbText();
     }
+
     private void Aim()
     {
         transform.LookAt(_mainCamera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, 50)));
@@ -77,12 +81,12 @@ public class OrbLauncher : MonoBehaviour
         if(Keyboard.current.digit2Key.wasPressedThisFrame){
             _selectedOrb = _chargedOrbs[1];
             _indexOrb = 1;
-             Debug.Log(_selectedOrb.ToString());
+            Debug.Log(_selectedOrb.ToString());
         }
         if(Keyboard.current.digit3Key.wasPressedThisFrame){
             _selectedOrb = _chargedOrbs[2];
             _indexOrb = 2;
-             Debug.Log(_selectedOrb.ToString());
+            Debug.Log(_selectedOrb.ToString());
         }
         if(Keyboard.current.qKey.wasPressedThisFrame){
             _indexOrb--;
@@ -100,7 +104,7 @@ public class OrbLauncher : MonoBehaviour
             _selectedOrb = _chargedOrbs[_indexOrb];
             Debug.Log(_selectedOrb.ToString());
         }
-        Debug.Log("Change orb activated" + Keyboard.current);
+        changeOrbText();
     }
 
     private void SetInputCallbacks()
@@ -116,4 +120,17 @@ public class OrbLauncher : MonoBehaviour
         _changeOrb.performed += ctx => ChangeOrb();
     }
 
+    private void changeOrbText(){
+        switch(_indexOrb){
+            case 0:
+                _orbText.text = "Orbe de dispersión";
+                break;
+            case 1:
+                _orbText.text = "Orbe de gravedad";
+                break;
+            case 2:
+                _orbText.text = "Orbe de hielo";
+                break;
+        }
+    }
 }
