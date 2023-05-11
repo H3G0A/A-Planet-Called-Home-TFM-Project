@@ -7,10 +7,11 @@ using static GlobalParameters;
 
 public class OrbLauncher : MonoBehaviour
 {
-    [SerializeField] private GameObject _orb;
+    [SerializeField] private GameObject _selectedOrb;
     [SerializeField] private float _force = 1000;
     [SerializeField] private Transform _firePoint;
     [SerializeField] Camera _mainCamera;
+    [SerializeField] private List<GameObject> _chargedOrbs;
 
     private Quaternion _initialRotation;
     private Quaternion _aimRotation;
@@ -21,19 +22,28 @@ public class OrbLauncher : MonoBehaviour
     //Input actions
     private InputAction _shootAction;
     private InputAction _aimAction;
+    private InputAction _changeOrb;
+    
+    private int _indexOrb;
 
     void Awake()
     {
         _playerInput = transform.parent.GetComponentInParent<PlayerInput>();
         _shootAction = _playerInput.actions[SHOOT_ACTION];
+        _changeOrb = _playerInput.actions[CHANGEORB_ACTION];
         _aimAction = _playerInput.actions[AIM_ACTION];
 
         _initialRotation = transform.localRotation;
-        
+        _selectedOrb = _chargedOrbs[0];
         SetInputCallbacks();
         Aim(); //Provisionally aim midscreen
     }
 
+    void Start()
+    {
+        _selectedOrb = _chargedOrbs[0];
+        _indexOrb = 0;
+    }
     private void Aim()
     {
         transform.LookAt(_mainCamera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, 50)));
@@ -51,11 +61,46 @@ public class OrbLauncher : MonoBehaviour
         
 
         // Instantiate and give initial speed boost
-        GameObject _orbInstance = GameObject.Instantiate(_orb, _firePoint.position, _firePoint.rotation);
+        GameObject _orbInstance = GameObject.Instantiate(_selectedOrb, _firePoint.position, _firePoint.rotation);
         
         Vector3 _forceVector = _firePoint.forward * _force;
         Rigidbody _rb = _orbInstance.GetComponent<Rigidbody>();
         _rb.AddForce(_forceVector, ForceMode.Impulse);
+    }
+
+    private void ChangeOrb(){
+        if(Keyboard.current.digit1Key.wasPressedThisFrame){
+            _selectedOrb = _chargedOrbs[0];
+            _indexOrb = 0;
+            Debug.Log(_selectedOrb.ToString());
+        }
+        if(Keyboard.current.digit2Key.wasPressedThisFrame){
+            _selectedOrb = _chargedOrbs[1];
+            _indexOrb = 1;
+             Debug.Log(_selectedOrb.ToString());
+        }
+        if(Keyboard.current.digit3Key.wasPressedThisFrame){
+            _selectedOrb = _chargedOrbs[2];
+            _indexOrb = 2;
+             Debug.Log(_selectedOrb.ToString());
+        }
+        if(Keyboard.current.qKey.wasPressedThisFrame){
+            _indexOrb--;
+            if(_indexOrb < 0){
+                _indexOrb = (_chargedOrbs.Count - 1);
+            }
+            _selectedOrb = _chargedOrbs[_indexOrb];
+            Debug.Log(_selectedOrb.ToString());
+        }
+        if(Keyboard.current.eKey.wasPressedThisFrame){
+            _indexOrb++;
+            if(_indexOrb >= _chargedOrbs.Count){
+                _indexOrb = 0;
+            }
+            _selectedOrb = _chargedOrbs[_indexOrb];
+            Debug.Log(_selectedOrb.ToString());
+        }
+        Debug.Log("Change orb activated" + Keyboard.current);
     }
 
     private void SetInputCallbacks()
@@ -66,5 +111,9 @@ public class OrbLauncher : MonoBehaviour
 
         //SHOOTING
         _shootAction.performed += ctx => ShootOrb();
+
+        //Change weapons()
+        _changeOrb.performed += ctx => ChangeOrb();
     }
+
 }

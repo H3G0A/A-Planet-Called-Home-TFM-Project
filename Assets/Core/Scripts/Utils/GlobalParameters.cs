@@ -23,4 +23,5 @@ public static class GlobalParameters
     public const string JUMP_ACTION = "Jump";
     public const string AIM_ACTION = "Aim";
     public const string SHOOT_ACTION = "Shoot";
+    public const string CHANGEORB_ACTION = "ChangeOrb";
 }
