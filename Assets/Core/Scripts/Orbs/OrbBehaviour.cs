@@ -6,7 +6,7 @@ using static GlobalParameters;
 public abstract class OrbBehaviour : MonoBehaviour
 {
     //List of object TAGS which their collisions with the orb will be ignored
-    List<string> _ignoreCollisions = new(){ 
+    readonly List<string> _ignoreCollisions = new(){ 
                                             ORB_TAG, PLAYER_TAG
                                         };
 
