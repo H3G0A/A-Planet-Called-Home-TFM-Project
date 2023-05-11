@@ -4,24 +4,24 @@ using UnityEngine;
 
 public class WeigthOrb : OrbBehaviour
 {
-    [SerializeField] float _magnitude;
     [SerializeField] bool _augment;
-    [SerializeField] float _radius;
-
+    Vector3 currentVelocity;
     protected override void ApplyEffect(Collision collision) //The orb change the weigth of the object that impacts.
     {        
-        Collider[] _colliders = Physics.OverlapSphere(transform.position, _radius); //Store every collider in range
-        foreach(Collider col in _colliders)
-        {
-            Rigidbody rb = col.GetComponent<Rigidbody>();
-            if(rb != null) //Range hits RigidBody
-            {
-                if(_augment){
-                    rb.mass = rb.mass * _magnitude;
-                } else {
-                    rb.mass = rb.mass / _magnitude;
-                }
+        GameObject objectCollision = collision.gameObject;
+        Rigidbody rb = objectCollision.GetComponent<Rigidbody>();
+        if(objectCollision.tag.Equals(GlobalParameters.DISPLACE_BOX_TAG)){
+            if(_augment){
+                rb.constraints = RigidbodyConstraints.FreezePosition;
+                Debug.Log(rb.constraints.ToString());
+            }else{
+                rb.constraints = RigidbodyConstraints.FreezeRotation;
+                Debug.Log(rb.constraints.ToString());
             }
+        }
+        if(objectCollision.tag.Equals(GlobalParameters.ELEVATOR_TAG)){
+            ElevatorMovementController elevator = objectCollision.GetComponent<ElevatorMovementController>();
+            elevator.WeigthOrbImpact(_augment);
         }
     }
 }

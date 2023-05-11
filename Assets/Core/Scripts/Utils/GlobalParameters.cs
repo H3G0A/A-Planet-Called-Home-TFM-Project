@@ -8,7 +8,8 @@ public static class GlobalParameters
     public const string ORB_TAG = "Orb";
     public const string PLAYER_TAG = "Player";
     public const string ICE_TAG = "Ice";
-
+    public const string DISPLACE_BOX_TAG = "DisplaceBox";
+    public const string ELEVATOR_TAG = "Elevator";
     //LAYERS
 
 

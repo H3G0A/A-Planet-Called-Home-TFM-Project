@@ -7,6 +7,8 @@ TagManager:
   - CinemachineTarget
   - Orb
   - Ice
+  - DisplaceBox
+  - Elevator
   layers:
   - Default
   - TransparentFX
