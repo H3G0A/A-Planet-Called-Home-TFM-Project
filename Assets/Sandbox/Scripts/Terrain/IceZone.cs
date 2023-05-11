@@ -5,6 +5,7 @@ using static GlobalParameters;
 
 public class IceZone : MonoBehaviour
 {
+    [SerializeField] bool permanent = false;
     [SerializeField] float _delayDestroyTimer;
     [SerializeField] float _radius;
     [SerializeField] LayerMask _iceLayers;
@@ -28,7 +29,7 @@ public class IceZone : MonoBehaviour
 
     void Start()
     {
-        Destroy(gameObject, _delayDestroyTimer);
+        if(!permanent) Destroy(gameObject, _delayDestroyTimer);
     }
 
     private void OnTriggerEnter(Collider other)
