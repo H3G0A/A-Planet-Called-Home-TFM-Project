@@ -11,12 +11,12 @@ public class FirstPersonController : MonoBehaviour
 	[SerializeField] float _moveSpeed = 4.0f;
 	[Tooltip("Sprint speed of the character in m/s")]
 	[SerializeField] float _sprintSpeed = 6.0f;
-	[SerializeField] float _slipMultiplier = 2f;
 	[Tooltip("Acceleration and deceleration")]
 	[SerializeField] float _speedChangeRate = 10.0f;
 
 	[Space(10)]
-	[SerializeField] Vector3 _finalInputMovement = Vector3.zero;
+	[SerializeField] Vector3 _horizontalVelocity = Vector3.zero;
+	[SerializeField] float _verticalVelocity;
 
 	[Space(10)]
 	[Tooltip("The height the player can jump")]
@@ -32,10 +32,11 @@ public class FirstPersonController : MonoBehaviour
 	[Header("Player Grounded")]
 	[Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
 	[SerializeField] bool _grounded = true;
-	[SerializeField] bool _onIce = false;
 	[Tooltip("Useful for rough ground")]
 	[SerializeField] float _groundedOffset = 0.05f;
-	[SerializeField] Vector3 _groundedBoxSize = new(1, 0.1f, 1);
+	[Tooltip("The radius of the ground sphere check, should be slightly smaller than the character controller radius")]
+	[SerializeField] float _groundedCheckRadius = .4f;
+	//[SerializeField] Vector3 _groundedBoxSize = new(1, 0.1f, 1);
 	[SerializeField] float _groundedCastDistance = 0.1f;
 	[Tooltip("What layers the character uses as ground")]
 	[SerializeField] LayerMask _groundLayers;
@@ -46,8 +47,13 @@ public class FirstPersonController : MonoBehaviour
 	[SerializeField] float _edgeCheckLength = .5f;
 	[SerializeField] float _edgeSlipSpeed;
 
+	[Space(10)]
+	[Tooltip("Always bigger than the distance used for the grounded check")]
+	[SerializeField] float _slopeCheckDistance = .2f;
+
 	[Header("Player On Ice")]
-	[SerializeField] LayerMask _iceLayers;
+	[SerializeField] int _onIce = 0;
+	[SerializeField] float _iceMultiplier = 2f;
 
 	[Header("Cinemachine")]
 	[Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
@@ -64,27 +70,33 @@ public class FirstPersonController : MonoBehaviour
 	[SerializeField] bool _jump;
 
 	[Header("Mouse Cursor Settings")]
-	public bool cursorLocked = true;
+	[SerializeField] bool cursorLocked = true;
 
 	// cinemachine
-	private float _cinemachineTargetPitch;
+	float _cinemachineTargetPitch;
 
 	// player
-	private float _speed;
-	private float _verticalVelocity;
-	private Vector3 _cumulatedMovement;
+	float _speed;
+	Vector3 _cumulatedMovement;
 
 	// timers
-	private float _fallTimeoutDelta;
+	float _fallTimeoutDelta;
 
 	// Player input
-	private PlayerInput _playerInput;
-	private InputAction _moveAction;
-	private InputAction _lookAction;
-	private InputAction _jumpAction;
-	private InputAction _sprintAction;
+	PlayerInput _playerInput;
+	InputAction _moveAction;
+	InputAction _lookAction;
+	InputAction _jumpAction;
+	InputAction _sprintAction;
 	
-	private CharacterController _controller;
+	CharacterController _controller;
+
+	//Getters & Setters
+	public int OnIce
+    {
+        get { return _onIce; }
+		set { _onIce = value; }
+    }
 
 	private void Awake()
 	{
@@ -107,16 +119,15 @@ public class FirstPersonController : MonoBehaviour
 
     void Update()
     {
-		//Ice orb
-		OnIceCheck();
+		//Checks
+		GroundCheck();
 
 		//Player movement
-		GroundCheck();
-		ManageGravity();
 		ManageJump();
+		ManageGravity();
 		ManageMovement();
 
-		//Apply movement once everything else has been set
+		//Apply movement
 		ApplyMovement();
     }
 
@@ -127,8 +138,10 @@ public class FirstPersonController : MonoBehaviour
 
     private void GroundCheck()
     {
-		Vector3 _boxCenter = new(transform.position.x, transform.position.y + _groundedOffset, transform.position.z);
-		_grounded = Physics.BoxCast(_boxCenter, _groundedBoxSize / 2, -transform.up, transform.rotation, _groundedCastDistance, _groundLayers);
+		Vector3 _boxCenter = new(transform.position.x, transform.position.y + _groundedCheckRadius + _groundedOffset, transform.position.z);
+		_grounded = Physics.SphereCast(_boxCenter, _groundedCheckRadius, Vector3.down, out _, _groundedCastDistance, _groundLayers);
+		//Vector3 _boxCenter = new(transform.position.x, transform.position.y + _groundedOffset, transform.position.z);
+		//_grounded = Physics.BoxCast(_boxCenter, _groundedBoxSize / 2, Vector3.down, Quaternion.identity, _groundedCastDistance, _groundLayers);
 
         if (!_grounded && _controller.velocity.y <= 0)
         {
@@ -142,6 +155,7 @@ public class FirstPersonController : MonoBehaviour
 		Vector3 _spawnPoint = new(transform.position.x, transform.position.y + _edgeCheckOffset, transform.position.z);
 
 		Ray[] casts = new Ray[4];
+		//Cardinal directions
 		casts[0] = new Ray(_spawnPoint, transform.forward);
 		casts[1] = new Ray(_spawnPoint, - transform.forward);
 		casts[2] = new Ray(_spawnPoint, transform.right);
@@ -161,18 +175,21 @@ public class FirstPersonController : MonoBehaviour
 		MoveCharacter(_edgeSlipSpeed * Time.deltaTime * slipDirection);
 	}
 
-	private void OnIceCheck()
-	{
-		Vector3 _boxCenter = new(transform.position.x, transform.position.y + _groundedOffset, transform.position.z);
-		_onIce = Physics.BoxCast(_boxCenter, _groundedBoxSize / 2, -transform.up, transform.rotation, _groundedCastDistance, _iceLayers, QueryTriggerInteraction.Ignore);
-	}
+    private void AdjustForSlope(ref Vector3 _velocity)
+    {
+        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit _hit, _slopeCheckDistance, _groundLayers, QueryTriggerInteraction.Ignore) && _grounded)
+        {
+            Quaternion _slopeRotation = Quaternion.FromToRotation(Vector3.up, _hit.normal);
+            _velocity = _slopeRotation * _velocity;
+        }
+    }
 
-	private void ManageMovement()
+    private void ManageMovement()
     {
 		// set target speed based on move speed, sprint speed and if sprint is pressed
 		float _targetSpeed = _sprint ? _sprintSpeed : _moveSpeed;
 
-		_targetSpeed = _onIce ? _targetSpeed * _slipMultiplier : _targetSpeed;
+		_targetSpeed = _onIce > 0 ? _targetSpeed * _iceMultiplier : _targetSpeed;
 
 		// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -181,7 +198,7 @@ public class FirstPersonController : MonoBehaviour
 		if (_move == Vector2.zero) _targetSpeed = 0.0f;
 
 		// a reference to the players current horizontal velocity
-		float _currentHorizontalSpeed = new Vector3(_finalInputMovement.x, 0.0f, _finalInputMovement.z).magnitude;
+		float _currentHorizontalSpeed = _horizontalVelocity.magnitude;
 
 		float _speedOffset = 0.1f;
 
@@ -203,10 +220,10 @@ public class FirstPersonController : MonoBehaviour
 		// Make the input for the movement into a vector3
 		Vector3 _inputDirection = transform.right * _move.x + transform.forward * _move.y;
 
-
 		// move the player
-		_finalInputMovement = (_inputDirection.normalized * _speed + new Vector3(0.0f, _verticalVelocity, 0.0f));
-		MoveCharacter(_finalInputMovement * Time.deltaTime);
+		_horizontalVelocity = _inputDirection.normalized * _speed;
+		AdjustForSlope(ref _horizontalVelocity);
+		MoveCharacter(_horizontalVelocity * Time.deltaTime);
 	}
 
 	private void ManageGravity()
@@ -217,7 +234,7 @@ public class FirstPersonController : MonoBehaviour
 			_fallTimeoutDelta = _fallTimeout;
 
 			// stop our velocity dropping infinitely when grounded
-			if (_verticalVelocity < 0.0f)
+			if (_verticalVelocity < 0)
 			{
 				_verticalVelocity = -2f;
 			}
@@ -230,6 +247,8 @@ public class FirstPersonController : MonoBehaviour
 				_verticalVelocity += _gravity * Time.deltaTime;
 			}
 		}
+
+		MoveCharacter(Vector3.up * _verticalVelocity * Time.deltaTime);
     }
 
 	private void ManageJump()
@@ -255,6 +274,17 @@ public class FirstPersonController : MonoBehaviour
 		}
 	}
 
+	public void MoveCharacter(Vector3 movement)
+	{
+		_cumulatedMovement += movement;
+	}
+
+	private void ApplyMovement()
+    {
+		_controller.Move(_cumulatedMovement);
+		_cumulatedMovement = Vector3.zero;
+	}
+
     private void CameraRotation()
     {
         _cinemachineTargetPitch += _look.y;
@@ -268,17 +298,6 @@ public class FirstPersonController : MonoBehaviour
         // rotate the player left and right
         transform.Rotate(Vector3.up * _look.x);
     }
-
-    public void MoveCharacter(Vector3 movement)
-    {
-		_cumulatedMovement += movement;
-    }
-
-	private void ApplyMovement()
-    {
-		_controller.Move(_cumulatedMovement);
-		_cumulatedMovement = Vector3.zero;
-	}
 
 	private void SetInputCallbacks()
     {
@@ -302,15 +321,19 @@ public class FirstPersonController : MonoBehaviour
 
 	private void OnDrawGizmosSelected()
     {
-		//GROUNDED CHECKBOX GIZMO
+
+		//GROUNDED CHECK GIZMO
+		//Vector3 _boxCenter = new(transform.position.x, transform.position.y + _groundedOffset, transform.position.z);
+		Vector3 _boxCenter = new(transform.position.x, transform.position.y + _groundedCheckRadius + _groundedOffset - _groundedCastDistance, transform.position.z);
+
 		Color transparentGreen = new(0.0f, 1.0f, 0.0f, 0.35f);
 		Color transparentRed = new(1.0f, 0.0f, 0.0f, 0.35f);
 
 		if (_grounded) Gizmos.color = transparentGreen;
 		else Gizmos.color = transparentRed;
 
-		Gizmos.DrawCube(new(transform.position.x, transform.position.y + _groundedOffset, transform.position.z), 
-						new(_groundedBoxSize.x, _groundedBoxSize.y + _groundedCastDistance*2, _groundedBoxSize.z));
+		//Gizmos.DrawCube(_boxCenter, new(_groundedBoxSize.x, _groundedBoxSize.y + _groundedCastDistance*2, _groundedBoxSize.z));
+		Gizmos.DrawSphere(_boxCenter, _groundedCheckRadius);
 
 		//EDGE CHECKS GIZMO
 		Vector3 _spawnPoint = new(transform.position.x, transform.position.y + _edgeCheckOffset, transform.position.z);
@@ -320,6 +343,14 @@ public class FirstPersonController : MonoBehaviour
 		Gizmos.DrawRay(_spawnPoint, - transform.forward * _edgeCheckLength);
 		Gizmos.DrawRay(_spawnPoint, transform.right * _edgeCheckLength);
 		Gizmos.DrawRay(_spawnPoint, - transform.right * _edgeCheckLength);
+
+		//SLOPE CHECK GIZMO
+		Gizmos.color = Color.red;
+		Gizmos.DrawRay(transform.position, Vector3.down * _slopeCheckDistance);
+
+		//UNCOMMENT THIS CODE TO SHOW THE DIRECTION OF THE INPUT + GRAVITY
+		//Gizmos.color = Color.black;
+		//Gizmos.DrawRay(new(transform.position.x, transform.position.y + _controller.center.y, transform.position.z), _finalInputMovement);
 	}
 
 	private void OnApplicationFocus(bool hasFocus)

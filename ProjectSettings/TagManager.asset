@@ -6,11 +6,12 @@ TagManager:
   tags:
   - CinemachineTarget
   - Orb
+  - Ice
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Slip
+  - Ground
   - Water
   - UI
   - 

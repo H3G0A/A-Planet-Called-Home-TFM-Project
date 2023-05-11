@@ -79,6 +79,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _force: 10
-  _radius: 5
-  _diagonalPush: 1
+  _radius: 2
+  _diagonalPush: 0
   _verticalPush: 0
