@@ -6,13 +6,14 @@ TagManager:
   tags:
   - CinemachineTarget
   - Orb
+  - Ice
   - DisplaceBox
   - Elevator
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Slip
+  - Ground
   - Water
   - UI
   - 
