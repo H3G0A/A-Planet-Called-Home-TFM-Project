@@ -11,9 +11,10 @@ public static class GlobalParameters
     public const string DISPLACE_BOX_TAG = "DisplaceBox";
     public const string ELEVATOR_TAG = "Elevator";
     public const string WATER_TAG = "Water";
+    public const string BREAKABLE_WALL_TAG = "BreakableWall";
 
     //LAYERS
-    //public const int WATER_LAYER = 4;
+
 
     //SORTING LAYERS
 
@@ -25,4 +26,5 @@ public static class GlobalParameters
     public const string JUMP_ACTION = "Jump";
     public const string AIM_ACTION = "Aim";
     public const string SHOOT_ACTION = "Shoot";
+    public const string CHANGEORB_ACTION = "ChangeOrb";
 }

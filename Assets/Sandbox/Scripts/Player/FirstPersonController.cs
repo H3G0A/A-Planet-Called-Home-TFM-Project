@@ -11,8 +11,13 @@ public class FirstPersonController : MonoBehaviour
 	[SerializeField] float _moveSpeed = 4.0f;
 	[Tooltip("Sprint speed of the character in m/s")]
 	[SerializeField] float _sprintSpeed = 6.0f;
-	[Tooltip("Acceleration and deceleration")]
-	[SerializeField] float _speedChangeRate = 10.0f;
+	[SerializeField] float _currentSpeed;
+
+	[Space(10)]
+	[Tooltip("Acceleration in terrain")]
+	[SerializeField] float _groundedAcceleration = 10.0f;
+	[Tooltip("Deceleration in terrain")]
+	[SerializeField] float _groundedDeceleration = 10.0f;
 
 	[Space(10)]
 	[SerializeField] Vector3 _horizontalVelocity = Vector3.zero;
@@ -26,8 +31,15 @@ public class FirstPersonController : MonoBehaviour
 	[SerializeField] float _terminalVelocity = 53.0f;
 
 	[Space(10)]
+	[Tooltip("Acceleration while airbone")]
+	[SerializeField] float _airboneAcceleration = 5.0f;
+	[Tooltip(" and deceleration while airbone")]
+	[SerializeField] float _airboneDeceleration = 2.0f;
+
+	[Space(10)]
 	[Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
 	[SerializeField] float _fallTimeout = 0.15f;
+
 
 	[Header("Player Grounded")]
 	[Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
@@ -51,15 +63,17 @@ public class FirstPersonController : MonoBehaviour
 	[Tooltip("Always bigger than the distance used for the grounded check")]
 	[SerializeField] float _slopeCheckDistance = .2f;
 
+
 	[Header("Player On Ice")]
 	[SerializeField] int _onIce = 0;
 	[SerializeField] float _iceMultiplier = 2f;
+
 
 	[Header("Player In Water")]
 	[SerializeField] bool _inWater = false;
 	[SerializeField] bool _heavy = false;
 	[SerializeField] LayerMask _waterLayers;
-	
+
 
 	[Header("Cinemachine")]
 	[Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
@@ -69,11 +83,13 @@ public class FirstPersonController : MonoBehaviour
 	[Tooltip("How far in degrees can you move the camera down")]
 	[SerializeField] float _bottomClamp = -90.0f;
 
+
 	[Header("Character Input Values")]
 	[SerializeField] Vector2 _move;
 	[SerializeField] Vector2 _look;
 	[SerializeField] bool _sprint;
 	[SerializeField] bool _jump;
+
 
 	[Header("Mouse Cursor Settings")]
 	[SerializeField] bool cursorLocked = true;
@@ -82,7 +98,9 @@ public class FirstPersonController : MonoBehaviour
 	float _cinemachineTargetPitch;
 
 	// player
-	float _speed;
+	float _targetSpeed;
+	float _acceleration;
+	float _deceleration;
 	Vector3 _inputDirection;
 	Vector3 _cumulatedMovement;
 	bool _touchingWater;
@@ -168,7 +186,7 @@ public class FirstPersonController : MonoBehaviour
     private void GroundCheck()
     {
 		Vector3 _boxCenter = new(transform.position.x, transform.position.y + _groundedCheckRadius + _groundedOffset, transform.position.z);
-		_grounded = Physics.SphereCast(_boxCenter, _groundedCheckRadius, Vector3.down, out _, _groundedCastDistance, _groundLayers);
+		_grounded = Physics.SphereCast(_boxCenter, _groundedCheckRadius, Vector3.down, out _, _groundedCastDistance, _groundLayers, QueryTriggerInteraction.Ignore);
 		//Vector3 _boxCenter = new(transform.position.x, transform.position.y + _groundedOffset, transform.position.z);
 		//_grounded = Physics.BoxCast(_boxCenter, _groundedBoxSize / 2, Vector3.down, Quaternion.identity, _groundedCastDistance, _groundLayers);
 
@@ -215,61 +233,73 @@ public class FirstPersonController : MonoBehaviour
 
     private void AdjustForSlope(ref Vector3 _velocity)
     {
-        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit _hit, _slopeCheckDistance, _groundLayers, QueryTriggerInteraction.Ignore) && _grounded)
+		bool _slopeCheck = Physics.Raycast(transform.position, Vector3.down, out RaycastHit _hit, _slopeCheckDistance, _groundLayers, QueryTriggerInteraction.Ignore);
+
+		if (_slopeCheck && _grounded)
         {
             Quaternion _slopeRotation = Quaternion.FromToRotation(Vector3.up, _hit.normal);
             _velocity = _slopeRotation * _velocity;
         }
     }
 
-    private void ManageMovement()
-    {
+	private void ManageMovement()
+	{
 		// set target speed based on move speed, sprint speed and if sprint is pressed
-		float _targetSpeed = _sprint ? _sprintSpeed : _moveSpeed;
+		if (_grounded)
+		{
+			_targetSpeed = _sprint ? _sprintSpeed : _moveSpeed;
+			if (_onIce > 0 && _grounded) _targetSpeed *= _iceMultiplier;
 
-		_targetSpeed = _onIce > 0 ? _targetSpeed * _iceMultiplier : _targetSpeed;
+			_acceleration = _groundedAcceleration;
+			_deceleration = _groundedDeceleration;
+		}
+        else
+        {
+			if(_targetSpeed < _moveSpeed) _targetSpeed = _moveSpeed;
 
-		// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
+			_acceleration = _airboneAcceleration;
+			_deceleration = _airboneDeceleration;
+		}
 
 		// note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
 		// if there is no input, set the target speed to 0
 		if (_move == Vector2.zero) _targetSpeed = 0.0f;
 
 		// a reference to the players current horizontal velocity
-		float _currentHorizontalSpeed = _horizontalVelocity.magnitude;
-
-
-        if (_grounded && !_inWater) //Maintain momentum while airbone
-        {
-			Accelerate(_currentHorizontalSpeed, _targetSpeed);
+		float _previousHorizontalSpeed = _horizontalVelocity.magnitude;
+		float _speedOffset = 0.1f;
+		// accelerate or decelerate to target speed
+		if (_previousHorizontalSpeed < _targetSpeed - _speedOffset)
+		{
+			VelocityChange(_previousHorizontalSpeed, _targetSpeed, true);
+		}
+		else if (_previousHorizontalSpeed > _targetSpeed + _speedOffset)
+		{
+			VelocityChange(_previousHorizontalSpeed, _targetSpeed, false);
+		}
+		else
+		{
+			_currentSpeed = _targetSpeed;
+		}
 			
-			// Make the input for the movement into a vector3
-			_inputDirection = transform.right * _move.x + transform.forward * _move.y;
-        }
+		// Make the input for the movement into a vector3
+		_inputDirection += transform.right * _move.x + transform.forward * _move.y;
+		_inputDirection.Normalize();
 
 		// move the player
-		_horizontalVelocity = _inputDirection.normalized * _speed;
+		_horizontalVelocity = _inputDirection * _currentSpeed;
 		AdjustForSlope(ref _horizontalVelocity);
 		MoveCharacter(_horizontalVelocity * Time.deltaTime);
 	}
 
-	private void Accelerate(float _currentSpeed, float _targetSpeed)
-    {
-		float _speedOffset = 0.1f;
-		// accelerate or decelerate to target speed
-		if (_currentSpeed < _targetSpeed - _speedOffset || _currentSpeed > _targetSpeed + _speedOffset)
-		{
-			// creates curved result rather than a linear one giving a more organic speed change
-			// note T in Lerp is clamped, so we don't need to clamp our speed
-			_speed = Mathf.Lerp(_currentSpeed, _targetSpeed * _move.magnitude, Time.deltaTime * _speedChangeRate);
+	private void VelocityChange(float _previousSpeed, float _targetSpeed, bool _isAccel)
+	{
+		float _speedChange;
+		_speedChange = _isAccel ? _acceleration : _deceleration;
 
-			// round speed to 3 decimal places
-			_speed = Mathf.Round(_speed * 1000f) / 1000f;
-		}
-		else
-		{
-			_speed = _targetSpeed;
-		}
+		// creates curved result rather than a linear one giving a more organic speed change
+		// note T in Lerp is clamped, so we don't need to clamp our speed
+		_currentSpeed = Mathf.Lerp(_previousSpeed, _targetSpeed * _move.magnitude, Time.deltaTime * _speedChange);
 	}
 
 	private void ManageGravity()

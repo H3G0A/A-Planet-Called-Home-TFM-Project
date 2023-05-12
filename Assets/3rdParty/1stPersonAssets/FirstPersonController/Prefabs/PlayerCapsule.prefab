@@ -253,24 +253,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveSpeed: 4
   _sprintSpeed: 6
-  _slipMultiplier: 2
-  _speedChangeRate: 10
-  _finalInputMovement: {x: 0, y: 0, z: 0}
+  _currentSpeed: 0
+  _groundedAcceleration: 10
+  _groundedDeceleration: 10
+  _horizontalVelocity: {x: 0, y: 0, z: 0}
+  _verticalVelocity: 0
   _jumpHeight: 1.2
   _gravity: -15
   _terminalVelocity: 53
+  _airboneAcceleration: 5
+  _airboneDeceleration: 1.5
   _fallTimeout: 0.15
   _grounded: 1
-  _sliped: 0
-  _groundedOffset: 0.05
-  _groundedBoxSize: {x: 0.9, y: 0.1, z: 0.9}
-  _groundedCastDistance: 0.1
+  _groundedOffset: -0.05
+  _groundedCheckRadius: 0.5
+  _groundedCastDistance: 0.08
   _groundLayers:
     serializedVersion: 2
     m_Bits: 9
-  _slipLayers:
-    serializedVersion: 2
-    m_Bits: 8
+  _edgeCheckOffset: 0.1
+  _edgeCheckLength: 0.75
+  _edgeSlipSpeed: 2
+  _slopeCheckDistance: 0.2
+  _onIce: 0
+  _iceMultiplier: 2
   _cinemachineCameraTarget: {fileID: 4135013735270702863}
   _topClamp: 90
   _bottomClamp: -90
@@ -291,7 +297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c07b1637ac759f45aa532d23eca136d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mass: 5
+  mass: 0.2
 --- !u!1001 &7283992801777407619
 PrefabInstance:
   m_ObjectHideFlags: 0

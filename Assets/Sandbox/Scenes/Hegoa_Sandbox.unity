@@ -3830,25 +3830,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1236055, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      propertyPath: mass
-      value: 0.2
+    - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+      propertyPath: _moveSpeed
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      propertyPath: _edgeSlipSpeed
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      propertyPath: _groundedOffset
-      value: -0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      propertyPath: _edgeCheckLength
-      value: 0.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      propertyPath: _edgeCheckOffset
-      value: 0.1
+      propertyPath: _currentSpeed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: _iceCheckDistance
@@ -3859,12 +3847,8 @@ PrefabInstance:
       value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      propertyPath: _groundedCheckRadius
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      propertyPath: _groundedCastDistance
-      value: 0.08
+      propertyPath: _cinemachineCameraTarget
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4135013735270702856, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3894,6 +3878,22 @@ PrefabInstance:
       propertyPath: _mainCamera
       value: 
       objectReference: {fileID: 855656282}
+    - target: {fileID: 6334482532541443431, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+      propertyPath: _selectedOrb
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6334482532541443431, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+      propertyPath: _chargedOrbs.Array.data[0]
+      value: 
+      objectReference: {fileID: 6016317886622445584, guid: e303382b79774d948bfcbb9f1634ec15, type: 3}
+    - target: {fileID: 6334482532541443431, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+      propertyPath: _chargedOrbs.Array.data[1]
+      value: 
+      objectReference: {fileID: 3763091816190321520, guid: fbc8c6956626b1d48bbb724b1da96332, type: 3}
+    - target: {fileID: 6334482532541443431, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+      propertyPath: _chargedOrbs.Array.data[2]
+      value: 
+      objectReference: {fileID: 8844603512878802888, guid: b0d919d4b48061745b51560fe4396cc3, type: 3}
     - target: {fileID: 8616685848737228372, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: m_Name
       value: PlayerCapsule
