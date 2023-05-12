@@ -10,6 +10,8 @@ public static class GlobalParameters
     public const string ICE_TAG = "Ice";
     public const string DISPLACE_BOX_TAG = "DisplaceBox";
     public const string ELEVATOR_TAG = "Elevator";
+    public const string BREAKABLE_WALL_TAG = "BreakableWall";
+
     //LAYERS
 
 

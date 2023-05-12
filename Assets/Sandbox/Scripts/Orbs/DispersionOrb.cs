@@ -41,6 +41,9 @@ public class DispersionOrb : OrbBehaviour
                 }
 
                 _impactReceiver.AddImpact(_forceDirection, _force);
+            } else if(col.gameObject.CompareTag(GlobalParameters.BREAKABLE_WALL_TAG)){
+                BreakableWallController breakableWallScript = col.GetComponent<BreakableWallController>();
+                breakableWallScript.hitByDispersionOrb();            
             }
         }
     }
