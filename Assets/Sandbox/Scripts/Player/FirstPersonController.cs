@@ -211,24 +211,22 @@ public class FirstPersonController : MonoBehaviour
 		if (_grounded)
 		{
 			_targetSpeed = _sprint ? _sprintSpeed : _moveSpeed;
-
 			if (_onIce > 0 && _grounded) _targetSpeed *= _iceMultiplier;
 
-			// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
-
-			// note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-			// if there is no input, set the target speed to 0
-			if (_move == Vector2.zero) _targetSpeed = 0.0f;
 			_acceleration = _groundedAcceleration;
 			_deceleration = _groundedDeceleration;
 		}
         else
         {
 			if(_targetSpeed < _moveSpeed) _targetSpeed = _moveSpeed;
-			if (_move == Vector2.zero) _targetSpeed = 0.0f;
+
 			_acceleration = _airboneAcceleration;
 			_deceleration = _airboneDeceleration;
 		}
+
+		// note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
+		// if there is no input, set the target speed to 0
+		if (_move == Vector2.zero) _targetSpeed = 0.0f;
 
 		// a reference to the players current horizontal velocity
 		float _previousHorizontalSpeed = _horizontalVelocity.magnitude;

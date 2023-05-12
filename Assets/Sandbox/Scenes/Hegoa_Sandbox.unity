@@ -3095,25 +3095,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1236055, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      propertyPath: mass
-      value: 0.2
+    - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+      propertyPath: _moveSpeed
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      propertyPath: _edgeSlipSpeed
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      propertyPath: _groundedOffset
-      value: -0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      propertyPath: _edgeCheckLength
-      value: 0.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      propertyPath: _edgeCheckOffset
-      value: 0.1
+      propertyPath: _currentSpeed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: _iceCheckDistance
@@ -3124,20 +3112,8 @@ PrefabInstance:
       value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      propertyPath: _airboneAcceleration
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      propertyPath: _airboneDeceleration
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      propertyPath: _groundedCheckRadius
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      propertyPath: _groundedCastDistance
-      value: 0.08
+      propertyPath: _cinemachineCameraTarget
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4135013735270702856, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: m_LocalRotation.w
