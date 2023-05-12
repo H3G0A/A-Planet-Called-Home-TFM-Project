@@ -9,6 +9,7 @@ TagManager:
   - Ice
   - DisplaceBox
   - Elevator
+  - BreakableWall
   layers:
   - Default
   - TransparentFX
