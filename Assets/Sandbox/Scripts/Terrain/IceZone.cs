@@ -79,8 +79,6 @@ public class IceZone : MonoBehaviour
             //Debug.Log(_hit.collider.gameObject);
             if (_hit.point.y > _maxHeight) _maxHeight = _hit.point.y;
             if (_hit.point.y < _minHeight) _minHeight = _hit.point.y;
-            Debug.Log("Max: " + _maxHeight);
-            Debug.Log("Min: " + _minHeight);
         }
     }
 
