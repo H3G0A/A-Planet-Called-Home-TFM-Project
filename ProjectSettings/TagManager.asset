@@ -9,6 +9,7 @@ TagManager:
   - Ice
   - DisplaceBox
   - Elevator
+  - Water
   layers:
   - Default
   - TransparentFX

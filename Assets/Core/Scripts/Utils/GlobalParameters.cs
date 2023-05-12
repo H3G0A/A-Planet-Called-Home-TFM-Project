@@ -10,8 +10,10 @@ public static class GlobalParameters
     public const string ICE_TAG = "Ice";
     public const string DISPLACE_BOX_TAG = "DisplaceBox";
     public const string ELEVATOR_TAG = "Elevator";
-    //LAYERS
+    public const string WATER_TAG = "Water";
 
+    //LAYERS
+    //public const int WATER_LAYER = 4;
 
     //SORTING LAYERS
 

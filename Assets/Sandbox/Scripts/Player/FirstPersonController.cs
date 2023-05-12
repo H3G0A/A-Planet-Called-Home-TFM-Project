@@ -55,6 +55,12 @@ public class FirstPersonController : MonoBehaviour
 	[SerializeField] int _onIce = 0;
 	[SerializeField] float _iceMultiplier = 2f;
 
+	[Header("Player In Water")]
+	[SerializeField] bool _inWater = false;
+	[SerializeField] bool _heavy = false;
+	[SerializeField] LayerMask _waterLayers;
+	
+
 	[Header("Cinemachine")]
 	[Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
 	[SerializeField] GameObject _cinemachineCameraTarget;
@@ -76,9 +82,10 @@ public class FirstPersonController : MonoBehaviour
 	float _cinemachineTargetPitch;
 
 	// player
-	Vector3 _inputDirection;
 	float _speed;
+	Vector3 _inputDirection;
 	Vector3 _cumulatedMovement;
+	bool _touchingWater;
 
 	// timers
 	float _fallTimeoutDelta;
@@ -122,6 +129,7 @@ public class FirstPersonController : MonoBehaviour
     {
 		//Checks
 		GroundCheck();
+		WaterCheck();
 
 		//Player movement
 		ManageJump();
@@ -137,6 +145,26 @@ public class FirstPersonController : MonoBehaviour
 		CameraRotation();
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        switch (other.tag)
+        {
+			case WATER_TAG:
+				_touchingWater = true;
+				break;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+		switch (other.tag)
+		{
+			case WATER_TAG:
+				_touchingWater = false;
+				break;
+		}
+	}
+
     private void GroundCheck()
     {
 		Vector3 _boxCenter = new(transform.position.x, transform.position.y + _groundedCheckRadius + _groundedOffset, transform.position.z);
@@ -149,6 +177,15 @@ public class FirstPersonController : MonoBehaviour
 			SlipCheck(); //Check if stuck on edge
         }
 	}
+
+	private void WaterCheck()
+    {
+        if (_touchingWater)
+        {
+			Vector3 _spawnPoint = new(transform.position.x, transform.position.y + _controller.center.y, transform.position.y);
+			_inWater = Physics.CheckSphere(_spawnPoint, .1f, _waterLayers);
+        }
+    }
 
 	private void SlipCheck()
     {
@@ -202,7 +239,7 @@ public class FirstPersonController : MonoBehaviour
 		float _currentHorizontalSpeed = _horizontalVelocity.magnitude;
 
 
-        if (_grounded) //Maintain momentum while airbone
+        if (_grounded && !_inWater) //Maintain momentum while airbone
         {
 			Accelerate(_currentHorizontalSpeed, _targetSpeed);
 			
@@ -257,7 +294,7 @@ public class FirstPersonController : MonoBehaviour
 			}
 		}
 
-		MoveCharacter(Vector3.up * _verticalVelocity * Time.deltaTime);
+		MoveCharacter(_verticalVelocity * Time.deltaTime * Vector3.up);
     }
 
 	private void ManageJump()
@@ -345,21 +382,25 @@ public class FirstPersonController : MonoBehaviour
 		Gizmos.DrawSphere(_boxCenter, _groundedCheckRadius);
 
 		//EDGE CHECKS GIZMO
-		Vector3 _spawnPoint = new(transform.position.x, transform.position.y + _edgeCheckOffset, transform.position.z);
+		Vector3 _edgeSpawnPoint = new(transform.position.x, transform.position.y + _edgeCheckOffset, transform.position.z);
 
 		Gizmos.color = Color.yellow;
-		Gizmos.DrawRay(_spawnPoint, transform.forward * _edgeCheckLength);
-		Gizmos.DrawRay(_spawnPoint, - transform.forward * _edgeCheckLength);
-		Gizmos.DrawRay(_spawnPoint, transform.right * _edgeCheckLength);
-		Gizmos.DrawRay(_spawnPoint, - transform.right * _edgeCheckLength);
+		Gizmos.DrawRay(_edgeSpawnPoint, transform.forward * _edgeCheckLength);
+		Gizmos.DrawRay(_edgeSpawnPoint, - transform.forward * _edgeCheckLength);
+		Gizmos.DrawRay(_edgeSpawnPoint, transform.right * _edgeCheckLength);
+		Gizmos.DrawRay(_edgeSpawnPoint, - transform.right * _edgeCheckLength);
 
 		//SLOPE CHECK GIZMO
 		Gizmos.color = Color.red;
 		Gizmos.DrawRay(transform.position, Vector3.down * _slopeCheckDistance);
 
-		//UNCOMMENT THIS CODE TO SHOW THE DIRECTION OF THE INPUT + GRAVITY
-		//Gizmos.color = Color.black;
-		//Gizmos.DrawRay(new(transform.position.x, transform.position.y + _controller.center.y, transform.position.z), _finalInputMovement);
+        //WATER CHECK GIZMO
+        if (_touchingWater)
+        {
+			Gizmos.color = Color.green;
+			Vector3 _waterSpawnPoint = new(transform.position.x, transform.position.y + _controller.center.y, transform.position.y);
+			Gizmos.DrawSphere(_waterSpawnPoint, .1f);
+        }
 	}
 
 	private void OnApplicationFocus(bool hasFocus)
