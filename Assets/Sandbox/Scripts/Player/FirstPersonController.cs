@@ -134,13 +134,13 @@ public class FirstPersonController : MonoBehaviour
 		_lookAction = _playerInput.actions[LOOK_ACTION];
 		_sprintAction = _playerInput.actions[SPRINT_ACTION];
 		_jumpAction = _playerInput.actions[JUMP_ACTION];
+
+		SetInputCallbacks();
 	}
 
 	void Start()
     {
 		_fallTimeoutDelta = _fallTimeout; // reset our timeouts on start
-
-		SetInputCallbacks();
 	}
 
     void Update()
@@ -200,8 +200,8 @@ public class FirstPersonController : MonoBehaviour
     {
         if (_touchingWater)
         {
-			Vector3 _spawnPoint = new(transform.position.x, transform.position.y + _controller.center.y, transform.position.y);
-			_inWater = Physics.CheckSphere(_spawnPoint, .1f, _waterLayers);
+			Vector3 _spawnPoint = new(transform.position.x, transform.position.y + _controller.center.y, transform.position.z);
+			_inWater = Physics.CheckSphere(_spawnPoint, .1f, _waterLayers, QueryTriggerInteraction.Collide);
         }
     }
 
@@ -268,6 +268,7 @@ public class FirstPersonController : MonoBehaviour
 		// a reference to the players current horizontal velocity
 		float _previousHorizontalSpeed = _horizontalVelocity.magnitude;
 		float _speedOffset = 0.1f;
+
 		// accelerate or decelerate to target speed
 		if (_previousHorizontalSpeed < _targetSpeed - _speedOffset)
 		{
@@ -294,17 +295,24 @@ public class FirstPersonController : MonoBehaviour
 
 	private void VelocityChange(float _previousSpeed, float _targetSpeed, bool _isAccel)
 	{
-		float _speedChange;
-		_speedChange = _isAccel ? _acceleration : _deceleration;
+		float _changeRate;
+		_changeRate = _isAccel ? _acceleration : _deceleration;
 
 		// creates curved result rather than a linear one giving a more organic speed change
 		// note T in Lerp is clamped, so we don't need to clamp our speed
-		_currentSpeed = Mathf.Lerp(_previousSpeed, _targetSpeed * _move.magnitude, Time.deltaTime * _speedChange);
+		_currentSpeed = Mathf.Lerp(_previousSpeed, _targetSpeed * _move.magnitude, Time.deltaTime * _changeRate);
 	}
 
 	private void ManageGravity()
     {
-        if (_grounded)
+        if (_inWater)
+        {
+			if (_verticalVelocity < 0)
+			{
+				_verticalVelocity = 0;
+			}
+		}
+        else if (_grounded)
         {
 			// reset the fall timeout timer
 			_fallTimeoutDelta = _fallTimeout;
@@ -329,7 +337,8 @@ public class FirstPersonController : MonoBehaviour
 
 	private void ManageJump()
     {
-        if (_grounded)
+
+        if (_grounded || _inWater)
         {
 			// Jump
 			if (_jump)
@@ -373,6 +382,11 @@ public class FirstPersonController : MonoBehaviour
 
         // rotate the player left and right
         transform.Rotate(Vector3.up * _look.x);
+    }
+
+	private void SwitchActionMap(string _mapName)
+    {
+        
     }
 
 	private void SetInputCallbacks()
@@ -427,8 +441,8 @@ public class FirstPersonController : MonoBehaviour
         //WATER CHECK GIZMO
         if (_touchingWater)
         {
-			Gizmos.color = Color.green;
-			Vector3 _waterSpawnPoint = new(transform.position.x, transform.position.y + _controller.center.y, transform.position.y);
+			Gizmos.color = Color.yellow;
+			Vector3 _waterSpawnPoint = new(transform.position.x, transform.position.y + _controller.center.y, transform.position.z);
 			Gizmos.DrawSphere(_waterSpawnPoint, .1f);
         }
 	}

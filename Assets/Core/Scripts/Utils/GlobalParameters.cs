@@ -27,4 +27,9 @@ public static class GlobalParameters
     public const string AIM_ACTION = "Aim";
     public const string SHOOT_ACTION = "Shoot";
     public const string CHANGEORB_ACTION = "ChangeOrb";
+
+    //ACTION MAPS
+    public const string PLAYER_GROUND_MAP = "Ground";
+    public const string PLAYER_WATER_SURFACE_MAP = "Water Surface";
+    public const string PLAYER_UNDERWATER_MAP = "Underwater";
 }
