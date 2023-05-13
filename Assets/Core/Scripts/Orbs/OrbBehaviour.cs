@@ -12,7 +12,7 @@ public abstract class OrbBehaviour : MonoBehaviour
 
     private void Start() //Destroy after a while if has not collided
     {
-        Destroy(this.gameObject, 10);
+        Destroy(this.gameObject, 5);
     }
 
     private void OnCollisionEnter(Collision collision)

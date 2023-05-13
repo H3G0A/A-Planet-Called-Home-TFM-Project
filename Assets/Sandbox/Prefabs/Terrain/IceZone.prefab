@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3947131424038484955}
   - component: {fileID: 3947131424038484952}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Projector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50,7 +50,7 @@ Projector:
   m_Material: {fileID: 2100000, guid: d331e7d27ad3a264e941d0566598fbee, type: 2}
   m_IgnoreLayers:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 247
 --- !u!1 &3947131425236279134
 GameObject:
   m_ObjectHideFlags: 0
@@ -62,7 +62,7 @@ GameObject:
   - component: {fileID: 3947131425236279132}
   - component: {fileID: 3947131425236279133}
   - component: {fileID: 980788584}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: IceZone
   m_TagString: Ice
   m_Icon: {fileID: 0}
@@ -110,9 +110,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27f1a98382cb8ce4c86c32ea29724251, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  permanent: 0
   _delayDestroyTimer: 10
+  _height: 4
   _radius: 4
   _iceLayers:
     serializedVersion: 2
     m_Bits: 8
-  _isPlayerOn: 0

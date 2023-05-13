@@ -14,7 +14,9 @@ public static class GlobalParameters
     public const string BREAKABLE_WALL_TAG = "BreakableWall";
 
     //LAYERS
-
+    public const int GROUND_LAYER = 3;
+    public const int PLAYER_LAYER = 6;
+    public const int ICE_LAYER = 8;
 
     //SORTING LAYERS
 

@@ -23,8 +23,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4135013735270702863}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.375, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.375, z: 0.194}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -43,10 +43,9 @@ GameObject:
   - component: {fileID: 1192213532990678435}
   - component: {fileID: 8642102851207229500}
   - component: {fileID: 1324191040466888942}
-  - component: {fileID: 4069083625701757228}
   m_Layer: 6
   m_Name: Capsule
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -116,20 +115,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &4069083625701757228
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4791547317394412363}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8616685848737228372
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,10 +221,6 @@ MonoBehaviour:
     m_ActionName: Player/Aim[/Mouse/rightButton]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: d01bd2e2-40ad-450f-b645-d47920863bac
-    m_ActionName: Ground/ChangeOrb[/Keyboard/q,/Keyboard/e,/Keyboard/1,/Keyboard/2,/Keyboard/3]
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: 85a60209-7bde-4b5d-acb5-ecb805a02858
     m_ActionName: Water Surface/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   - m_PersistentCalls:
@@ -253,19 +234,23 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: b5f4a0d6-92d3-4245-b0a1-25a683376338
-    m_ActionName: Underwater/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+    m_ActionName: Water Diving/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: f5cafa10-4a7c-44f4-83d8-f8f94b5a381b
-    m_ActionName: Underwater/Look[/Mouse/delta]
+    m_ActionName: Water Diving/Look[/Mouse/delta]
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 19deff8b-e65e-46a2-8cf9-0f9c81938e30
-    m_ActionName: Underwater/Jump[/Keyboard/space]
+    m_ActionName: Water Diving/Jump[/Keyboard/space]
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 50ed0220-064e-4d76-bfb0-66943a44f236
-    m_ActionName: Underwater/Sprint[/Keyboard/leftShift]
+    m_ActionName: Water Diving/Sprint[/Keyboard/leftShift]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d01bd2e2-40ad-450f-b645-d47920863bac
+    m_ActionName: Ground/ChangeOrb[/Keyboard/q,/Keyboard/e,/Keyboard/1,/Keyboard/2,/Keyboard/3]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Ground
@@ -306,14 +291,14 @@ MonoBehaviour:
   _edgeCheckOffset: 0.1
   _edgeCheckLength: 0.75
   _edgeSlipSpeed: 2
-  _slopeCheckDistance: 0.2
+  _slopeCheckDistance: 0.4
   _onIce: 0
   _iceMultiplier: 2
-  _inWater: 0
   _heavy: 0
+  _inWater: 0
   _waterLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 16
   _cinemachineCameraTarget: {fileID: 4135013735270702863}
   _topClamp: 90
   _bottomClamp: -90
@@ -354,6 +339,18 @@ PrefabInstance:
       propertyPath: _mainCamera
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3674210042753416164, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
+      propertyPath: _chargedOrbs.Array.data[0]
+      value: 
+      objectReference: {fileID: 6016317886622445584, guid: e303382b79774d948bfcbb9f1634ec15, type: 3}
+    - target: {fileID: 3674210042753416164, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
+      propertyPath: _chargedOrbs.Array.data[1]
+      value: 
+      objectReference: {fileID: 3763091816190321520, guid: fbc8c6956626b1d48bbb724b1da96332, type: 3}
+    - target: {fileID: 3674210042753416164, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
+      propertyPath: _chargedOrbs.Array.data[2]
+      value: 
+      objectReference: {fileID: 8844603512878802888, guid: b0d919d4b48061745b51560fe4396cc3, type: 3}
     - target: {fileID: 3674210042753416184, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
       propertyPath: m_RootOrder
       value: 0

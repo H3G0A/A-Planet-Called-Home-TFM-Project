@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 4050671529694767881}
   - component: {fileID: 1039602587088960188}
   m_Layer: 4
-  m_Name: upsideDown
+  m_Name: inverseWater
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

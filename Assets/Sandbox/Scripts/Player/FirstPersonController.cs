@@ -48,7 +48,6 @@ public class FirstPersonController : MonoBehaviour
 	[SerializeField] float _groundedOffset = 0.05f;
 	[Tooltip("The radius of the ground sphere check, should be slightly smaller than the character controller radius")]
 	[SerializeField] float _groundedCheckRadius = .4f;
-	//[SerializeField] Vector3 _groundedBoxSize = new(1, 0.1f, 1);
 	[SerializeField] float _groundedCastDistance = 0.1f;
 	[Tooltip("What layers the character uses as ground")]
 	[SerializeField] LayerMask _groundLayers;
@@ -65,13 +64,14 @@ public class FirstPersonController : MonoBehaviour
 
 
 	[Header("Player On Ice")]
-	[SerializeField] int _onIce = 0;
-	[SerializeField] float _iceMultiplier = 2f;
+	[SerializeField] bool _onIce = false;
+	[SerializeField] float _iceSpeedMultiplier = 2f;
 
 
 	[Header("Player In Water")]
-	[SerializeField] bool _inWater = false;
 	[SerializeField] bool _heavy = false;
+	[SerializeField] bool _inWater = false;
+	[SerializeField] bool _underWater = false;
 	[SerializeField] LayerMask _waterLayers;
 
 
@@ -104,6 +104,7 @@ public class FirstPersonController : MonoBehaviour
 	Vector3 _inputDirection;
 	Vector3 _cumulatedMovement;
 	bool _touchingWater;
+	float _waterCheckRadius = .01f;
 
 	// timers
 	float _fallTimeoutDelta;
@@ -116,13 +117,6 @@ public class FirstPersonController : MonoBehaviour
 	InputAction _sprintAction;
 	
 	CharacterController _controller;
-
-	//Getters & Setters
-	public int OnIce
-    {
-        get { return _onIce; }
-		set { _onIce = value; }
-    }
 
 	private void Awake()
 	{
@@ -147,11 +141,13 @@ public class FirstPersonController : MonoBehaviour
     {
 		//Checks
 		GroundCheck();
+		IceCheck();
 		WaterCheck();
 
 		//Player movement
 		ManageJump();
 		ManageGravity();
+		WaterLogic();
 		ManageMovement();
 
 		//Apply movement
@@ -187,10 +183,8 @@ public class FirstPersonController : MonoBehaviour
     {
 		Vector3 _boxCenter = new(transform.position.x, transform.position.y + _groundedCheckRadius + _groundedOffset, transform.position.z);
 		_grounded = Physics.SphereCast(_boxCenter, _groundedCheckRadius, Vector3.down, out _, _groundedCastDistance, _groundLayers, QueryTriggerInteraction.Ignore);
-		//Vector3 _boxCenter = new(transform.position.x, transform.position.y + _groundedOffset, transform.position.z);
-		//_grounded = Physics.BoxCast(_boxCenter, _groundedBoxSize / 2, Vector3.down, Quaternion.identity, _groundedCastDistance, _groundLayers);
 
-        if (!_grounded && _controller.velocity.y <= 0)
+        if (!_grounded && _controller.velocity.y <= 0 && !_inWater)
         {
 			SlipCheck(); //Check if stuck on edge
         }
@@ -200,8 +194,13 @@ public class FirstPersonController : MonoBehaviour
     {
         if (_touchingWater)
         {
-			Vector3 _spawnPoint = new(transform.position.x, transform.position.y + _controller.center.y, transform.position.z);
-			_inWater = Physics.CheckSphere(_spawnPoint, .1f, _waterLayers, QueryTriggerInteraction.Collide);
+			Vector3 _spawnIn = new(transform.position.x, transform.position.y + _controller.center.y, transform.position.z);
+			_inWater = Physics.CheckSphere(_spawnIn, _waterCheckRadius, _waterLayers, QueryTriggerInteraction.Collide);
+			
+			Vector3 _spawnUnder = new(transform.position.x, transform.position.y + _controller.center.y + (_waterCheckRadius * 2), transform.position.z);
+			_underWater = Physics.CheckSphere(_spawnUnder, _waterCheckRadius, _waterLayers, QueryTriggerInteraction.Collide);
+
+			if(_inWater) WaterLogic();
         }
     }
 
@@ -231,6 +230,22 @@ public class FirstPersonController : MonoBehaviour
 		MoveCharacter(_edgeSlipSpeed * Time.deltaTime * slipDirection);
 	}
 
+	private void IceCheck()
+    {
+		float _radius = .01f;
+		float _offset = .09f;
+		Vector3 _pos = new(transform.position.x, transform.position.y + _radius - _offset, transform.position.z);
+		if (Physics.CheckSphere(_pos, .01f, 1 << ICE_LAYER, QueryTriggerInteraction.Collide))
+		{
+			Debug.Log("true");
+			_onIce = true;
+		}
+		else
+		{
+			_onIce = false;
+		}
+	}
+
     private void AdjustForSlope(ref Vector3 _velocity)
     {
 		bool _slopeCheck = Physics.Raycast(transform.position, Vector3.down, out RaycastHit _hit, _slopeCheckDistance, _groundLayers, QueryTriggerInteraction.Ignore);
@@ -244,22 +259,8 @@ public class FirstPersonController : MonoBehaviour
 
 	private void ManageMovement()
 	{
-		// set target speed based on move speed, sprint speed and if sprint is pressed
-		if (_grounded)
-		{
-			_targetSpeed = _sprint ? _sprintSpeed : _moveSpeed;
-			if (_onIce > 0 && _grounded) _targetSpeed *= _iceMultiplier;
 
-			_acceleration = _groundedAcceleration;
-			_deceleration = _groundedDeceleration;
-		}
-        else
-        {
-			if(_targetSpeed < _moveSpeed) _targetSpeed = _moveSpeed;
-
-			_acceleration = _airboneAcceleration;
-			_deceleration = _airboneDeceleration;
-		}
+		SetSpeedAndAcceleration();
 
 		// note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
 		// if there is no input, set the target speed to 0
@@ -305,7 +306,8 @@ public class FirstPersonController : MonoBehaviour
 
 	private void ManageGravity()
     {
-        if (_inWater)
+		// Keep player on water surface when not heavy
+        if (_inWater && !_heavy)
         {
 			if (_verticalVelocity < 0)
 			{
@@ -335,10 +337,18 @@ public class FirstPersonController : MonoBehaviour
 		MoveCharacter(_verticalVelocity * Time.deltaTime * Vector3.up);
     }
 
+	private void WaterLogic()
+    {
+        if (_underWater && !_heavy)
+        {
+
+        }
+    }
+
 	private void ManageJump()
     {
 
-        if (_grounded || _inWater)
+        if (_grounded || (_inWater && !_heavy))
         {
 			// Jump
 			if (_jump)
@@ -359,17 +369,6 @@ public class FirstPersonController : MonoBehaviour
 		}
 	}
 
-	public void MoveCharacter(Vector3 movement)
-	{
-		_cumulatedMovement += movement;
-	}
-
-	private void ApplyMovement()
-    {
-		_controller.Move(_cumulatedMovement);
-		_cumulatedMovement = Vector3.zero;
-	}
-
     private void CameraRotation()
     {
         _cinemachineTargetPitch += _look.y;
@@ -383,6 +382,36 @@ public class FirstPersonController : MonoBehaviour
         // rotate the player left and right
         transform.Rotate(Vector3.up * _look.x);
     }
+
+	public void MoveCharacter(Vector3 movement)
+	{
+		_cumulatedMovement += movement;
+	}
+
+	private void ApplyMovement()
+    {
+		_controller.Move(_cumulatedMovement);
+		_cumulatedMovement = Vector3.zero;
+	}
+
+    private void SetSpeedAndAcceleration()
+    {
+		if (_grounded || _inWater)
+		{
+			_targetSpeed = _sprint ? _sprintSpeed : _moveSpeed;
+			if (_onIce && _grounded) _targetSpeed *= _iceSpeedMultiplier;
+
+			_acceleration = _groundedAcceleration;
+			_deceleration = _groundedDeceleration;
+		}
+		else
+		{
+			if (_targetSpeed < _moveSpeed) _targetSpeed = _moveSpeed;
+
+			_acceleration = _airboneAcceleration;
+			_deceleration = _airboneDeceleration;
+		}
+	}
 
 	private void SwitchActionMap(string _mapName)
     {
@@ -413,7 +442,6 @@ public class FirstPersonController : MonoBehaviour
     {
 
 		//GROUNDED CHECK GIZMO
-		//Vector3 _boxCenter = new(transform.position.x, transform.position.y + _groundedOffset, transform.position.z);
 		Vector3 _boxCenter = new(transform.position.x, transform.position.y + _groundedCheckRadius + _groundedOffset - _groundedCastDistance, transform.position.z);
 
 		Color transparentGreen = new(0.0f, 1.0f, 0.0f, 0.35f);
@@ -422,7 +450,6 @@ public class FirstPersonController : MonoBehaviour
 		if (_grounded) Gizmos.color = transparentGreen;
 		else Gizmos.color = transparentRed;
 
-		//Gizmos.DrawCube(_boxCenter, new(_groundedBoxSize.x, _groundedBoxSize.y + _groundedCastDistance*2, _groundedBoxSize.z));
 		Gizmos.DrawSphere(_boxCenter, _groundedCheckRadius);
 
 		//EDGE CHECKS GIZMO
@@ -442,9 +469,20 @@ public class FirstPersonController : MonoBehaviour
         if (_touchingWater)
         {
 			Gizmos.color = Color.yellow;
-			Vector3 _waterSpawnPoint = new(transform.position.x, transform.position.y + _controller.center.y, transform.position.z);
-			Gizmos.DrawSphere(_waterSpawnPoint, .1f);
+			Vector3 _inWaterCheckPos = new(transform.position.x, transform.position.y + _controller.center.y, transform.position.z);
+			Gizmos.DrawSphere(_inWaterCheckPos, _waterCheckRadius);
+			
+			Gizmos.color = Color.red;
+			Vector3 _underWaterCheckPos = new(transform.position.x, transform.position.y + _controller.center.y + (_waterCheckRadius * 2), transform.position.z);
+			Gizmos.DrawSphere(_underWaterCheckPos, _waterCheckRadius);
         }
+
+		//ICE CHECK GIZMO
+		Gizmos.color = Color.red;
+		float _iceCheckRadius = .01f;
+		float _iceCheckOffset = .09f;
+		Vector3 _iceCheckPos = new(transform.position.x, transform.position.y + _iceCheckRadius - _iceCheckOffset, transform.position.z);
+		Gizmos.DrawSphere(_iceCheckPos, _iceCheckRadius);
 	}
 
 	private void OnApplicationFocus(bool hasFocus)
