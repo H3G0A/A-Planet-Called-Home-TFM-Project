@@ -67,6 +67,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Change Weight",
+                    "type": "Button",
+                    "id": "a19aa4b3-8b82-4110-a74d-563a2027ef68",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -232,6 +241,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "ChangeOrb",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f005d57e-a2fb-4902-989a-de1b7fdfbaee",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "Scale(factor=-1)",
+                    "groups": "",
+                    "action": "Change Weight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "670f5c97-5066-404e-81f9-fd7ec30ac5b9",
+                    "path": "<Keyboard>/v",
+                    "interactions": "",
+                    "processors": "Scale",
+                    "groups": "",
+                    "action": "Change Weight",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
