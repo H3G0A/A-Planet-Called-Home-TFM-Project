@@ -82,5 +82,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22a2f65821fc70b44811bc60b5907b23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _iceZone: {fileID: 3947131425236279134, guid: 8c517c524b64227448d76c5fada9bb5f, type: 3}
   _radius: 10
+  _iceZone: {fileID: 3947131425236279134, guid: 8c517c524b64227448d76c5fada9bb5f, type: 3}
+  _frozenWater: {fileID: 4954022143767521026, guid: 77282f2adb1ab3b42a8d86b13b33776b, type: 3}
