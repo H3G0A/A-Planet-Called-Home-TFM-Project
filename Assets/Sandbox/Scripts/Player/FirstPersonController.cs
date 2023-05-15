@@ -62,6 +62,10 @@ public class FirstPersonController : MonoBehaviour
 	[Tooltip("Always bigger than the distance used for the grounded check")]
 	[SerializeField] float _slopeCheckDistance = .2f;
 
+	[Space(10)]
+	[Tooltip("0: Regular Weight \n 1: Heavy Weight \n -1: Light Weight")]
+	[SerializeField] int _playerWeight = 0;
+
 
 	[Header("Player On Ice")]
 	[SerializeField] bool _onIce = false;
@@ -69,7 +73,6 @@ public class FirstPersonController : MonoBehaviour
 
 
 	[Header("Player In Water")]
-	[SerializeField] bool _heavy = false;
 	[SerializeField] bool _inWater = false;
 	[SerializeField] bool _underWater = false;
 	[SerializeField] LayerMask _waterLayers;
@@ -106,34 +109,48 @@ public class FirstPersonController : MonoBehaviour
 	bool _touchingWater;
 	float _waterCheckRadius = .01f;
 
-	// timers
+	// Timers
 	float _fallTimeoutDelta;
 
-	// Player input
-	PlayerInput _playerInput;
+	// Input Actions
 	InputAction _moveAction;
 	InputAction _lookAction;
 	InputAction _jumpAction;
 	InputAction _sprintAction;
-	
+	InputAction _changeWeightAction;
+
+	// Components
+	PlayerInput _playerInput;
 	CharacterController _controller;
+	ImpactReceiver _impactReceiver;
+
+	// Getter and setters
+	private int PlayerWeight
+    {
+        get { return _playerWeight; }
+		set { _playerWeight = Mathf.Clamp(value, -1, 1); }
+    }
 
 	private void Awake()
 	{
-		_controller = GetComponent<CharacterController>();
 		_playerInput = GetComponent<PlayerInput>();
+		_controller = GetComponent<CharacterController>();
+		_impactReceiver = GetComponent<ImpactReceiver>();
 
 		//assign actions to variables
 		_moveAction = _playerInput.actions[MOVE_ACTION];
 		_lookAction = _playerInput.actions[LOOK_ACTION];
 		_sprintAction = _playerInput.actions[SPRINT_ACTION];
 		_jumpAction = _playerInput.actions[JUMP_ACTION];
+		_changeWeightAction = _playerInput.actions[CHANGE_WEIGHT_ACTION];
 
 		SetInputCallbacks();
 	}
 
 	void Start()
     {
+		_impactReceiver.ChangeMass(PlayerWeight);
+
 		_fallTimeoutDelta = _fallTimeout; // reset our timeouts on start
 	}
 
@@ -305,7 +322,7 @@ public class FirstPersonController : MonoBehaviour
 	private void ManageGravity()
     {
 		// Keep player on water surface when not heavy
-        if (_inWater && !_heavy)
+        if (_inWater && (_playerWeight != 1))
         {
 			if (_verticalVelocity < 0)
 			{
@@ -337,12 +354,12 @@ public class FirstPersonController : MonoBehaviour
 
 	private void WaterLogic()
     {
-        if (!_heavy && _underWater)
+        if ((_playerWeight != 1) && _underWater)
         {
 			//Float back to surface
 			_verticalVelocity = 2f;
         }
-		else if (!_heavy)
+		else if (_playerWeight != 1)
         {
 			//Don't wait for next gravity update to stop; prevents bouncing on surface
 			_verticalVelocity = 0;
@@ -352,8 +369,8 @@ public class FirstPersonController : MonoBehaviour
 	private void ManageJump()
     {
 		bool _groundJump = _grounded && !_inWater;
-		bool _underWaterJump = _grounded && _heavy;
-		bool _waterJump = _inWater && !_heavy && !_underWater;
+		bool _underWaterJump = _grounded && (_playerWeight == 1);
+		bool _waterJump = _inWater && (_playerWeight != 1) && !_underWater;
 
 		if (_groundJump || _underWaterJump || _waterJump)
         {
@@ -420,6 +437,13 @@ public class FirstPersonController : MonoBehaviour
 		}
 	}
 
+	private void ChangeWeight(InputAction.CallbackContext ctx)
+    {
+		PlayerWeight += (int) ctx.ReadValue<float>();
+
+		_impactReceiver.ChangeMass(PlayerWeight);
+    }
+
 	private void SwitchActionMap(string _mapName)
     {
         
@@ -441,6 +465,9 @@ public class FirstPersonController : MonoBehaviour
 
 		// JUMP
 		_jumpAction.performed += ctx => _jump = true;
+
+		// CHANGE WEIGHT
+		_changeWeightAction.performed += ChangeWeight;
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
