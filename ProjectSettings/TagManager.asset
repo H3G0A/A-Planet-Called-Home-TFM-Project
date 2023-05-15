@@ -9,6 +9,7 @@ TagManager:
   - Ice
   - DisplaceBox
   - Elevator
+  - Water
   - BreakableWall
   layers:
   - Default
@@ -17,9 +18,9 @@ TagManager:
   - Ground
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Player
+  - Orb
+  - Ice
   - 
   - 
   - 

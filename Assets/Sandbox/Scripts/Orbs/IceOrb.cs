@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static GlobalParameters;
 
 public class IceOrb : OrbBehaviour
 {
@@ -10,12 +11,17 @@ public class IceOrb : OrbBehaviour
     protected override void ApplyEffect(Collision collision)
     {
         GameObject objectCollision = collision.gameObject;
-        if(objectCollision.tag.Equals(GlobalParameters.BREAKABLE_WALL_TAG)){
+
+        if(objectCollision.tag.Equals(BREAKABLE_WALL_TAG))
+        {
             Renderer _breakablWallRenderer = objectCollision.GetComponent<Renderer>();
-            _breakablWallRenderer.material.SetColor("_Color", Color.white);
             BreakableWallController breakableWallScript = objectCollision.GetComponent<BreakableWallController>();
+
+            _breakablWallRenderer.material.SetColor("_Color", Color.white);
             breakableWallScript.hitByIceOrb();
-        }else {
+        }
+        else if(objectCollision.layer == GROUND_LAYER)
+        {
             Instantiate(_iceZone, transform.position, Quaternion.identity);
         }
     }

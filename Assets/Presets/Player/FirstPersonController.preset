@@ -129,6 +129,18 @@ Preset:
     value: 2
     objectReference: {fileID: 0}
   - target: {fileID: 0}
+    propertyPath: _inWater
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _heavy
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _waterLayers.m_Bits
+    value: 16
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
     propertyPath: _cinemachineCameraTarget
     value: 
     objectReference: {fileID: 0}

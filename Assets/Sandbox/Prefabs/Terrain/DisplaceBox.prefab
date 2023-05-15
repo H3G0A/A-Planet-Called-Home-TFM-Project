@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7272356606137895718}
   - component: {fileID: 7272356606137895719}
   - component: {fileID: 7272356606137895739}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: DisplaceBox
   m_TagString: DisplaceBox
   m_Icon: {fileID: 0}
