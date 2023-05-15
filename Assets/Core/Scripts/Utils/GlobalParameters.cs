@@ -29,6 +29,7 @@ public static class GlobalParameters
     public const string AIM_ACTION = "Aim";
     public const string SHOOT_ACTION = "Shoot";
     public const string CHANGEORB_ACTION = "ChangeOrb";
+    public const string CHANGEORBWEIGTH_ACTION = "ChangeOrbWeigth";
     public const string CHANGE_WEIGHT_ACTION = "Change Weight";
 
     //ACTION MAPS

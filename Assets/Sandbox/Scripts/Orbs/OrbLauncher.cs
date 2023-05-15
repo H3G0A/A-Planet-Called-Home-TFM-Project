@@ -14,7 +14,8 @@ public class OrbLauncher : MonoBehaviour
     [SerializeField] Camera _mainCamera;
     [SerializeField] private List<GameObject> _chargedOrbs;
     [SerializeField] TMP_Text _orbText;
-
+    [SerializeField] TMP_Text _orbWeigthText;
+    [SerializeField] bool _augmentWeigthOrb;
     private Quaternion _initialRotation;
     private Quaternion _aimRotation;
     
@@ -25,6 +26,7 @@ public class OrbLauncher : MonoBehaviour
     private InputAction _shootAction;
     private InputAction _aimAction;
     private InputAction _changeOrb;
+    private InputAction _changeOrbWeigth;
     
     private int _indexOrb;
 
@@ -34,6 +36,7 @@ public class OrbLauncher : MonoBehaviour
         _shootAction = _playerInput.actions[SHOOT_ACTION];
         _changeOrb = _playerInput.actions[CHANGEORB_ACTION];
         _aimAction = _playerInput.actions[AIM_ACTION];
+        _changeOrbWeigth = _playerInput.actions[CHANGEORBWEIGTH_ACTION];
 
         _initialRotation = transform.localRotation;
         _selectedOrb = _chargedOrbs[0];
@@ -46,6 +49,7 @@ public class OrbLauncher : MonoBehaviour
         _selectedOrb = _chargedOrbs[0];
         _indexOrb = 0;
         changeOrbText();
+        changeAugmentText();
     }
 
     private void Aim()
@@ -62,11 +66,11 @@ public class OrbLauncher : MonoBehaviour
 
     private void ShootOrb()
     {
-        
-
         // Instantiate and give initial speed boost
         GameObject _orbInstance = GameObject.Instantiate(_selectedOrb, _firePoint.position, _firePoint.rotation);
-        
+        if(_indexOrb == 1){
+            _orbInstance.GetComponent<WeigthOrb>().changeAugment(_augmentWeigthOrb);
+        } 
         Vector3 _forceVector = _firePoint.forward * _force;
         Rigidbody _rb = _orbInstance.GetComponent<Rigidbody>();
         _rb.AddForce(_forceVector, ForceMode.Impulse);
@@ -116,8 +120,17 @@ public class OrbLauncher : MonoBehaviour
         //SHOOTING
         _shootAction.performed += ctx => ShootOrb();
 
-        //Change weapons()
+        //Change weapons.
         _changeOrb.performed += ctx => ChangeOrb();
+
+        // Change gravity of weigth orb.
+        _changeOrbWeigth.performed += ctx => ChangeOrbWeigth();
+    }
+
+    private void ChangeOrbWeigth(){
+        Debug.Log("Cambio de peso");
+        _augmentWeigthOrb = !_augmentWeigthOrb;
+        changeAugmentText();
     }
 
     private void changeOrbText(){
@@ -131,6 +144,14 @@ public class OrbLauncher : MonoBehaviour
             case 2:
                 _orbText.text = "Orbe de hielo";
                 break;
+        }
+    }
+
+    private void changeAugmentText(){
+        if(_augmentWeigthOrb){
+            _orbWeigthText.text = "Aumento de peso";
+        }else{
+            _orbWeigthText.text = "Reducción de peso";
         }
     }
 }

@@ -24,4 +24,8 @@ public class WeigthOrb : OrbBehaviour
             elevator.WeigthOrbImpact(_augment);
         }
     }
+
+    public void changeAugment(bool _newAugment){
+        _augment = _newAugment;
+    }
 }
