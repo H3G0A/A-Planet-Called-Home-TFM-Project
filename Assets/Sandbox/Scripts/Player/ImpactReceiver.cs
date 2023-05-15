@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class ImpactReceiver : MonoBehaviour
 {
-    [SerializeField] float mass = 1;
+    [SerializeField] float _lightMass = .2f;
+    [SerializeField] float _regularMass = .8f;
+    [SerializeField] float _heavyMass = 1000f;
 
+    [SerializeField] float _currentMass;
     Vector3 _impact = Vector3.zero;
     FirstPersonController _firstPersonController;
 
-    private void Start()
+    private void Awake()
     {
-        //_charController = this.GetComponent<CharacterController>();
         _firstPersonController = this.GetComponent<FirstPersonController>();
     }
 
@@ -23,7 +25,7 @@ public class ImpactReceiver : MonoBehaviour
     public void AddImpact(Vector3 dir, float force) //Simulate Rigidbody.AddForce()
     {
         dir.Normalize();
-        _impact += dir * force / mass;
+        _impact += dir * force / _currentMass;
     }
 
     private void ManageForces()
@@ -35,13 +37,26 @@ public class ImpactReceiver : MonoBehaviour
         }
     }
 
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    Vector3 normal = collision.GetContact(0).normal;
+    ///<summary>
+    /// 0 = Regular Weight;
+    /// 1 = Heavy Weight;
+    /// -1 = Light Weight;
+    /// </summary>
+    public void ChangeMass(int _playerWeight)
+    {
+        switch (_playerWeight)
+        {
+            case 0:
+                _currentMass = _regularMass;
+                break;
 
-    //    if(normal == -transform.up)
-    //    {
-    //        _impact.y = 0;
-    //    }
-    //}
+            case 1:
+                _currentMass = _heavyMass;
+                break;
+
+            case -1:
+                _currentMass = _lightMass;
+                break;
+        }
+    }
 }

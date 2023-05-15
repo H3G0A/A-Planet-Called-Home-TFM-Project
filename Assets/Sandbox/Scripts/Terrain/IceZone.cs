@@ -5,7 +5,7 @@ using static GlobalParameters;
 
 public class IceZone : MonoBehaviour
 {
-    [SerializeField] bool permanent = false;
+    [SerializeField] bool _isPermanent = false;
     [SerializeField] float _delayDestroyTimer;
     [SerializeField] float _height;
     [SerializeField] float _radius;
@@ -28,7 +28,7 @@ public class IceZone : MonoBehaviour
 
     void Start()
     {
-        if(!permanent) Destroy(gameObject, _delayDestroyTimer);
+        if(!_isPermanent) Destroy(gameObject, _delayDestroyTimer);
 
 
         //GetColliderHeights();
