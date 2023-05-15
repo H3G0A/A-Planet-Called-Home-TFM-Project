@@ -147,7 +147,6 @@ public class FirstPersonController : MonoBehaviour
 		//Player movement
 		ManageJump();
 		ManageGravity();
-		WaterLogic();
 		ManageMovement();
 
 		//Apply movement
@@ -196,8 +195,8 @@ public class FirstPersonController : MonoBehaviour
         {
 			Vector3 _spawnIn = new(transform.position.x, transform.position.y + _controller.center.y, transform.position.z);
 			_inWater = Physics.CheckSphere(_spawnIn, _waterCheckRadius, _waterLayers, QueryTriggerInteraction.Collide);
-			
-			Vector3 _spawnUnder = new(transform.position.x, transform.position.y + _controller.center.y + (_waterCheckRadius * 2), transform.position.z);
+
+			Vector3 _spawnUnder = new(transform.position.x, transform.position.y + _controller.center.y + (_waterCheckRadius * 2) + .03f, transform.position.z);
 			_underWater = Physics.CheckSphere(_spawnUnder, _waterCheckRadius, _waterLayers, QueryTriggerInteraction.Collide);
 
 			if(_inWater) WaterLogic();
@@ -237,7 +236,6 @@ public class FirstPersonController : MonoBehaviour
 		Vector3 _pos = new(transform.position.x, transform.position.y + _radius - _offset, transform.position.z);
 		if (Physics.CheckSphere(_pos, .01f, 1 << ICE_LAYER, QueryTriggerInteraction.Collide))
 		{
-			Debug.Log("true");
 			_onIce = true;
 		}
 		else
@@ -339,16 +337,25 @@ public class FirstPersonController : MonoBehaviour
 
 	private void WaterLogic()
     {
-        if (_underWater && !_heavy)
+        if (!_heavy && _underWater)
         {
-
+			//Float back to surface
+			_verticalVelocity = 2f;
+        }
+		else if (!_heavy)
+        {
+			//Don't wait for next gravity update to stop; prevents bouncing on surface
+			_verticalVelocity = 0;
         }
     }
 
 	private void ManageJump()
     {
+		bool _groundJump = _grounded && !_inWater;
+		bool _underWaterJump = _grounded && _heavy;
+		bool _waterJump = _inWater && !_heavy && !_underWater;
 
-        if (_grounded || (_inWater && !_heavy))
+		if (_groundJump || _underWaterJump || _waterJump)
         {
 			// Jump
 			if (_jump)
@@ -473,7 +480,7 @@ public class FirstPersonController : MonoBehaviour
 			Gizmos.DrawSphere(_inWaterCheckPos, _waterCheckRadius);
 			
 			Gizmos.color = Color.red;
-			Vector3 _underWaterCheckPos = new(transform.position.x, transform.position.y + _controller.center.y + (_waterCheckRadius * 2), transform.position.z);
+			Vector3 _underWaterCheckPos = new(transform.position.x, transform.position.y + _controller.center.y + (_waterCheckRadius * 2) + .03f, transform.position.z);
 			Gizmos.DrawSphere(_underWaterCheckPos, _waterCheckRadius);
         }
 
