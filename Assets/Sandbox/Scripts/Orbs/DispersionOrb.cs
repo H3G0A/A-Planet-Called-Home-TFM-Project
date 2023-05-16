@@ -14,35 +14,34 @@ public class DispersionOrb : OrbBehaviour
     {
         Collider[] _colliders = Physics.OverlapSphere(transform.position, _radius); //Store every collider in range
         
-        foreach(Collider col in _colliders)
+        foreach(Collider _collider in _colliders)
         {
-            Rigidbody rb = col.GetComponent<Rigidbody>();
+            Rigidbody rb = _collider.GetComponent<Rigidbody>();
             if(rb != null) //Range hits RigidBody
             {
-                Vector3 _forceDirection = CalculateForceDirection(this.transform.position, col.transform.position);
-
-                if (_forceDirection.y > 0)
+                //Only move the object if the orb has not collided with its top face directly
+                if(collision.gameObject != _collider.gameObject || collision.GetContact(0).normal != Vector3.up)
                 {
-                    _forceDirection.y *= 3;
-
+                    Vector3 _forceDirection = CalculateForceDirection(this.transform.position, _collider.transform.position);
+                    rb.AddForce(_forceDirection * _force, ForceMode.Impulse);
                 }
-
-                rb.AddForce(_forceDirection * _force, ForceMode.Impulse);
             }
-            else if (col.gameObject.CompareTag(GlobalParameters.PLAYER_TAG)) //Range hits player
+            else if (_collider.gameObject.CompareTag(GlobalParameters.PLAYER_TAG)) //Range hits player
             {
-                CharacterController _charController = col.GetComponent<CharacterController>();
+                CharacterController _charController = _collider.GetComponent<CharacterController>();
                 
-                Vector3 _forceDirection = (col.transform.TransformPoint(_charController.center) - this.transform.position);
+                Vector3 _forceDirection = (_collider.transform.TransformPoint(_charController.center) - this.transform.position);
 
                 if (!_impactReceiver)
                 {
-                    _impactReceiver = col.GetComponent<ImpactReceiver>();
+                    _impactReceiver = _collider.GetComponent<ImpactReceiver>();
                 }
 
                 _impactReceiver.AddImpact(_forceDirection, _force);
-            } else if(col.gameObject.CompareTag(GlobalParameters.BREAKABLE_WALL_TAG)){
-                BreakableWallController breakableWallScript = col.GetComponent<BreakableWallController>();
+            } 
+            else if(_collider.gameObject.CompareTag(GlobalParameters.BREAKABLE_WALL_TAG)) //Range hits breakable wall
+            {
+                BreakableWallController breakableWallScript = _collider.GetComponent<BreakableWallController>();
                 breakableWallScript.hitByDispersionOrb();            
             }
         }
