@@ -68,9 +68,14 @@ public class OrbLauncher : MonoBehaviour
     {
         // Instantiate and give initial speed boost
         GameObject _orbInstance = GameObject.Instantiate(_selectedOrb, _firePoint.position, _firePoint.rotation);
-        if(_indexOrb == 1){
-            _orbInstance.GetComponent<WeigthOrb>().changeAugment(_augmentWeigthOrb);
-        } 
+
+        // If it is a weight orb
+        WeigthOrb _weightOrbScrpit = _orbInstance.GetComponent<WeigthOrb>();
+        if (_weightOrbScrpit != null)
+        {
+            _weightOrbScrpit.changeAugment(_augmentWeigthOrb);
+        }
+        
         Vector3 _forceVector = _firePoint.forward * _force;
         Rigidbody _rb = _orbInstance.GetComponent<Rigidbody>();
         _rb.AddForce(_forceVector, ForceMode.Impulse);

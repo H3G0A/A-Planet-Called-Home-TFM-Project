@@ -110,6 +110,7 @@ GameObject:
   - component: {fileID: 2521654738002714270}
   - component: {fileID: 2521654738002714271}
   - component: {fileID: 2521654738002714259}
+  - component: {fileID: 419897621252431758}
   m_Layer: 0
   m_Name: Elevator
   m_TagString: Elevator
@@ -207,10 +208,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34f26f29e3197174ba1aa1d3bae3617b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _elevatoMoveSpeed: 0.5
+  _elevatoMoveSpeed: 3
   _topPosition: {fileID: 2521654737600489553}
   _midPosition: {fileID: 2521654738833808942}
   _bottomPosition: {fileID: 2521654737501326888}
+--- !u!54 &419897621252431758
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2521654738002714264}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &2521654738833808942
 GameObject:
   m_ObjectHideFlags: 0
