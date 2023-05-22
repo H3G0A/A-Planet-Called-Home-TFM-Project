@@ -335,30 +335,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4135013735270702856}
     m_Modifications:
-    - target: {fileID: 3674210042753416164, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
-      propertyPath: _orb
-      value: 
-      objectReference: {fileID: 3763091816190321520, guid: fbc8c6956626b1d48bbb724b1da96332, type: 3}
-    - target: {fileID: 3674210042753416164, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
-      propertyPath: _force
-      value: 0.035
-      objectReference: {fileID: 0}
-    - target: {fileID: 3674210042753416164, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
-      propertyPath: _mainCamera
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3674210042753416164, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
-      propertyPath: _chargedOrbs.Array.data[0]
-      value: 
-      objectReference: {fileID: 6016317886622445584, guid: e303382b79774d948bfcbb9f1634ec15, type: 3}
-    - target: {fileID: 3674210042753416164, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
-      propertyPath: _chargedOrbs.Array.data[1]
-      value: 
-      objectReference: {fileID: 3763091816190321520, guid: fbc8c6956626b1d48bbb724b1da96332, type: 3}
-    - target: {fileID: 3674210042753416164, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
-      propertyPath: _chargedOrbs.Array.data[2]
-      value: 
-      objectReference: {fileID: 8844603512878802888, guid: b0d919d4b48061745b51560fe4396cc3, type: 3}
     - target: {fileID: 3674210042753416184, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -424,10 +400,6 @@ PrefabInstance:
       value: OrbLauncher
       objectReference: {fileID: 0}
     - target: {fileID: 3674210042753416187, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 3674210043524229241, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}

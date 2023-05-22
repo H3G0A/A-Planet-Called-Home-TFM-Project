@@ -9,7 +9,7 @@ using static GlobalParameters;
 public class OrbLauncher : MonoBehaviour
 {
     [Header("Stats")]
-    [SerializeField] float _force = 1000;
+    [SerializeField] float _force = .035f;
     [SerializeField] float _range = 100;
     [SerializeField] float _fireRate = .5f;
 
