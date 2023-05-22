@@ -8,40 +8,52 @@ using static GlobalParameters;
 
 public class OrbLauncher : MonoBehaviour
 {
-    [SerializeField] private GameObject _selectedOrb;
-    [SerializeField] private float _force = 1000;
-    [SerializeField] private Transform _firePoint;
-    [SerializeField] Camera _mainCamera;
-    [SerializeField] private List<GameObject> _chargedOrbs;
+    [Header("Stats")]
+    [SerializeField] float _force = 1000;
+    [SerializeField] float _range = 100;
+    [SerializeField] float _fireRate = .5f;
+
+    
+    [Header("Orbs")]
+    [SerializeField] GameObject _selectedOrb;
+    [SerializeField] List<GameObject> _chargedOrbs;
+    
+    [Space(10)]
     [SerializeField] TMP_Text _orbText;
     [SerializeField] TMP_Text _orbWeigthText;
     [SerializeField] bool _augmentWeigthOrb;
-    private Quaternion _initialRotation;
-    private Quaternion _aimRotation;
+
+    [Header("Others")]
+    [SerializeField] Transform _firePoint;
+    [SerializeField] Camera _mainCamera;
     
     //Player input
-    private PlayerInput _playerInput;
+    PlayerInput _playerInput;
 
     //Input actions
-    private InputAction _shootAction;
-    private InputAction _aimAction;
-    private InputAction _changeOrb;
-    private InputAction _changeOrbWeigth;
+    InputAction _shootAction;
+    InputAction _changeOrb;
+    InputAction _changeOrbWeigth;
     
+    // Launcher
     private int _indexOrb;
+    
+    // Timers
+    private float _fireRateDelta = 0;
 
     void Awake()
     {
         _playerInput = transform.parent.GetComponentInParent<PlayerInput>();
         _shootAction = _playerInput.actions[SHOOT_ACTION];
         _changeOrb = _playerInput.actions[CHANGEORB_ACTION];
-        _aimAction = _playerInput.actions[AIM_ACTION];
         _changeOrbWeigth = _playerInput.actions[CHANGEORBWEIGTH_ACTION];
 
-        _initialRotation = transform.localRotation;
         _selectedOrb = _chargedOrbs[0];
         SetInputCallbacks();
-        Aim(); //Provisionally aim midscreen
+        
+        // Make launcher point at the middle of the screen
+        transform.LookAt(_mainCamera.ScreenToWorldPoint(new(Screen.width / 2, Screen.height / 2, 100)));
+        transform.Rotate(90, 0, 0); // This rotation is only for the launcher's placeholder cylinder
     }
 
     void Start()
@@ -52,28 +64,48 @@ public class OrbLauncher : MonoBehaviour
         changeAugmentText();
     }
 
-    private void Aim()
+    void Update()
     {
-        transform.LookAt(_mainCamera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, 50)));
-        transform.Rotate(90, 0, 0);
-
-    }
-
-    private void Rest()
-    {
-        transform.localRotation = _initialRotation;
+        ManageCooldown();
     }
 
     private void ShootOrb()
     {
+        // By default nothing has been hit, so simulate a far point
+        Vector3 _forceDirection = _mainCamera.ScreenToWorldPoint(new(Screen.width / 2, Screen.height / 2, 100)) - _firePoint.transform.position;
+
+        // Raycast from camera to get impact point and shoot accordingly
+        bool _inRangeCollision = Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out RaycastHit _hit, _range);
+        
+        // If something was shoot the orb in it's direction
+        if (_inRangeCollision)
+        {
+            _forceDirection = _hit.point - _firePoint.transform.position;
+        }
+
+        // If not on cooldown, shoot
+        if(_fireRateDelta <= 0) InstantiateOrb(_forceDirection);
+    }
+
+    void InstantiateOrb(Vector3 _forceDirection)
+    {
         // Instantiate and give initial speed boost
         GameObject _orbInstance = GameObject.Instantiate(_selectedOrb, _firePoint.position, _firePoint.rotation);
-        if(_indexOrb == 1){
+        if (_indexOrb == 1)
+        {
             _orbInstance.GetComponent<WeigthOrb>().changeAugment(_augmentWeigthOrb);
-        } 
-        Vector3 _forceVector = _firePoint.forward * _force;
+        }
+        Vector3 _forceVector = _forceDirection.normalized * _force;
         Rigidbody _rb = _orbInstance.GetComponent<Rigidbody>();
         _rb.AddForce(_forceVector, ForceMode.Impulse);
+
+        // Reset cooldown
+        _fireRateDelta = _fireRate;
+    }
+
+    void ManageCooldown()
+    {
+        if (_fireRateDelta > 0) _fireRateDelta -= Time.deltaTime;
     }
 
     private void ChangeOrb(){
@@ -113,10 +145,6 @@ public class OrbLauncher : MonoBehaviour
 
     private void SetInputCallbacks()
     {
-        // AIMING
-        _aimAction.performed += ctx => Aim();
-        //_aimAction.canceled += ctx => Rest();
-
         //SHOOTING
         _shootAction.performed += ctx => ShootOrb();
 

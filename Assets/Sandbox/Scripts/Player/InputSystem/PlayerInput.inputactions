@@ -51,15 +51,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Aim",
-                    "type": "Button",
-                    "id": "7d2abc05-f8b1-4f1d-bb7f-a60cd1d17894",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "ChangeOrb",
                     "type": "Button",
                     "id": "d01bd2e2-40ad-450f-b645-d47920863bac",
@@ -184,17 +175,6 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "Shoot",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "9f23d500-696e-4261-a7a7-0378de50f986",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "Aim",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
