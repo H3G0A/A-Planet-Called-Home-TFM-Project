@@ -76,6 +76,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ChangeOrbDirectly",
+                    "type": "Button",
+                    "id": "868e7e54-a3a6-401c-86b0-89329529ce91",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -183,7 +192,7 @@
                     "id": "f29ae9d9-12ea-44f0-9765-6ba68dce65d8",
                     "path": "<Keyboard>/q",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "Scale",
                     "groups": "",
                     "action": "ChangeOrb",
                     "isComposite": false,
@@ -194,40 +203,7 @@
                     "id": "db0fe492-c3ca-4398-b852-44ca5aa1086d",
                     "path": "<Keyboard>/e",
                     "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChangeOrb",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "77e34261-497f-46aa-a25f-2f3bbe2dc19e",
-                    "path": "<Keyboard>/1",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChangeOrb",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "90102696-5b09-4a3f-b1fe-a9026e9f0493",
-                    "path": "<Keyboard>/2",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChangeOrb",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "5e961335-89d4-434e-b3a8-f8a8def70b3a",
-                    "path": "<Keyboard>/3",
-                    "interactions": "",
-                    "processors": "",
+                    "processors": "Scale(factor=-1)",
                     "groups": "",
                     "action": "ChangeOrb",
                     "isComposite": false,
@@ -263,6 +239,39 @@
                     "processors": "Scale(factor=-1)",
                     "groups": "",
                     "action": "Change Weight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6e5a93b1-da20-4df8-893e-fc997f9e3704",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "Scale(factor=0)",
+                    "groups": "",
+                    "action": "ChangeOrbDirectly",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8f5c3663-7cbb-4200-bcbc-08f9280337e2",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "Scale",
+                    "groups": "",
+                    "action": "ChangeOrbDirectly",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fe55d1d6-bc95-4666-ac55-49d11e626729",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "Scale(factor=2)",
+                    "groups": "",
+                    "action": "ChangeOrbDirectly",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
