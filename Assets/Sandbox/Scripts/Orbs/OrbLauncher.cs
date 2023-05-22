@@ -148,9 +148,11 @@ public class OrbLauncher : MonoBehaviour
     }
 
     private void ChangeOrbWeigth(){
-        Debug.Log("Cambio de peso");
-        _augmentWeigthOrb = !_augmentWeigthOrb;
-        changeAugmentText();
+        if(_selectedOrb.GetComponent<WeigthOrb>() != null){
+            Debug.Log("Cambio de peso");
+            _augmentWeigthOrb = !_augmentWeigthOrb;
+            changeAugmentText();
+        } 
     }
 
     private void changeOrbText(){
