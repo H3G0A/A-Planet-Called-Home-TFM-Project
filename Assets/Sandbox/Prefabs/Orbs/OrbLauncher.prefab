@@ -26,15 +26,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3674210042753416187}
-  m_LocalRotation: {x: 0.6515778, y: 0.27467522, z: -0.27467525, w: 0.6515777}
-  m_LocalPosition: {x: -0.385, y: -0.23600006, z: 0.699}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3674210043524229222}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: -45.716}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!33 &3674210042753416167
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -97,14 +97,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 712cb22f9b4531f419dc7dd6c90bca72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _selectedOrb: {fileID: 0}
   _force: 2000
-  _firePoint: {fileID: 3674210043524229222}
-  _mainCamera: {fileID: 0}
+  _range: 100
+  _fireRate: 0.5
+  _selectedOrb: {fileID: 0}
   _chargedOrbs:
   - {fileID: 3763091816190321520, guid: fbc8c6956626b1d48bbb724b1da96332, type: 3}
   - {fileID: 8844603512878802888, guid: b0d919d4b48061745b51560fe4396cc3, type: 3}
   - {fileID: 6016317886622445584, guid: e303382b79774d948bfcbb9f1634ec15, type: 3}
+  _orbText: {fileID: 0}
+  _orbWeigthText: {fileID: 0}
+  _augmentWeigthOrb: 0
+  _firePoint: {fileID: 3674210043524229222}
+  _mainCamera: {fileID: 0}
 --- !u!1 &3674210043524229241
 GameObject:
   m_ObjectHideFlags: 0
@@ -114,7 +119,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3674210043524229222}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: firePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

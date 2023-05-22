@@ -217,10 +217,6 @@ MonoBehaviour:
     m_ActionName: Player/Shoot[/Mouse/leftButton]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 7d2abc05-f8b1-4f1d-bb7f-a60cd1d17894
-    m_ActionName: Player/Aim[/Mouse/rightButton]
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: 85a60209-7bde-4b5d-acb5-ecb805a02858
     m_ActionName: Water Surface/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   - m_PersistentCalls:
@@ -251,6 +247,14 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: d01bd2e2-40ad-450f-b645-d47920863bac
     m_ActionName: Ground/ChangeOrb[/Keyboard/q,/Keyboard/e,/Keyboard/1,/Keyboard/2,/Keyboard/3]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: aeb18c4c-ca44-4445-9793-0a3ddfc99cc8
+    m_ActionName: Ground/ChangeOrbWeigth[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 95a600fb-d012-48af-b59f-6a09ac4203c5
+    m_ActionName: Ground/Change Weight[/Keyboard/v,/Keyboard/c]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Ground
@@ -292,10 +296,11 @@ MonoBehaviour:
   _edgeCheckLength: 0.75
   _edgeSlipSpeed: 2
   _slopeCheckDistance: 0.4
+  _playerWeight: 0
   _onIce: 0
-  _iceMultiplier: 2
-  _heavy: 0
+  _iceSpeedMultiplier: 2
   _inWater: 0
+  _underWater: 0
   _waterLayers:
     serializedVersion: 2
     m_Bits: 16
@@ -319,7 +324,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c07b1637ac759f45aa532d23eca136d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mass: 0.2
+  _lightMass: 0.2
+  _regularMass: 0.8
+  _heavyMass: 1000
+  _currentMass: 0
 --- !u!1001 &7283992801777407619
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -327,30 +335,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4135013735270702856}
     m_Modifications:
-    - target: {fileID: 3674210042753416164, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
-      propertyPath: _orb
-      value: 
-      objectReference: {fileID: 3763091816190321520, guid: fbc8c6956626b1d48bbb724b1da96332, type: 3}
-    - target: {fileID: 3674210042753416164, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
-      propertyPath: _force
-      value: 0.035
-      objectReference: {fileID: 0}
-    - target: {fileID: 3674210042753416164, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
-      propertyPath: _mainCamera
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3674210042753416164, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
-      propertyPath: _chargedOrbs.Array.data[0]
-      value: 
-      objectReference: {fileID: 6016317886622445584, guid: e303382b79774d948bfcbb9f1634ec15, type: 3}
-    - target: {fileID: 3674210042753416164, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
-      propertyPath: _chargedOrbs.Array.data[1]
-      value: 
-      objectReference: {fileID: 3763091816190321520, guid: fbc8c6956626b1d48bbb724b1da96332, type: 3}
-    - target: {fileID: 3674210042753416164, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
-      propertyPath: _chargedOrbs.Array.data[2]
-      value: 
-      objectReference: {fileID: 8844603512878802888, guid: b0d919d4b48061745b51560fe4396cc3, type: 3}
     - target: {fileID: 3674210042753416184, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -416,10 +400,6 @@ PrefabInstance:
       value: OrbLauncher
       objectReference: {fileID: 0}
     - target: {fileID: 3674210042753416187, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 3674210043524229241, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
