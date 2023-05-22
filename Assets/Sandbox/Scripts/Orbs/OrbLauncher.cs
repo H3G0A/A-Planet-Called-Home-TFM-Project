@@ -27,6 +27,7 @@ public class OrbLauncher : MonoBehaviour
     private InputAction _aimAction;
     private InputAction _changeOrb;
     private InputAction _changeOrbWeigth;
+    private InputAction _changeOrbDirectly;
     
     private int _indexOrb;
 
@@ -37,6 +38,7 @@ public class OrbLauncher : MonoBehaviour
         _changeOrb = _playerInput.actions[CHANGEORB_ACTION];
         _aimAction = _playerInput.actions[AIM_ACTION];
         _changeOrbWeigth = _playerInput.actions[CHANGEORBWEIGTH_ACTION];
+        _changeOrbDirectly =_playerInput.actions[CHANGEORBDIRECTLY_ACTION];
 
         _initialRotation = transform.localRotation;
         _selectedOrb = _chargedOrbs[0];
@@ -76,38 +78,24 @@ public class OrbLauncher : MonoBehaviour
         _rb.AddForce(_forceVector, ForceMode.Impulse);
     }
 
-    private void ChangeOrb(){
-        if(Keyboard.current.digit1Key.wasPressedThisFrame){
-            _selectedOrb = _chargedOrbs[0];
+    private void ChangeOrb(InputAction.CallbackContext ctx){  
+        int _nextValueOrbs = (int) ctx.ReadValue<float>();
+        Debug.Log("Valor del cambio: " + _nextValueOrbs);      
+        _indexOrb = _indexOrb + _nextValueOrbs;
+        if(_indexOrb >= _chargedOrbs.Count){
             _indexOrb = 0;
-            Debug.Log(_selectedOrb.ToString());
         }
-        if(Keyboard.current.digit2Key.wasPressedThisFrame){
-            _selectedOrb = _chargedOrbs[1];
-            _indexOrb = 1;
-            Debug.Log(_selectedOrb.ToString());
+        if(_indexOrb < 0){
+            _indexOrb = (_chargedOrbs.Count - 1);
         }
-        if(Keyboard.current.digit3Key.wasPressedThisFrame){
-            _selectedOrb = _chargedOrbs[2];
-            _indexOrb = 2;
-            Debug.Log(_selectedOrb.ToString());
-        }
-        if(Keyboard.current.qKey.wasPressedThisFrame){
-            _indexOrb--;
-            if(_indexOrb < 0){
-                _indexOrb = (_chargedOrbs.Count - 1);
-            }
-            _selectedOrb = _chargedOrbs[_indexOrb];
-            Debug.Log(_selectedOrb.ToString());
-        }
-        if(Keyboard.current.eKey.wasPressedThisFrame){
-            _indexOrb++;
-            if(_indexOrb >= _chargedOrbs.Count){
-                _indexOrb = 0;
-            }
-            _selectedOrb = _chargedOrbs[_indexOrb];
-            Debug.Log(_selectedOrb.ToString());
-        }
+        _selectedOrb = _chargedOrbs[_indexOrb];
+        changeOrbText();
+    }
+
+    private void changeOrbDirectly(InputAction.CallbackContext ctx){
+        _indexOrb = (int) ctx.ReadValue<float>();
+        Debug.Log("Orbe seleccioando: " + _indexOrb);      
+        _selectedOrb = _chargedOrbs[_indexOrb];
         changeOrbText();
     }
 
@@ -121,7 +109,10 @@ public class OrbLauncher : MonoBehaviour
         _shootAction.performed += ctx => ShootOrb();
 
         //Change weapons.
-        _changeOrb.performed += ctx => ChangeOrb();
+        _changeOrb.performed += ChangeOrb;
+
+        //Change weapons shortcut.
+        _changeOrbDirectly.performed += changeOrbDirectly;
 
         // Change gravity of weigth orb.
         _changeOrbWeigth.performed += ctx => ChangeOrbWeigth();
