@@ -112,17 +112,10 @@ public class FirstPersonController : MonoBehaviour
 	// Timers
 	float _fallTimeoutDelta;
 
-	// Input Actions
-	InputAction _moveAction;
-	InputAction _lookAction;
-	InputAction _jumpAction;
-	InputAction _sprintAction;
-	InputAction _changeWeightAction;
-
 	// Components
-	PlayerInput _playerInput;
 	CharacterController _controller;
 	ImpactReceiver _impactReceiver;
+	PlayerInputController _inputController;
 
 	// Getter and setters
 	private int PlayerWeight
@@ -131,20 +124,12 @@ public class FirstPersonController : MonoBehaviour
 		set { _playerWeight = Mathf.Clamp(value, -1, 1); }
     }
 
+
 	private void Awake()
 	{
-		_playerInput = GetComponent<PlayerInput>();
 		_controller = GetComponent<CharacterController>();
 		_impactReceiver = GetComponent<ImpactReceiver>();
-
-		//assign actions to variables
-		_moveAction = _playerInput.actions[MOVE_ACTION];
-		_lookAction = _playerInput.actions[LOOK_ACTION];
-		_sprintAction = _playerInput.actions[SPRINT_ACTION];
-		_jumpAction = _playerInput.actions[JUMP_ACTION];
-		_changeWeightAction = _playerInput.actions[CHANGE_WEIGHT_ACTION];
-
-		SetInputCallbacks();
+		_inputController = GetComponent<PlayerInputController>();
 	}
 
 	void Start()
@@ -279,7 +264,7 @@ public class FirstPersonController : MonoBehaviour
 
 		// note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
 		// if there is no input, set the target speed to 0
-		if (_move == Vector2.zero) _targetSpeed = 0.0f;
+		if (_inputController.Move == Vector2.zero) _targetSpeed = 0.0f;
 
 		// a reference to the players current horizontal velocity
 		float _previousHorizontalSpeed = _horizontalVelocity.magnitude;
@@ -300,7 +285,7 @@ public class FirstPersonController : MonoBehaviour
 		}
 			
 		// Make the input for the movement into a vector3
-		_inputDirection += transform.right * _move.x + transform.forward * _move.y;
+		_inputDirection += transform.right * _inputController.Move.x + transform.forward * _inputController.Move.y;
 		_inputDirection.Normalize();
 
 		// move the player
@@ -316,7 +301,7 @@ public class FirstPersonController : MonoBehaviour
 
 		// creates curved result rather than a linear one giving a more organic speed change
 		// note T in Lerp is clamped, so we don't need to clamp our speed
-		_currentSpeed = Mathf.Lerp(_previousSpeed, _targetSpeed * _move.magnitude, Time.deltaTime * _changeRate);
+		_currentSpeed = Mathf.Lerp(_previousSpeed, _targetSpeed * _inputController.Move.magnitude, Time.deltaTime * _changeRate);
 	}
 
 	private void ManageGravity()
@@ -375,7 +360,7 @@ public class FirstPersonController : MonoBehaviour
 		if (_groundJump || _underWaterJump || _waterJump)
         {
 			// Jump
-			if (_jump)
+			if (_inputController.Jump)
 			{
 				// the square root of H * -2 * G = how much velocity needed to reach desired height
 				_verticalVelocity = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
@@ -389,13 +374,13 @@ public class FirstPersonController : MonoBehaviour
 				_fallTimeoutDelta -= Time.deltaTime;
 			}
 
-			_jump = false;
+			_inputController.Jump = false;
 		}
 	}
 
     private void CameraRotation()
     {
-        _cinemachineTargetPitch += _look.y;
+        _cinemachineTargetPitch += _inputController.Look.y;
 
         // clamp our pitch rotation
         _cinemachineTargetPitch = Mathf.Clamp(_cinemachineTargetPitch, _bottomClamp, _topClamp);
@@ -404,7 +389,7 @@ public class FirstPersonController : MonoBehaviour
         _cinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
 
         // rotate the player left and right
-        transform.Rotate(Vector3.up * _look.x);
+        transform.Rotate(Vector3.up * _inputController.Look.x);
     }
 
 	public void MoveCharacter(Vector3 movement)
@@ -422,7 +407,7 @@ public class FirstPersonController : MonoBehaviour
     {
 		if (_grounded || _inWater)
 		{
-			_targetSpeed = _sprint ? _sprintSpeed : _moveSpeed;
+			_targetSpeed = _inputController.Sprint ? _sprintSpeed : _moveSpeed;
 			if (_onIce && _grounded) _targetSpeed *= _iceSpeedMultiplier;
 
 			_acceleration = _groundedAcceleration;
@@ -437,7 +422,7 @@ public class FirstPersonController : MonoBehaviour
 		}
 	}
 
-	private void ChangeWeight(InputAction.CallbackContext ctx)
+	public void ChangeWeight(InputAction.CallbackContext ctx)
     {
 		PlayerWeight += (int) ctx.ReadValue<float>();
 
@@ -448,27 +433,6 @@ public class FirstPersonController : MonoBehaviour
     {
         
     }
-
-	private void SetInputCallbacks()
-    {
-		// MOVE
-		_moveAction.performed += ctx => _move = ctx.ReadValue<Vector2>();
-		_moveAction.canceled += ctx => _move = Vector2.zero;
-
-		// LOOK
-		_lookAction.performed += ctx => _look = ctx.ReadValue<Vector2>();
-		_lookAction.canceled += ctx => _look = Vector2.zero;
-
-		// SPRINT
-		_sprintAction.performed += ctx => _sprint = true;
-		_sprintAction.canceled += ctx => _sprint = false;
-
-		// JUMP
-		_jumpAction.performed += ctx => _jump = true;
-
-		// CHANGE WEIGHT
-		_changeWeightAction.performed += ChangeWeight;
-	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
