@@ -27,16 +27,6 @@ public class OrbLauncher : MonoBehaviour
     [SerializeField] Transform _firePoint;
     [SerializeField] Camera _mainCamera;
     
-    //Player input
-    PlayerInput _playerInput;
-
-    //Input actions
-    InputAction _shootAction;
-    InputAction _aimAction;
-    InputAction _changeOrb;
-    InputAction _changeOrbWeigth;
-    InputAction _changeOrbDirectly;
-    
     // Launcher
     private int _indexOrb;
     
@@ -45,14 +35,7 @@ public class OrbLauncher : MonoBehaviour
 
     void Awake()
     {
-        _playerInput = transform.parent.GetComponentInParent<PlayerInput>();
-        _shootAction = _playerInput.actions[SHOOT_ACTION];
-        _changeOrb = _playerInput.actions[CHANGEORB_ACTION];
-        _changeOrbWeigth = _playerInput.actions[CHANGEORBWEIGTH_ACTION];
-        _changeOrbDirectly =_playerInput.actions[CHANGEORBDIRECTLY_ACTION];
-
         _selectedOrb = _chargedOrbs[0];
-        SetInputCallbacks();
         
         // Make launcher point at the middle of the screen
         transform.LookAt(_mainCamera.ScreenToWorldPoint(new(Screen.width / 2, Screen.height / 2, 100)));
@@ -72,7 +55,7 @@ public class OrbLauncher : MonoBehaviour
         ManageCooldown();
     }
 
-    private void ShootOrb()
+    public void ShootOrb(InputAction.CallbackContext ctx)
     {
         // By default nothing has been hit, so simulate a far point
         Vector3 _forceDirection = _mainCamera.ScreenToWorldPoint(new(Screen.width / 2, Screen.height / 2, 100)) - _firePoint.transform.position;
@@ -111,7 +94,7 @@ public class OrbLauncher : MonoBehaviour
         if (_fireRateDelta > 0) _fireRateDelta -= Time.deltaTime;
     }
 
-    private void ChangeOrb(InputAction.CallbackContext ctx){  
+    public void ChangeOrb(InputAction.CallbackContext ctx){  
         int _nextValueOrbs = (int) ctx.ReadValue<float>();
         Debug.Log("Valor del cambio: " + _nextValueOrbs);      
         _indexOrb = _indexOrb + _nextValueOrbs;
@@ -125,29 +108,14 @@ public class OrbLauncher : MonoBehaviour
         changeOrbText();
     }
 
-    private void changeOrbDirectly(InputAction.CallbackContext ctx){
+    public void ChangeOrbDirectly(InputAction.CallbackContext ctx){
         _indexOrb = (int) ctx.ReadValue<float>();
         Debug.Log("Orbe seleccioando: " + _indexOrb);      
         _selectedOrb = _chargedOrbs[_indexOrb];
         changeOrbText();
     }
 
-    private void SetInputCallbacks()
-    {
-        //SHOOTING
-        _shootAction.performed += ctx => ShootOrb();
-
-        //Change weapons.
-        _changeOrb.performed += ChangeOrb;
-
-        //Change weapons shortcut.
-        _changeOrbDirectly.performed += changeOrbDirectly;
-
-        // Change gravity of weigth orb.
-        _changeOrbWeigth.performed += ctx => ChangeOrbWeigth();
-    }
-
-    private void ChangeOrbWeigth(){
+    public void ChangeOrbWeigth(InputAction.CallbackContext ctx){
         if(_selectedOrb.GetComponent<WeigthOrb>() != null){
             Debug.Log("Cambio de peso");
             _augmentWeigthOrb = !_augmentWeigthOrb;
