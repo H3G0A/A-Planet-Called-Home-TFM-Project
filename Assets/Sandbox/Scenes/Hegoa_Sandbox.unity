@@ -5809,6 +5809,14 @@ PrefabInstance:
       propertyPath: _regularMass
       value: 0.6
       objectReference: {fileID: 0}
+    - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+      propertyPath: _iceDeceleration
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+      propertyPath: _airboneDeceleration
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 1324191040466888942, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: m_CastShadows
       value: 1
