@@ -368,7 +368,7 @@ public class FirstPersonController : MonoBehaviour
         if ((_playerWeight != 1) && _underWater)
         {
 			//Float back to surface
-			_verticalVelocity = 2f;
+			_verticalVelocity = 4f;
         }
 		else if (_playerWeight != 1)
         {
