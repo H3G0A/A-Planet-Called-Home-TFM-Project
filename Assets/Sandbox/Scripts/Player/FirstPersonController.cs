@@ -33,8 +33,6 @@ public class FirstPersonController : MonoBehaviour
 	[Space(10)]
 	[Tooltip("Acceleration while airbone")]
 	[SerializeField] float _airboneAcceleration = 5.0f;
-	[Tooltip(" and deceleration while airbone")]
-	[SerializeField] float _airboneDeceleration = 2.0f;
 
 	[Space(10)]
 	[Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
@@ -85,13 +83,6 @@ public class FirstPersonController : MonoBehaviour
 	[SerializeField] float _topClamp = 90.0f;
 	[Tooltip("How far in degrees can you move the camera down")]
 	[SerializeField] float _bottomClamp = -90.0f;
-
-
-	[Header("Character Input Values")]
-	[SerializeField] Vector2 _move;
-	[SerializeField] Vector2 _look;
-	[SerializeField] bool _sprint;
-	[SerializeField] bool _jump;
 
 
 	[Header("Mouse Cursor Settings")]
@@ -259,8 +250,16 @@ public class FirstPersonController : MonoBehaviour
 
 	private void ManageMovement()
 	{
-
-		SetSpeedAndAcceleration();
+		// Set speed
+		if (_grounded)
+		{
+			_targetSpeed = _inputController.Sprint ? _sprintSpeed : _moveSpeed;
+			if (_onIce) _targetSpeed *= _iceSpeedMultiplier;
+        }
+        else
+        {
+			_targetSpeed = _moveSpeed;
+        }
 
 		// note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
 		// if there is no input, set the target speed to 0
@@ -288,16 +287,25 @@ public class FirstPersonController : MonoBehaviour
 		_inputDirection += transform.right * _inputController.Move.x + transform.forward * _inputController.Move.y;
 		_inputDirection.Normalize();
 
-		// move the player
-		_horizontalVelocity = _inputDirection * _currentSpeed;
-		AdjustForSlope(ref _horizontalVelocity);
+        // move the player
+        if (_grounded)
+        {
+			_horizontalVelocity = _inputDirection * _currentSpeed;
+			AdjustForSlope(ref _horizontalVelocity);
+		}
+        else 
+        {
+			Vector3 _airVelocity = _inputDirection * _targetSpeed;
+			_horizontalVelocity = Vector3.Lerp(_horizontalVelocity, _airVelocity, Time.deltaTime * _airboneAcceleration);
+		}
+		
 		MoveCharacter(_horizontalVelocity * Time.deltaTime);
 	}
 
 	private void VelocityChange(float _previousSpeed, float _targetSpeed, bool _isAccel)
 	{
 		float _changeRate;
-		_changeRate = _isAccel ? _acceleration : _deceleration;
+		_changeRate = _isAccel ? _groundedAcceleration : _groundedDeceleration;
 
 		// creates curved result rather than a linear one giving a more organic speed change
 		// note T in Lerp is clamped, so we don't need to clamp our speed
@@ -401,25 +409,6 @@ public class FirstPersonController : MonoBehaviour
     {
 		_controller.Move(_cumulatedMovement);
 		_cumulatedMovement = Vector3.zero;
-	}
-
-    private void SetSpeedAndAcceleration()
-    {
-		if (_grounded || _inWater)
-		{
-			_targetSpeed = _inputController.Sprint ? _sprintSpeed : _moveSpeed;
-			if (_onIce && _grounded) _targetSpeed *= _iceSpeedMultiplier;
-
-			_acceleration = _groundedAcceleration;
-			_deceleration = _groundedDeceleration;
-		}
-		else
-		{
-			if (_targetSpeed < _moveSpeed) _targetSpeed = _moveSpeed;
-
-			_acceleration = _airboneAcceleration;
-			_deceleration = _airboneDeceleration;
-		}
 	}
 
 	public void ChangeWeight(InputAction.CallbackContext ctx)
