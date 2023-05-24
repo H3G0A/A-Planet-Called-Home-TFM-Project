@@ -284,7 +284,7 @@ MonoBehaviour:
   _gravity: -15
   _terminalVelocity: 53
   _airboneAcceleration: 5
-  _airboneDeceleration: 1.5
+  _airboneDeceleration: 0.5
   _fallTimeout: 0.15
   _grounded: 1
   _groundedOffset: -0.05
@@ -300,6 +300,8 @@ MonoBehaviour:
   _playerWeight: 0
   _onIce: 0
   _iceSpeedMultiplier: 2
+  _iceAcceleration: 5
+  _iceDeceleration: 1
   _inWater: 0
   _underWater: 0
   _waterLayers:
@@ -308,10 +310,6 @@ MonoBehaviour:
   _cinemachineCameraTarget: {fileID: 4135013735270702863}
   _topClamp: 90
   _bottomClamp: -90
-  _move: {x: 0, y: 0}
-  _look: {x: 0, y: 0}
-  _sprint: 0
-  _jump: 0
   cursorLocked: 1
 --- !u!114 &1236055
 MonoBehaviour:
@@ -325,10 +323,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c07b1637ac759f45aa532d23eca136d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lightMass: 0.2
-  _regularMass: 0.8
+  _lightMass: 0.5
+  _regularMass: 1
   _heavyMass: 1000
   _currentMass: 0
+  _groundDrag: 5
+  _airDrag: 1
+  _iceDrag: 1
 --- !u!114 &1148824889810656823
 MonoBehaviour:
   m_ObjectHideFlags: 0

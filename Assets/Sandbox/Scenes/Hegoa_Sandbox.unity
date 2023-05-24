@@ -1705,7 +1705,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh25294
+  m_Name: pb_Mesh38162
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -5797,26 +5797,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1236055, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      propertyPath: _heavyMass
-      value: 1000
-      objectReference: {fileID: 0}
-    - target: {fileID: 1236055, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      propertyPath: _lightMass
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1236055, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      propertyPath: _regularMass
-      value: 0.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      propertyPath: _iceDeceleration
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      propertyPath: _airboneDeceleration
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 1324191040466888942, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: m_CastShadows
       value: 1

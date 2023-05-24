@@ -118,6 +118,18 @@ public class FirstPersonController : MonoBehaviour
         get { return _playerWeight; }
 		set { _playerWeight = Mathf.Clamp(value, -1, 1); }
     }
+	public bool Grounded
+    {
+        get { return _grounded; }
+    }
+	public bool OnIce
+    {
+        get { return _onIce; }
+    }
+	public bool InWater
+    {
+        get { return _inWater; }
+    }
 
 
 	private void Awake()
@@ -231,7 +243,8 @@ public class FirstPersonController : MonoBehaviour
 		float _radius = .01f;
 		float _offset = .09f;
 		Vector3 _pos = new(transform.position.x, transform.position.y + _radius - _offset, transform.position.z);
-		if (Physics.CheckSphere(_pos, .01f, 1 << ICE_LAYER, QueryTriggerInteraction.Collide))
+		
+		if (Physics.CheckSphere(_pos, .01f, 1 << ICE_LAYER, QueryTriggerInteraction.Collide) && (_grounded))
 		{
 			_onIce = true;
 		}
@@ -333,7 +346,7 @@ public class FirstPersonController : MonoBehaviour
 	private void ManageGravity()
     {
 		// Keep player on water surface when not heavy
-        if (_inWater && (_playerWeight != 1))
+        if (_inWater && (PlayerWeight != 1))
         {
 			if (_verticalVelocity < 0)
 			{
@@ -365,12 +378,12 @@ public class FirstPersonController : MonoBehaviour
 
 	private void WaterLogic()
     {
-        if ((_playerWeight != 1) && _underWater)
+        if ((PlayerWeight != 1) && _underWater)
         {
 			//Float back to surface
 			_verticalVelocity = 4f;
         }
-		else if (_playerWeight != 1)
+		else if (PlayerWeight != 1)
         {
 			//Don't wait for next gravity update to stop; prevents bouncing on surface
 			_verticalVelocity = 0;
@@ -380,8 +393,8 @@ public class FirstPersonController : MonoBehaviour
 	private void ManageJump()
     {
 		bool _groundJump = _grounded && !_inWater;
-		bool _underWaterJump = _grounded && (_playerWeight == 1);
-		bool _waterJump = _inWater && (_playerWeight != 1) && !_underWater;
+		bool _underWaterJump = _grounded && (PlayerWeight == 1);
+		bool _waterJump = _inWater && (PlayerWeight != 1) && !_underWater;
 
 		if (_groundJump || _underWaterJump || _waterJump)
         {
