@@ -4,17 +4,28 @@ using UnityEngine;
 
 public class ImpactReceiver : MonoBehaviour
 {
+    [Header("Mass")]
     [SerializeField] float _lightMass = .2f;
     [SerializeField] float _regularMass = .8f;
     [SerializeField] float _heavyMass = 1000f;
-
     [SerializeField] float _currentMass;
+
+    [Header("Drag")]
+    [SerializeField] float _groundDrag = 5;
+    [SerializeField] float _airDrag = 1;
+    [SerializeField] float _iceDrag = 1;
+
     Vector3 _impact = Vector3.zero;
+    float _drag;
+    bool _leftGround = false;
+
     FirstPersonController _firstPersonController;
+    CharacterController _charController;
 
     private void Awake()
     {
         _firstPersonController = this.GetComponent<FirstPersonController>();
+        _charController = this.GetComponent<CharacterController>();
     }
 
     private void Update()
@@ -32,9 +43,46 @@ public class ImpactReceiver : MonoBehaviour
     {
         if (_impact.magnitude > 0.2)
         {
+            SetDrag();
+            
+
             _firstPersonController.MoveCharacter(_impact * Time.deltaTime);
-            _impact = Vector3.Lerp(_impact, Vector3.zero, 5 * Time.deltaTime);
+
+            _impact = Vector3.Lerp(_impact, Vector3.zero, Time.deltaTime * _drag);
+
+            PreventBouncing();
         }
+        else
+        {
+            _impact = Vector3.zero;
+            _leftGround = false;
+        }
+    }
+
+    private void SetDrag()
+    {
+        if(_firstPersonController.OnIce)
+        {
+            _drag = _iceDrag;
+        }
+        else if (_firstPersonController.Grounded)
+        {
+            _drag = _groundDrag;
+        }
+        else
+        {
+            _drag = _airDrag;
+        }
+    }
+
+    private void PreventBouncing()
+    {
+        if (!_firstPersonController.Grounded)
+        {
+            _leftGround = true;
+        }
+
+        if ((_firstPersonController.Grounded || _firstPersonController.InWater) && _leftGround) _impact.y = 0;
     }
 
     ///<summary>
