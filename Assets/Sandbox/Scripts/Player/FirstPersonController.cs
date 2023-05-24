@@ -33,6 +33,7 @@ public class FirstPersonController : MonoBehaviour
 	[Space(10)]
 	[Tooltip("Acceleration while airbone")]
 	[SerializeField] float _airboneAcceleration = 5.0f;
+	[SerializeField] float _airboneDeceleration = 1.0f;
 
 	[Space(10)]
 	[Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
@@ -68,6 +69,8 @@ public class FirstPersonController : MonoBehaviour
 	[Header("Player On Ice")]
 	[SerializeField] bool _onIce = false;
 	[SerializeField] float _iceSpeedMultiplier = 2f;
+	[SerializeField] float _iceAcceleration = 5;
+	[SerializeField] float _iceDeceleration = 5;
 
 
 	[Header("Player In Water")]
@@ -99,6 +102,7 @@ public class FirstPersonController : MonoBehaviour
 	Vector3 _cumulatedMovement;
 	bool _touchingWater;
 	float _waterCheckRadius = .01f;
+	float _speedChangeRate;
 
 	// Timers
 	float _fallTimeoutDelta;
@@ -250,20 +254,7 @@ public class FirstPersonController : MonoBehaviour
 
 	private void ManageMovement()
 	{
-		// Set speed
-		if (_grounded)
-		{
-			_targetSpeed = _inputController.Sprint ? _sprintSpeed : _moveSpeed;
-			if (_onIce) _targetSpeed *= _iceSpeedMultiplier;
-        }
-        else
-        {
-			_targetSpeed = _moveSpeed;
-        }
-
-		// note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-		// if there is no input, set the target speed to 0
-		if (_inputController.Move == Vector2.zero) _targetSpeed = 0.0f;
+		SetSpeedAndAcceleration();
 
 		// a reference to the players current horizontal velocity
 		float _previousHorizontalSpeed = _horizontalVelocity.magnitude;
@@ -296,7 +287,7 @@ public class FirstPersonController : MonoBehaviour
         else 
         {
 			Vector3 _airVelocity = _inputDirection * _targetSpeed;
-			_horizontalVelocity = Vector3.Lerp(_horizontalVelocity, _airVelocity, Time.deltaTime * _airboneAcceleration);
+			_horizontalVelocity = Vector3.Lerp(_horizontalVelocity, _airVelocity, Time.deltaTime * _speedChangeRate);
 		}
 		
 		MoveCharacter(_horizontalVelocity * Time.deltaTime);
@@ -304,12 +295,39 @@ public class FirstPersonController : MonoBehaviour
 
 	private void VelocityChange(float _previousSpeed, float _targetSpeed, bool _isAccel)
 	{
-		float _changeRate;
-		_changeRate = _isAccel ? _groundedAcceleration : _groundedDeceleration;
+		_speedChangeRate = _isAccel ? _acceleration : _deceleration;
+		
+		_currentSpeed = Mathf.Lerp(_previousSpeed, _targetSpeed * _inputController.Move.magnitude, Time.deltaTime * _speedChangeRate);
+	}
 
-		// creates curved result rather than a linear one giving a more organic speed change
-		// note T in Lerp is clamped, so we don't need to clamp our speed
-		_currentSpeed = Mathf.Lerp(_previousSpeed, _targetSpeed * _inputController.Move.magnitude, Time.deltaTime * _changeRate);
+	private void SetSpeedAndAcceleration()
+	{
+		if (_grounded)
+		{
+			_targetSpeed = _inputController.Sprint ? _sprintSpeed : _moveSpeed;
+			if (_onIce)
+			{
+				_targetSpeed *= _iceSpeedMultiplier;
+				_acceleration = _iceAcceleration;
+				_deceleration = _iceDeceleration;
+			}
+			else
+			{
+				_acceleration = _groundedAcceleration;
+				_deceleration = _groundedDeceleration;
+			}
+		}
+		// On air
+		else
+		{
+			_targetSpeed = _currentSpeed > _moveSpeed ? _currentSpeed : _moveSpeed;
+			_acceleration = _airboneAcceleration;
+			_deceleration = _airboneDeceleration;
+		}
+
+		// note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
+		// if there is no input, set the target speed to 0
+		if (_inputController.Move == Vector2.zero) _targetSpeed = 0.0f;
 	}
 
 	private void ManageGravity()
