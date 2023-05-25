@@ -113,10 +113,10 @@ public class FirstPersonController : MonoBehaviour
 	PlayerInputController _inputController;
 
 	// Getter and setters
-	private int PlayerWeight
+	public int PlayerWeight
     {
         get { return _playerWeight; }
-		set { _playerWeight = Mathf.Clamp(value, -1, 1); }
+		private set { _playerWeight = Mathf.Clamp(value, -1, 1); }
     }
 	public bool Grounded
     {
@@ -129,6 +129,10 @@ public class FirstPersonController : MonoBehaviour
 	public bool InWater
     {
         get { return _inWater; }
+    }
+	public Vector3 CumulatedMovement
+    {
+        get { return _cumulatedMovement; }
     }
 
 
@@ -186,6 +190,11 @@ public class FirstPersonController : MonoBehaviour
 				break;
 		}
 	}
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+		
+    }
 
     private void GroundCheck()
     {
@@ -447,6 +456,12 @@ public class FirstPersonController : MonoBehaviour
 		PlayerWeight += (int) ctx.ReadValue<float>();
 
 		_impactReceiver.ChangeMass(PlayerWeight);
+    }
+
+	public void StopMovement()
+    {
+		_verticalVelocity = 0;
+		_horizontalVelocity = Vector3.zero;
     }
 
 	private void SwitchActionMap(string _mapName)
