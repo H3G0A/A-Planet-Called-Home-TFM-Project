@@ -20,12 +20,10 @@ public class ImpactReceiver : MonoBehaviour
     bool _leftGround = false;
 
     FirstPersonController _firstPersonController;
-    CharacterController _charController;
 
     private void Awake()
     {
         _firstPersonController = this.GetComponent<FirstPersonController>();
-        _charController = this.GetComponent<CharacterController>();
     }
 
     private void Update()
@@ -39,23 +37,26 @@ public class ImpactReceiver : MonoBehaviour
         _impact += dir * force / _currentMass;
     }
 
+    public void OverrideForce(Vector3 dir, float force)
+    {
+        dir.Normalize();
+        _impact = dir * force / _currentMass;
+    }
+
     private void ManageForces()
     {
         if (_impact.magnitude > 0.2)
         {
             SetDrag();
-            
+            PreventBouncing();
 
             _firstPersonController.MoveCharacter(_impact * Time.deltaTime);
 
             _impact = Vector3.Lerp(_impact, Vector3.zero, Time.deltaTime * _drag);
-
-            PreventBouncing();
         }
         else
         {
             _impact = Vector3.zero;
-            _leftGround = false;
         }
     }
 
@@ -77,12 +78,14 @@ public class ImpactReceiver : MonoBehaviour
 
     private void PreventBouncing()
     {
-        if (!_firstPersonController.Grounded)
-        {
-            _leftGround = true;
-        }
+        if (!_firstPersonController.Grounded) _leftGround = true;
 
-        if ((_firstPersonController.Grounded || _firstPersonController.InWater) && _leftGround) _impact.y = 0;
+        bool _backOnGround = (_firstPersonController.Grounded || _firstPersonController.InWater) && _leftGround && _firstPersonController.CumulatedMovement.y <= 0;
+        if (_backOnGround)
+        {
+            _impact.y = 0;
+            _leftGround = false;
+        }
     }
 
     ///<summary>

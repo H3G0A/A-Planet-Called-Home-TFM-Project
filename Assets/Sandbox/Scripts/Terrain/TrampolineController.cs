@@ -5,18 +5,29 @@ using static GlobalParameters;
 
 public class TrampolineController : MonoBehaviour
 {
+    [Header("Impact")]
     [SerializeField] float _force;
-    [SerializeField] float _radius;
 
-    private void OnTriggerEnter(Collider other)
+    ImpactReceiver _impactReceiver;
+    FirstPersonController _playerController;
+
+    private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag(PLAYER_TAG))
+        if(other.CompareTag(PLAYER_TAG))
         {
-            FirstPersonController _FPController = other.GetComponent<FirstPersonController>();
-            Vector3 _forceDirection = (new Vector3(0f,1f,0f));
-            ImpactReceiver _impactReceiver = other.GetComponent<ImpactReceiver>();
-            _impactReceiver.AddImpact(_forceDirection, _force);
-            Debug.Log("Colision con jugador");
+            if (_impactReceiver == null) _impactReceiver = other.GetComponent<ImpactReceiver>();
+            if (_playerController == null) _playerController = other.GetComponent<FirstPersonController>();
+
+            ApplyForce();
+        }
+    }
+
+    private void ApplyForce()
+    {
+        if (_playerController.PlayerWeight != 1)
+        {
+            _playerController.StopMovement();
+            _impactReceiver.OverrideForce(transform.up, _force);
         }
     }
 }
