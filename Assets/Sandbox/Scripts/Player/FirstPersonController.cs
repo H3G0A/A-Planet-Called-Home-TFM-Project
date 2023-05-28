@@ -191,11 +191,6 @@ public class FirstPersonController : MonoBehaviour
 		}
 	}
 
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-		
-    }
-
     private void GroundCheck()
     {
 		Vector3 _boxCenter = new(transform.position.x, transform.position.y + _groundedCheckRadius + _groundedOffset, transform.position.z);
