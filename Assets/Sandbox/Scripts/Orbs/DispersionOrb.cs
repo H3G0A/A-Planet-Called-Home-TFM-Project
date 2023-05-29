@@ -44,8 +44,8 @@ public class DispersionOrb : OrbBehaviour
                 BreakableWallController breakableWallScript = _collider.GetComponent<BreakableWallController>();
                 breakableWallScript.hitByDispersionOrb();            
             }else if(_collider.gameObject.CompareTag(GlobalParameters.LUMINOUS_CRYSTAL)) {
-                Light ligth = _collider.GetComponent<Light>();
-                ligth.enabled = true;
+                LigthCrystalController _lightCrystalController = _collider.GetComponent<LigthCrystalController>();
+                _lightCrystalController.increaseIntensity();
             }
         }
     }

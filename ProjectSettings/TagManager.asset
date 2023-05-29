@@ -11,6 +11,7 @@ TagManager:
   - Elevator
   - Water
   - BreakableWall
+  - LuminousCrystal
   layers:
   - Default
   - TransparentFX
