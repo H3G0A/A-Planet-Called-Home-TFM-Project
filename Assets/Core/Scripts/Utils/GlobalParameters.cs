@@ -12,6 +12,7 @@ public static class GlobalParameters
     public const string ELEVATOR_TAG = "Elevator";
     public const string WATER_TAG = "Water";
     public const string BREAKABLE_WALL_TAG = "BreakableWall";
+    public const string LUMINOUS_CRYSTAL = "LuminousCrystal";
 
     //LAYERS
     public const int GROUND_LAYER = 3;
