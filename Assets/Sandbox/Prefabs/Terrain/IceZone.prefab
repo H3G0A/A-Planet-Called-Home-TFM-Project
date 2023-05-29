@@ -110,10 +110,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27f1a98382cb8ce4c86c32ea29724251, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  permanent: 0
+  _isPermanent: 0
   _delayDestroyTimer: 10
   _height: 4
-  _radius: 4
+  _radius: 10
   _iceLayers:
     serializedVersion: 2
     m_Bits: 8

@@ -33,6 +33,7 @@ public class FirstPersonController : MonoBehaviour
 	[Space(10)]
 	[Tooltip("Acceleration while airbone")]
 	[SerializeField] float _airboneAcceleration = 5.0f;
+	[SerializeField] float _airboneDeceleration = 1.0f;
 
 	[Space(10)]
 	[Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
@@ -68,6 +69,8 @@ public class FirstPersonController : MonoBehaviour
 	[Header("Player On Ice")]
 	[SerializeField] bool _onIce = false;
 	[SerializeField] float _iceSpeedMultiplier = 2f;
+	[SerializeField] float _iceAcceleration = 5;
+	[SerializeField] float _iceDeceleration = 5;
 
 
 	[Header("Player In Water")]
@@ -99,6 +102,7 @@ public class FirstPersonController : MonoBehaviour
 	Vector3 _cumulatedMovement;
 	bool _touchingWater;
 	float _waterCheckRadius = .01f;
+	float _speedChangeRate;
 
 	// Timers
 	float _fallTimeoutDelta;
@@ -109,10 +113,26 @@ public class FirstPersonController : MonoBehaviour
 	PlayerInputController _inputController;
 
 	// Getter and setters
-	private int PlayerWeight
+	public int PlayerWeight
     {
         get { return _playerWeight; }
-		set { _playerWeight = Mathf.Clamp(value, -1, 1); }
+		private set { _playerWeight = Mathf.Clamp(value, -1, 1); }
+    }
+	public bool Grounded
+    {
+        get { return _grounded; }
+    }
+	public bool OnIce
+    {
+        get { return _onIce; }
+    }
+	public bool InWater
+    {
+        get { return _inWater; }
+    }
+	public Vector3 CumulatedMovement
+    {
+        get { return _cumulatedMovement; }
     }
 
 
@@ -227,7 +247,8 @@ public class FirstPersonController : MonoBehaviour
 		float _radius = .01f;
 		float _offset = .09f;
 		Vector3 _pos = new(transform.position.x, transform.position.y + _radius - _offset, transform.position.z);
-		if (Physics.CheckSphere(_pos, .01f, 1 << ICE_LAYER, QueryTriggerInteraction.Collide))
+		
+		if (Physics.CheckSphere(_pos, .01f, 1 << ICE_LAYER, QueryTriggerInteraction.Collide) && (_grounded))
 		{
 			_onIce = true;
 		}
@@ -250,20 +271,7 @@ public class FirstPersonController : MonoBehaviour
 
 	private void ManageMovement()
 	{
-		// Set speed
-		if (_grounded)
-		{
-			_targetSpeed = _inputController.Sprint ? _sprintSpeed : _moveSpeed;
-			if (_onIce) _targetSpeed *= _iceSpeedMultiplier;
-        }
-        else
-        {
-			_targetSpeed = _moveSpeed;
-        }
-
-		// note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-		// if there is no input, set the target speed to 0
-		if (_inputController.Move == Vector2.zero) _targetSpeed = 0.0f;
+		SetSpeedAndAcceleration();
 
 		// a reference to the players current horizontal velocity
 		float _previousHorizontalSpeed = _horizontalVelocity.magnitude;
@@ -296,7 +304,7 @@ public class FirstPersonController : MonoBehaviour
         else 
         {
 			Vector3 _airVelocity = _inputDirection * _targetSpeed;
-			_horizontalVelocity = Vector3.Lerp(_horizontalVelocity, _airVelocity, Time.deltaTime * _airboneAcceleration);
+			_horizontalVelocity = Vector3.Lerp(_horizontalVelocity, _airVelocity, Time.deltaTime * _speedChangeRate);
 		}
 		
 		MoveCharacter(_horizontalVelocity * Time.deltaTime);
@@ -304,18 +312,45 @@ public class FirstPersonController : MonoBehaviour
 
 	private void VelocityChange(float _previousSpeed, float _targetSpeed, bool _isAccel)
 	{
-		float _changeRate;
-		_changeRate = _isAccel ? _groundedAcceleration : _groundedDeceleration;
+		_speedChangeRate = _isAccel ? _acceleration : _deceleration;
+		
+		_currentSpeed = Mathf.Lerp(_previousSpeed, _targetSpeed * _inputController.Move.magnitude, Time.deltaTime * _speedChangeRate);
+	}
 
-		// creates curved result rather than a linear one giving a more organic speed change
-		// note T in Lerp is clamped, so we don't need to clamp our speed
-		_currentSpeed = Mathf.Lerp(_previousSpeed, _targetSpeed * _inputController.Move.magnitude, Time.deltaTime * _changeRate);
+	private void SetSpeedAndAcceleration()
+	{
+		if (_grounded)
+		{
+			_targetSpeed = _inputController.Sprint ? _sprintSpeed : _moveSpeed;
+			if (_onIce)
+			{
+				_targetSpeed *= _iceSpeedMultiplier;
+				_acceleration = _iceAcceleration;
+				_deceleration = _iceDeceleration;
+			}
+			else
+			{
+				_acceleration = _groundedAcceleration;
+				_deceleration = _groundedDeceleration;
+			}
+		}
+		// On air
+		else
+		{
+			_targetSpeed = _currentSpeed > _moveSpeed ? _currentSpeed : _moveSpeed;
+			_acceleration = _airboneAcceleration;
+			_deceleration = _airboneDeceleration;
+		}
+
+		// note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
+		// if there is no input, set the target speed to 0
+		if (_inputController.Move == Vector2.zero) _targetSpeed = 0.0f;
 	}
 
 	private void ManageGravity()
     {
 		// Keep player on water surface when not heavy
-        if (_inWater && (_playerWeight != 1))
+        if (_inWater && (PlayerWeight != 1))
         {
 			if (_verticalVelocity < 0)
 			{
@@ -347,12 +382,12 @@ public class FirstPersonController : MonoBehaviour
 
 	private void WaterLogic()
     {
-        if ((_playerWeight != 1) && _underWater)
+        if ((PlayerWeight != 1) && _underWater)
         {
 			//Float back to surface
-			_verticalVelocity = 2f;
+			_verticalVelocity = 4f;
         }
-		else if (_playerWeight != 1)
+		else if (PlayerWeight != 1)
         {
 			//Don't wait for next gravity update to stop; prevents bouncing on surface
 			_verticalVelocity = 0;
@@ -362,8 +397,8 @@ public class FirstPersonController : MonoBehaviour
 	private void ManageJump()
     {
 		bool _groundJump = _grounded && !_inWater;
-		bool _underWaterJump = _grounded && (_playerWeight == 1);
-		bool _waterJump = _inWater && (_playerWeight != 1) && !_underWater;
+		bool _underWaterJump = _grounded && (PlayerWeight == 1);
+		bool _waterJump = _inWater && (PlayerWeight != 1) && !_underWater;
 
 		if (_groundJump || _underWaterJump || _waterJump)
         {
@@ -416,6 +451,12 @@ public class FirstPersonController : MonoBehaviour
 		PlayerWeight += (int) ctx.ReadValue<float>();
 
 		_impactReceiver.ChangeMass(PlayerWeight);
+    }
+
+	public void StopMovement()
+    {
+		_verticalVelocity = 0;
+		_horizontalVelocity = Vector3.zero;
     }
 
 	private void SwitchActionMap(string _mapName)
