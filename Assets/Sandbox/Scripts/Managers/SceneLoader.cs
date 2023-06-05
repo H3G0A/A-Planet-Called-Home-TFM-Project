@@ -24,6 +24,8 @@ public class SceneLoader : MonoBehaviour
     public void LoadScene(GlobalParameters.Scenes sceneName)
     {
         StartCoroutine(LoadingCorrutine(sceneName));
+
+
     }
 
     private IEnumerator LoadingCorrutine(GlobalParameters.Scenes sceneName)
@@ -37,19 +39,21 @@ public class SceneLoader : MonoBehaviour
         _loadingScreen.SetActive(true);
 
         //Prevent scene from completely loading
-        scene.allowSceneActivation = false;
+        //scene.allowSceneActivation = false;
 
+        //Wait in case loading is too fast, for better transition
+        yield return new WaitForSecondsRealtime(0.35f);
+        
         //Wait until scene is loaded
-        while (scene.progress < 0.9f)
+        while (scene.progress < 1f)
         {
             yield return null;
         }
 
-        //Wait 1 second in case loading is too fast, for better transition
-        yield return new WaitForSeconds(1);
 
         //Allow scene to completely load
-        scene.allowSceneActivation = true;
+        //scene.allowSceneActivation = true;
+
         //Hide loading screen
         _loadingScreen.SetActive(false);
     }

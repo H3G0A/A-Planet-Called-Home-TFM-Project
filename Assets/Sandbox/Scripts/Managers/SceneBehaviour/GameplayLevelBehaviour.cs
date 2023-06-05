@@ -5,20 +5,10 @@ using UnityEngine;
 public class GameplayLevelBehaviour : MonoBehaviour
 {
 	[Header("Mouse Cursor Settings")]
-	[SerializeField] bool cursorLocked = true;
+	[SerializeField] CursorLockMode _cursorState = CursorLockMode.Locked;
 
-    private void Awake()
+	private void Awake()
     {
 		Cursor.lockState = CursorLockMode.Locked;
     }
-
-    private void OnApplicationFocus(bool hasFocus)
-	{
-		SetCursorState(cursorLocked);
-	}
-
-	private void SetCursorState(bool newState)
-	{
-		Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
-	}
 }
