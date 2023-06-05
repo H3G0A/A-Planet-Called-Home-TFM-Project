@@ -13,6 +13,8 @@ public static class GlobalParameters
     public const string WATER_TAG = "Water";
     public const string BREAKABLE_WALL_TAG = "BreakableWall";
     public const string LUMINOUS_CRYSTAL = "LuminousCrystal";
+    public const string HEAT_ZONE_TAG = "HeatZone";
+
 
     //LAYERS
     public const int GROUND_LAYER = 3;

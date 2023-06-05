@@ -10,11 +10,11 @@ public class DialogTriggerController : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        TextController _textController = _dialogController.GetComponent<TextController>();
+        DialogManager _dialogManager = _dialogController.GetComponent<DialogManager>();
         if(other.CompareTag(PLAYER_TAG))
         {
             Debug.Log("Play Dialogs");
-            _textController.playDialogs(_dialogs);
+            _dialogManager.playDialogs(_dialogs);
             Destroy(gameObject);
         }
     }
