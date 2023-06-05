@@ -53,6 +53,12 @@ public class PlayerInputController : MonoBehaviour
         _changeOrbDirectly = _playerInput.actions[CHANGEORBDIRECTLY_ACTION];
     }
 
+    private void Start()
+    {
+        //Set reference in GameManager
+        GameManager.Instance.PlayerInputController_ = this;
+    }
+
     void OnEnable()
     {
         EnableInputCallbacks();
@@ -65,6 +71,8 @@ public class PlayerInputController : MonoBehaviour
 
     void EnableInputCallbacks()
     {
+        _playerInput.ActivateInput();
+        
         //////////////////////// PLAYER INPUTS ////////////////////////////////
         // MOVE
         _moveAction.performed += SetMove;
@@ -101,6 +109,8 @@ public class PlayerInputController : MonoBehaviour
 
     void DisableInputCallbacks()
     {
+        _playerInput.DeactivateInput();
+
         //////////////////////// PLAYER INPUTS ////////////////////////////////
         // MOVE
         _moveAction.performed -= SetMove;
