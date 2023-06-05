@@ -4,7 +4,11 @@ using UnityEngine;
 
 public static class GlobalParameters
 {
-    //TAGS
+    // SCENES
+    //// In order for a scene to be loaded it has to exist in the BUILD SETTINGS
+    public enum Scenes { MainMenu, HegoaSandbox };
+
+    // TAGS
     public const string ORB_TAG = "Orb";
     public const string PLAYER_TAG = "Player";
     public const string ICE_TAG = "Ice";
@@ -14,15 +18,15 @@ public static class GlobalParameters
     public const string BREAKABLE_WALL_TAG = "BreakableWall";
     public const string LUMINOUS_CRYSTAL = "LuminousCrystal";
 
-    //LAYERS
+    // LAYERS
     public const int GROUND_LAYER = 3;
     public const int PLAYER_LAYER = 6;
     public const int ICE_LAYER = 8;
 
-    //SORTING LAYERS
+    // SORTING LAYERS
 
 
-    //INPUT ACTIONS
+    // INPUT ACTIONS
     public const string MOVE_ACTION = "Move";
     public const string LOOK_ACTION = "Look";
     public const string SPRINT_ACTION = "Sprint";
@@ -34,7 +38,7 @@ public static class GlobalParameters
     public const string CHANGEORBDIRECTLY_ACTION = "ChangeOrbDirectly";
     public const string CHANGE_WEIGHT_ACTION = "Change Weight";
 
-    //ACTION MAPS
+    // ACTION MAPS
     public const string PLAYER_GROUND_MAP = "Ground";
     public const string PLAYER_WATER_SURFACE_MAP = "Water Surface";
     public const string PLAYER_UNDERWATER_MAP = "Underwater";

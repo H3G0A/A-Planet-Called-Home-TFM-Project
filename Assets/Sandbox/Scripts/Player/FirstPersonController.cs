@@ -87,10 +87,6 @@ public class FirstPersonController : MonoBehaviour
 	[Tooltip("How far in degrees can you move the camera down")]
 	[SerializeField] float _bottomClamp = -90.0f;
 
-
-	[Header("Mouse Cursor Settings")]
-	[SerializeField] bool cursorLocked = true;
-
 	// cinemachine
 	float _cinemachineTargetPitch;
 
@@ -423,16 +419,19 @@ public class FirstPersonController : MonoBehaviour
 
     private void CameraRotation()
     {
-        _cinemachineTargetPitch += _inputController.Look.y;
+        if (!GameManager.Instance.GamePaused)
+        {
+			_cinemachineTargetPitch += _inputController.Look.y;
 
-        // clamp our pitch rotation
-        _cinemachineTargetPitch = Mathf.Clamp(_cinemachineTargetPitch, _bottomClamp, _topClamp);
+			// clamp our pitch rotation
+			_cinemachineTargetPitch = Mathf.Clamp(_cinemachineTargetPitch, _bottomClamp, _topClamp);
 
-        // Update Cinemachine camera target pitch
-        _cinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
+			// Update Cinemachine camera target pitch
+			_cinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
 
-        // rotate the player left and right
-        transform.Rotate(Vector3.up * _inputController.Look.x);
+			// rotate the player left and right
+			transform.Rotate(Vector3.up * _inputController.Look.x);
+		}
     }
 
 	public void MoveCharacter(Vector3 movement)
@@ -457,11 +456,6 @@ public class FirstPersonController : MonoBehaviour
     {
 		_verticalVelocity = 0;
 		_horizontalVelocity = Vector3.zero;
-    }
-
-	private void SwitchActionMap(string _mapName)
-    {
-        
     }
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -511,15 +505,5 @@ public class FirstPersonController : MonoBehaviour
 		float _iceCheckOffset = .09f;
 		Vector3 _iceCheckPos = new(transform.position.x, transform.position.y + _iceCheckRadius - _iceCheckOffset, transform.position.z);
 		Gizmos.DrawSphere(_iceCheckPos, _iceCheckRadius);
-	}
-
-	private void OnApplicationFocus(bool hasFocus)
-	{
-		SetCursorState(cursorLocked);
-	}
-
-	private void SetCursorState(bool newState)
-	{
-		Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
 	}
 }
