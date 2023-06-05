@@ -12,6 +12,7 @@ TagManager:
   - Water
   - BreakableWall
   - LuminousCrystal
+  - HeatZone
   layers:
   - Default
   - TransparentFX
