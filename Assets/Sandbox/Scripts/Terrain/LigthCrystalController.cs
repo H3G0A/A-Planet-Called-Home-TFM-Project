@@ -9,8 +9,7 @@ public class LigthCrystalController : MonoBehaviour
     [SerializeField] Light _ligthElement = null;
     [SerializeField] float _lighIncrement = 0.5f;
     float _ligthIntensity = 0.0f;
-    float _t = 0.0f;
-
+    
     void Start()
     {
         _ligthElement = this.GetComponent<Light>();    

@@ -86,8 +86,9 @@ public class FirstPersonController : MonoBehaviour
 	[SerializeField] float _topClamp = 90.0f;
 	[Tooltip("How far in degrees can you move the camera down")]
 	[SerializeField] float _bottomClamp = -90.0f;
-
 	// cinemachine
+
+	[SerializeField] GameObject _dmgImage;
 	float _cinemachineTargetPitch;
 
 	// player
@@ -97,9 +98,10 @@ public class FirstPersonController : MonoBehaviour
 	Vector3 _inputDirection;
 	Vector3 _cumulatedMovement;
 	bool _touchingWater;
+	bool _inHeatZone;
 	float _waterCheckRadius = .01f;
 	float _speedChangeRate;
-
+	float _heatPercentage;
 	// Timers
 	float _fallTimeoutDelta;
 
@@ -107,6 +109,7 @@ public class FirstPersonController : MonoBehaviour
 	CharacterController _controller;
 	ImpactReceiver _impactReceiver;
 	PlayerInputController _inputController;
+	DmgEffect _dmgEffect;
 
 	// Getter and setters
 	public int PlayerWeight
@@ -137,12 +140,14 @@ public class FirstPersonController : MonoBehaviour
 		_controller = GetComponent<CharacterController>();
 		_impactReceiver = GetComponent<ImpactReceiver>();
 		_inputController = GetComponent<PlayerInputController>();
+		_dmgEffect = _dmgImage.GetComponent<DmgEffect>();
 	}
 
 	void Start()
     {
 		_impactReceiver.ChangeMass(PlayerWeight);
-
+		_heatPercentage = 0.00f;
+		_inHeatZone = false;
 		_fallTimeoutDelta = _fallTimeout; // reset our timeouts on start
 	}
 
@@ -152,6 +157,7 @@ public class FirstPersonController : MonoBehaviour
 		GroundCheck();
 		IceCheck();
 		WaterCheck();
+		HeatZoneCheck();
 
 		//Player movement
 		ManageJump();
@@ -174,6 +180,10 @@ public class FirstPersonController : MonoBehaviour
 			case WATER_TAG:
 				_touchingWater = true;
 				break;
+			case HEAT_ZONE_TAG:
+				Debug.Log("Entrando zona de calor");
+				_inHeatZone = true;
+				break;
         }
     }
 
@@ -183,6 +193,10 @@ public class FirstPersonController : MonoBehaviour
 		{
 			case WATER_TAG:
 				_touchingWater = false;
+				break;
+			case HEAT_ZONE_TAG:
+				Debug.Log("Saliendo zona de calor");
+				_inHeatZone = false;
 				break;
 		}
 	}
@@ -211,6 +225,23 @@ public class FirstPersonController : MonoBehaviour
 			if(_inWater) WaterLogic();
         }
     }
+
+	private void HeatZoneCheck(){
+		if(_inHeatZone)
+		{
+			if( _heatPercentage < 1.0f)
+			{
+				_heatPercentage += 0.01f;
+			}
+		} else 
+		{
+			if( _heatPercentage> 0.0f)
+			{
+				_heatPercentage -= 0.01f;
+			}
+		}
+		_dmgEffect.ChangeColor(_heatPercentage);
+	}
 
 	private void SlipCheck()
     {
