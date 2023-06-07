@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using static GlobalParameters;
 
-public class FirstPersonController : MonoBehaviour
+public class FirstPersonController : MonoBehaviour, IDataPersistence
 {
 	[Header("Player")]
 	[Tooltip("Move speed of the character in m/s")]
@@ -12,6 +12,7 @@ public class FirstPersonController : MonoBehaviour
 	[Tooltip("Sprint speed of the character in m/s")]
 	[SerializeField] float _sprintSpeed = 6.0f;
 	[SerializeField] float _currentSpeed;
+	public Vector3 _lastCheckpoint;
 
 	[Space(10)]
 	[Tooltip("Acceleration in terrain")]
@@ -537,4 +538,20 @@ public class FirstPersonController : MonoBehaviour
 		Vector3 _iceCheckPos = new(transform.position.x, transform.position.y + _iceCheckRadius - _iceCheckOffset, transform.position.z);
 		Gizmos.DrawSphere(_iceCheckPos, _iceCheckRadius);
 	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public void LoadData(GameData data)
+    {
+		this._lastCheckpoint = new(data.LastCheckpoint[0], data.LastCheckpoint[1], data.LastCheckpoint[2]);
+
+		_controller.enabled = false;
+		this.transform.position = this._lastCheckpoint;
+		_controller.enabled = true;
+    }
+
+    public void SaveData(ref GameData data)
+    {
+		data.LastCheckpoint = new float[] { _lastCheckpoint.x, _lastCheckpoint.y, _lastCheckpoint.z};
+    }
 }

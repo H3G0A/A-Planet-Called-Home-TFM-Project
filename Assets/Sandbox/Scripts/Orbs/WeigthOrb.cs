@@ -5,7 +5,10 @@ using UnityEngine;
 public class WeigthOrb : OrbBehaviour
 {
     [SerializeField] bool _augment;
-    Vector3 currentVelocity;
+
+    public override int ID { get; protected set; } = (int)GlobalParameters.Orbs.WEIGHT;
+    //int _id = (int)GlobalParameters.Orbs.WEIGHT;
+
     protected override void ApplyEffect(Collision collision) //The orb change the weigth of the object that impacts.
     {        
         GameObject objectCollision = collision.gameObject;

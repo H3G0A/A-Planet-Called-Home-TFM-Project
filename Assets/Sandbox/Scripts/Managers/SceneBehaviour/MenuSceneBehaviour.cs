@@ -10,5 +10,5 @@ public class MenuSceneBehaviour : MonoBehaviour
     private void Awake()
     {
 		Cursor.lockState = _cursorState;
-	}
+    }
 }
