@@ -6,7 +6,7 @@ public static class GlobalParameters
 {
     // SCENES
     //// In order for a scene to be loaded it has to exist in the BUILD SETTINGS
-    public enum Scenes { MainMenu, HegoaSandbox };
+    public enum Scenes { MainMenu, HegoaSandbox, SergiSandbox };
 
     // TAGS
     public const string ORB_TAG = "Orb";

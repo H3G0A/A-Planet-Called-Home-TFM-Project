@@ -21,13 +21,13 @@ public class MainMenu : MonoBehaviour
 
     public void OnContinue()
     {
-        SceneLoader.Instance.LoadScene(Scenes.HegoaSandbox);
+        SceneLoader.Instance.LoadScene(GameManager.Instance.CurrentLevel);
     }
 
     public void OnNewGame()
     {
         DataPersistenceManager.Instance.NewGame();
-        SceneLoader.Instance.LoadScene(Scenes.HegoaSandbox);
+        SceneLoader.Instance.LoadScene(GameManager.Instance.CurrentLevel);
     }
 
     public void OnExit()
