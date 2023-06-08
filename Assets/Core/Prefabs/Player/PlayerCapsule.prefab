@@ -276,6 +276,7 @@ MonoBehaviour:
   _moveSpeed: 4
   _sprintSpeed: 6
   _currentSpeed: 0
+  _lastCheckpoint: {x: 0, y: 0, z: 0}
   _groundedAcceleration: 10
   _groundedDeceleration: 10
   _horizontalVelocity: {x: 0, y: 0, z: 0}
@@ -288,11 +289,11 @@ MonoBehaviour:
   _fallTimeout: 0.15
   _grounded: 1
   _groundedOffset: -0.05
-  _groundedCheckRadius: 0.5
+  _groundedCheckRadius: 0.45
   _groundedCastDistance: 0.08
   _groundLayers:
     serializedVersion: 2
-    m_Bits: 9
+    m_Bits: 8
   _edgeCheckOffset: 0.1
   _edgeCheckLength: 0.75
   _edgeSlipSpeed: 2
@@ -310,7 +311,7 @@ MonoBehaviour:
   _cinemachineCameraTarget: {fileID: 4135013735270702863}
   _topClamp: 90
   _bottomClamp: -90
-  cursorLocked: 1
+  _dmgImage: {fileID: 0}
 --- !u!114 &1236055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349,6 +350,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4135013735270702856}
     m_Modifications:
+    - target: {fileID: 3674210042753416164, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
+      propertyPath: _force
+      value: 0.035
+      objectReference: {fileID: 0}
+    - target: {fileID: 3674210042753416164, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
+      propertyPath: _orbText
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3674210042753416164, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
+      propertyPath: _mainCamera
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3674210042753416164, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
+      propertyPath: _orbWeigthText
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3674210042753416184, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
       propertyPath: m_RootOrder
       value: 0

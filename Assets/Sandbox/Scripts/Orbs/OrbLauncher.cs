@@ -8,6 +8,8 @@ using static GlobalParameters;
 
 public class OrbLauncher : MonoBehaviour
 {
+    public bool IsEnabled = true;
+
     [Header("Stats")]
     [SerializeField] float _force = .035f;
     [SerializeField] float _range = 100;
@@ -18,7 +20,6 @@ public class OrbLauncher : MonoBehaviour
     [Header("Orbs")]
     [SerializeField] GameObject _selectedOrb;
     [SerializeField] List<GameObject> _chargedOrbs;
-    [SerializeField] List<Orbs> _activeOrbs;
     
     [Space(10)]
     [SerializeField] TMP_Text _orbText;
@@ -46,10 +47,12 @@ public class OrbLauncher : MonoBehaviour
 
     void Start()
     {
+        LoadOrbs();
+
         //Set reference in GameManager
         GameManager.Instance.OrbLauncher_ = this;
 
-        LoadOrbs();
+        
         _selectedOrb = _chargedOrbs[0];
         _indexOrb = 0;
         ChangeOrbText();
@@ -76,6 +79,8 @@ public class OrbLauncher : MonoBehaviour
 
     public void ShootOrb(InputAction.CallbackContext ctx)
     {
+        if (!IsEnabled) return;
+
         // By default nothing has been hit, so simulate a far point
         Vector3 _forceDirection = _mainCamera.ScreenToWorldPoint(new(Screen.width / 2, Screen.height / 2, 100)) - _firePoint.transform.position;
 
@@ -113,7 +118,9 @@ public class OrbLauncher : MonoBehaviour
         if (_fireRateDelta > 0) _fireRateDelta -= Time.deltaTime;
     }
 
-    public void ChangeOrb(InputAction.CallbackContext ctx){  
+    public void ChangeOrb(InputAction.CallbackContext ctx){
+        if (!IsEnabled) return;
+
         int _nextValueOrbs = (int) ctx.ReadValue<float>();      
         _indexOrb += _nextValueOrbs;
         if(_indexOrb >= _chargedOrbs.Count){
@@ -127,13 +134,17 @@ public class OrbLauncher : MonoBehaviour
     }
 
     public void ChangeOrbDirectly(InputAction.CallbackContext ctx){
+        if (!IsEnabled) return;
+
         _indexOrb = (int) ctx.ReadValue<float>();   
         _selectedOrb = _chargedOrbs[_indexOrb];
         ChangeOrbText();
     }
 
     public void ChangeOrbWeigth(InputAction.CallbackContext ctx){
-        if(_selectedOrb.GetComponent<WeigthOrb>() != null){
+        if (IsEnabled) return;
+
+        if (_selectedOrb.GetComponent<WeigthOrb>() != null){
             _augmentWeigthOrb = !_augmentWeigthOrb;
             ChangeAugmentText();
         } 

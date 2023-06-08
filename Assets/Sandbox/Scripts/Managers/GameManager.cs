@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public bool GamePaused { get; private set; }
     public PlayerInputController PlayerInputController_;
     public OrbLauncher OrbLauncher_;
+    public FirstPersonController FirstPersonController_;
    
     public GlobalParameters.Scenes CurrentLevel;
 
@@ -26,6 +27,20 @@ public class GameManager : MonoBehaviour, IDataPersistence
     {
         Initialize();
         GamePaused = false;
+    }
+
+    
+
+    private void Update()
+    {
+        if (FirstPersonController_.InWater)
+        {
+            OrbLauncher_.IsEnabled = false;
+        }
+        else if(!OrbLauncher_.enabled)
+        {
+            OrbLauncher_.IsEnabled = true;
+        }
     }
 
     private void Initialize()

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class DataPersistenceManager : MonoBehaviour
 {
@@ -9,7 +10,8 @@ public class DataPersistenceManager : MonoBehaviour
     [SerializeField] private string fileName;
 
     [Header("Debugging")]
-    [SerializeField] private bool InitializeDataIfNull;
+    [SerializeField] private bool _initializeDataIfNull;
+    [SerializeField] private bool _loadDataWithScene;
 
     private GameData _gameData;
     private List<IDataPersistence> _dataPersistenceObjects;
@@ -18,9 +20,10 @@ public class DataPersistenceManager : MonoBehaviour
 
     private void Awake()
     {
-    #if !UNITY_EDITOR
-        InitializeDataIfNull = false;
-    #endif
+#if !UNITY_EDITOR
+        _initializeDataIfNull = false;
+        _loadDataWithScene = true;
+#endif
 
         Initialize();
         _dataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
@@ -39,6 +42,21 @@ public class DataPersistenceManager : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if(_loadDataWithScene) LoadGame();
+    }
+
     private List<IDataPersistence> FindAllDataPersistenceObjects()
     {
         IEnumerable<IDataPersistence> dataPersistenceObjects = FindObjectsOfType<MonoBehaviour>().OfType<IDataPersistence>();
@@ -51,6 +69,7 @@ public class DataPersistenceManager : MonoBehaviour
         Debug.Log("New Game");
         this._gameData = new GameData();
         _dataHandler.Save(_gameData);
+        LoadGame();
     }
 
     public void LoadGame()
@@ -62,7 +81,7 @@ public class DataPersistenceManager : MonoBehaviour
 
         if (_gameData == null)
         {
-            if (InitializeDataIfNull)
+            if (_initializeDataIfNull)
             {
                 Debug.LogWarning("No saved data was found. A new save file will be created");
                 NewGame();
