@@ -1,20 +1,27 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static GlobalParameters;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour, IDataPersistence
 {
-    public static GameManager Instance { get; private set; }
-
     public bool GamePaused { get; private set; }
-
-    // Player
     public PlayerInputController PlayerInputController_;
+    public OrbLauncher OrbLauncher_;
+   
+    public GlobalParameters.Scenes CurrentLevel;
 
-    // Time
+    [Serializable]
+    public class Orb
+    {
+        public GameObject Prefab;
+        public bool Available;
+    }
+    public List<Orb> OrbStash;
+
     float _lastTimeScale = 1;
 
+   
+    public static GameManager Instance { get; private set; }
     private void Awake()
     {
         Initialize();
@@ -54,13 +61,77 @@ public class GameManager : MonoBehaviour
 
     }
 
-    
-
     public void ResumeGame()
     {
         GamePaused = false;
         Time.timeScale = _lastTimeScale;
 
         if (PlayerInputController_ != null) PlayerInputController_.enabled = true;
+    }
+
+    public void EnableOrb(GlobalParameters.Orbs orbName)
+    {
+        int orbID = (int)orbName;
+        foreach(Orb selectedOrb in OrbStash)
+        {
+            int selectedOrbID = selectedOrb.Prefab.GetComponent<OrbBehaviour>().ID;
+            if(orbID == selectedOrbID)
+            {
+                selectedOrb.Available = true;
+            }
+        }
+
+        OrbLauncher_.LoadOrbs();
+    }
+
+    public void DisableOrb(GlobalParameters.Orbs orbName)
+    {
+        int orbID = (int)orbName;
+        foreach (Orb selectedOrb in OrbStash)
+        {
+            int selectedOrbID = selectedOrb.Prefab.GetComponent<OrbBehaviour>().ID;
+            if (orbID == selectedOrbID)
+            {
+                selectedOrb.Available = false;
+            }
+        }
+
+        OrbLauncher_.LoadOrbs();
+    }
+
+    public void LoadData(GameData data)
+    {
+        //Level
+        this.CurrentLevel = (GlobalParameters.Scenes) Enum.Parse(typeof(GlobalParameters.Scenes), data.CurrentLevel);
+
+        //Orbs
+        foreach(Orb orb in OrbStash)
+        {
+            int orbId = orb.Prefab.GetComponent<OrbBehaviour>().ID;
+
+            if (data.ActiveOrbs.Contains(orbId))
+            {
+                orb.Available = true;
+            }
+        }
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        //Level
+        data.CurrentLevel = this.CurrentLevel.ToString();
+
+        //Orbs
+        data.ActiveOrbs = new List<int>();
+
+        foreach(Orb orb in OrbStash)
+        {
+            int orbId = orb.Prefab.GetComponent<OrbBehaviour>().ID;
+
+            if (orb.Available)
+            {
+                data.ActiveOrbs.Add(orbId);
+            }
+        }
     }
 }

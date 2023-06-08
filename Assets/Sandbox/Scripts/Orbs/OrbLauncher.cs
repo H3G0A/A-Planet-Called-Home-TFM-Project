@@ -12,18 +12,21 @@ public class OrbLauncher : MonoBehaviour
     [SerializeField] float _force = .035f;
     [SerializeField] float _range = 100;
     [SerializeField] float _fireRate = .5f;
+    [SerializeField] bool _canShoot = false;
 
     
     [Header("Orbs")]
     [SerializeField] GameObject _selectedOrb;
     [SerializeField] List<GameObject> _chargedOrbs;
+    [SerializeField] List<Orbs> _activeOrbs;
     
     [Space(10)]
     [SerializeField] TMP_Text _orbText;
     [SerializeField] TMP_Text _orbWeigthText;
     [SerializeField] bool _augmentWeigthOrb;
 
-    [Header("Others")]
+
+    [Header("Aiming")]
     [SerializeField] Transform _firePoint;
     [SerializeField] Camera _mainCamera;
     
@@ -34,25 +37,41 @@ public class OrbLauncher : MonoBehaviour
     private float _fireRateDelta = 0;
 
     void Awake()
-    {
-        _selectedOrb = _chargedOrbs[0];
-        
+    {        
         // Make launcher point at the middle of the screen
         transform.LookAt(_mainCamera.ScreenToWorldPoint(new(Screen.width / 2, Screen.height / 2, 100)));
         transform.Rotate(90, 0, 0); // This rotation is only for the launcher's placeholder cylinder
+
     }
 
     void Start()
     {
+        //Set reference in GameManager
+        GameManager.Instance.OrbLauncher_ = this;
+
+        LoadOrbs();
         _selectedOrb = _chargedOrbs[0];
         _indexOrb = 0;
-        changeOrbText();
-        changeAugmentText();
+        ChangeOrbText();
+        ChangeAugmentText();
     }
 
     void Update()
     {
         ManageCooldown();
+    }
+
+    public void LoadOrbs()
+    {
+        _chargedOrbs = new List<GameObject>();
+
+        foreach(GameManager.Orb orb in GameManager.Instance.OrbStash)
+        {
+            if (orb.Available)
+            {
+                _chargedOrbs.Add(orb.Prefab);
+            }
+        }
     }
 
     public void ShootOrb(InputAction.CallbackContext ctx)
@@ -62,7 +81,7 @@ public class OrbLauncher : MonoBehaviour
 
         // Raycast from camera to get impact point and shoot accordingly
         bool _inRangeCollision = Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out RaycastHit _hit, _range, -1, QueryTriggerInteraction.Ignore);
-        
+
         // If something was shoot the orb in it's direction
         if (_inRangeCollision)
         {
@@ -70,14 +89,14 @@ public class OrbLauncher : MonoBehaviour
         }
 
         // If not on cooldown, shoot
-        if(_fireRateDelta <= 0) InstantiateOrb(_forceDirection);
+        if (_fireRateDelta <= 0) InstantiateOrb(_forceDirection);
     }
 
     void InstantiateOrb(Vector3 _forceDirection)
     {
         // Instantiate and give initial speed boost
         GameObject _orbInstance = GameObject.Instantiate(_selectedOrb, _firePoint.position, _firePoint.rotation);
-        if (_indexOrb == 1)
+        if (_orbInstance.GetComponent<WeigthOrb>() != null)
         {
             _orbInstance.GetComponent<WeigthOrb>().changeAugment(_augmentWeigthOrb);
         }
@@ -95,9 +114,8 @@ public class OrbLauncher : MonoBehaviour
     }
 
     public void ChangeOrb(InputAction.CallbackContext ctx){  
-        int _nextValueOrbs = (int) ctx.ReadValue<float>();
-        Debug.Log("Valor del cambio: " + _nextValueOrbs);      
-        _indexOrb = _indexOrb + _nextValueOrbs;
+        int _nextValueOrbs = (int) ctx.ReadValue<float>();      
+        _indexOrb += _nextValueOrbs;
         if(_indexOrb >= _chargedOrbs.Count){
             _indexOrb = 0;
         }
@@ -105,25 +123,23 @@ public class OrbLauncher : MonoBehaviour
             _indexOrb = (_chargedOrbs.Count - 1);
         }
         _selectedOrb = _chargedOrbs[_indexOrb];
-        changeOrbText();
+        ChangeOrbText();
     }
 
     public void ChangeOrbDirectly(InputAction.CallbackContext ctx){
-        _indexOrb = (int) ctx.ReadValue<float>();
-        Debug.Log("Orbe seleccioando: " + _indexOrb);      
+        _indexOrb = (int) ctx.ReadValue<float>();   
         _selectedOrb = _chargedOrbs[_indexOrb];
-        changeOrbText();
+        ChangeOrbText();
     }
 
     public void ChangeOrbWeigth(InputAction.CallbackContext ctx){
         if(_selectedOrb.GetComponent<WeigthOrb>() != null){
-            Debug.Log("Cambio de peso");
             _augmentWeigthOrb = !_augmentWeigthOrb;
-            changeAugmentText();
+            ChangeAugmentText();
         } 
     }
 
-    private void changeOrbText(){
+    private void ChangeOrbText(){
         switch(_indexOrb){
             case 0:
                 _orbText.text = "Orbe de dispersión";
@@ -137,7 +153,7 @@ public class OrbLauncher : MonoBehaviour
         }
     }
 
-    private void changeAugmentText(){
+    private void ChangeAugmentText(){
         if(_augmentWeigthOrb){
             _orbWeigthText.text = "Aumento de peso";
         }else{

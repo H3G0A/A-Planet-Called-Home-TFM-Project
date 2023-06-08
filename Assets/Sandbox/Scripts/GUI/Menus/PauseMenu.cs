@@ -75,6 +75,7 @@ public class PauseMenu : MonoBehaviour
 
     public void OnMainMenu()
     {
+        DisableMenu();
         SceneLoader.Instance.LoadScene(Scenes.MainMenu);
     }
 

@@ -9,6 +9,9 @@ public class IceOrb : OrbBehaviour
     [SerializeField] GameObject _iceZone;
     [SerializeField] GameObject _frozenWater;
 
+    public override int ID { get; protected set; } = (int)GlobalParameters.Orbs.ICE;
+    // readonly public int _id = (int)GlobalParameters.Orbs.ICE;
+
     protected override void ApplyEffect(Collision collision)
     {
         GameObject objectCollision = collision.gameObject;

@@ -8,7 +8,10 @@ public class DispersionOrb : OrbBehaviour
     [SerializeField] float _radius;
     [SerializeField] bool _diagonalPush = true;
     [SerializeField] bool _verticalPush = false;
+
     ImpactReceiver _impactReceiver;
+    public override int ID { get; protected set; } = (int)GlobalParameters.Orbs.DISPERSION;
+    //int _id = (int) GlobalParameters.Orbs.DISPERSION;
 
     protected override void ApplyEffect(Collision collision) //The orb pushes all objects inside radius away
     {

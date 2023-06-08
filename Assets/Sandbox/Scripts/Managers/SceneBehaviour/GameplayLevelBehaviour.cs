@@ -1,24 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static GlobalParameters;
 
 public class GameplayLevelBehaviour : MonoBehaviour
 {
 	[Header("Mouse Cursor Settings")]
-	[SerializeField] bool cursorLocked = true;
+	[SerializeField] CursorLockMode _cursorState = CursorLockMode.Locked;
+	[SerializeField] Scenes _currentLevel;
 
-    private void Awake()
+	private void Awake()
     {
 		Cursor.lockState = CursorLockMode.Locked;
+		GameManager.Instance.CurrentLevel = _currentLevel;
     }
-
-    private void OnApplicationFocus(bool hasFocus)
-	{
-		SetCursorState(cursorLocked);
-	}
-
-	private void SetCursorState(bool newState)
-	{
-		Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
-	}
 }

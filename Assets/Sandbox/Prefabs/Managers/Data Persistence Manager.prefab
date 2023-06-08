@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5832985184456971257
+--- !u!1 &7856122009844416053
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,48 +8,41 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4183870563703900431}
-  - component: {fileID: 7290132790930238399}
+  - component: {fileID: 8692898441872804298}
+  - component: {fileID: 3014358216475996938}
   m_Layer: 0
-  m_Name: Game Manager
+  m_Name: Data Persistence Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4183870563703900431
+--- !u!4 &8692898441872804298
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5832985184456971257}
+  m_GameObject: {fileID: 7856122009844416053}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 3.2100937, y: 2.4438725, z: -12.336962}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7290132790930238399
+--- !u!114 &3014358216475996938
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5832985184456971257}
+  m_GameObject: {fileID: 7856122009844416053}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abdef0a800b6fd444a780cdb67eceb53, type: 3}
+  m_Script: {fileID: 11500000, guid: b3a2d697174929c45a635c85ed88e54e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerInputController_: {fileID: 0}
-  CurrentLevel: 
-  OrbStash:
-  - Prefab: {fileID: 3763091816190321520, guid: fbc8c6956626b1d48bbb724b1da96332, type: 3}
-    Available: 1
-  - Prefab: {fileID: 6016317886622445584, guid: e303382b79774d948bfcbb9f1634ec15, type: 3}
-    Available: 0
-  - Prefab: {fileID: 8844603512878802888, guid: b0d919d4b48061745b51560fe4396cc3, type: 3}
-    Available: 0
+  fileName: data.save
+  InitializeDataIfNull: 1

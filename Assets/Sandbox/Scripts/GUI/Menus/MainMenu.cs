@@ -5,14 +5,29 @@ using static GlobalParameters;
 
 public class MainMenu : MonoBehaviour
 {
+    [SerializeField] private GameObject _continueButton;
+
+    private void Start()
+    {
+        if (DataPersistenceManager.Instance.HasGameData())
+        {
+            _continueButton.SetActive(true);
+        }
+        else
+        {
+            _continueButton.SetActive(false);
+        }
+    }
+
     public void OnContinue()
     {
-        SceneLoader.Instance.LoadScene(Scenes.HegoaSandbox);
+        SceneLoader.Instance.LoadScene(GameManager.Instance.CurrentLevel);
     }
 
     public void OnNewGame()
     {
-        SceneLoader.Instance.LoadScene(Scenes.HegoaSandbox);
+        DataPersistenceManager.Instance.NewGame();
+        SceneLoader.Instance.LoadScene(GameManager.Instance.CurrentLevel);
     }
 
     public void OnExit()

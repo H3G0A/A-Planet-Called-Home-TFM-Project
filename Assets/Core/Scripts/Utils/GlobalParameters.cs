@@ -6,7 +6,7 @@ public static class GlobalParameters
 {
     // SCENES
     //// In order for a scene to be loaded it has to exist in the BUILD SETTINGS
-    public enum Scenes { MainMenu, HegoaSandbox };
+    public enum Scenes { MainMenu, HegoaSandbox, SergiSandbox };
 
     // TAGS
     public const string ORB_TAG = "Orb";
@@ -18,7 +18,6 @@ public static class GlobalParameters
     public const string BREAKABLE_WALL_TAG = "BreakableWall";
     public const string LUMINOUS_CRYSTAL = "LuminousCrystal";
     public const string HEAT_ZONE_TAG = "HeatZone";
-
 
     // LAYERS
     public const int GROUND_LAYER = 3;
@@ -44,4 +43,7 @@ public static class GlobalParameters
     public const string PLAYER_GROUND_MAP = "Ground";
     public const string PLAYER_WATER_SURFACE_MAP = "Water Surface";
     public const string PLAYER_UNDERWATER_MAP = "Underwater";
+
+    // ORBS ID
+    public enum Orbs { DISPERSION = 0, ICE = 1, WEIGHT = 2 };
 }
