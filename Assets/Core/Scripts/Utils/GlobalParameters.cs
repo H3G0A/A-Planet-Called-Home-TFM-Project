@@ -18,6 +18,7 @@ public static class GlobalParameters
     public const string BREAKABLE_WALL_TAG = "BreakableWall";
     public const string LUMINOUS_CRYSTAL = "LuminousCrystal";
     public const string HEAT_ZONE_TAG = "HeatZone";
+    public const string WORLD_BOUNDS_TAG = "WorldBounds";
 
     // LAYERS
     public const int GROUND_LAYER = 3;

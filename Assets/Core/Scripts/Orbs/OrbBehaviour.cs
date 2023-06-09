@@ -10,7 +10,8 @@ public abstract class OrbBehaviour : MonoBehaviour
     //List of object TAGS which their collisions with the orb will be ignored
     readonly List<string> _ignoreCollision = new(){
                                                     ORB_TAG,
-                                                    PLAYER_TAG
+                                                    PLAYER_TAG,
+                                                    WORLD_BOUNDS_TAG
                                                     };
 
     private void Start() //Destroy after a while if has not collided
