@@ -30,7 +30,11 @@ public class OrbLauncher : MonoBehaviour
     [Header("Aiming")]
     [SerializeField] Transform _firePoint;
     [SerializeField] Camera _mainCamera;
-    
+
+
+    [Header("Player")]
+    [SerializeField] FirstPersonController _FPController;
+
     // Launcher
     private int _indexOrb;
     
@@ -42,7 +46,6 @@ public class OrbLauncher : MonoBehaviour
         // Make launcher point at the middle of the screen
         transform.LookAt(_mainCamera.ScreenToWorldPoint(new(Screen.width / 2, Screen.height / 2, 100)));
         transform.Rotate(90, 0, 0); // This rotation is only for the launcher's placeholder cylinder
-
     }
 
     void Start()
@@ -73,6 +76,11 @@ public class OrbLauncher : MonoBehaviour
             if (orb.Available)
             {
                 _chargedOrbs.Add(orb.Prefab);
+
+                if (orb.Prefab.GetComponent<WeigthOrb>() != null)
+                {
+                    _FPController._canChangeWeight = true;
+                }
             }
         }
     }
@@ -142,7 +150,7 @@ public class OrbLauncher : MonoBehaviour
     }
 
     public void ChangeOrbWeigth(InputAction.CallbackContext ctx){
-        if (IsEnabled) return;
+        if (!IsEnabled) return;
 
         if (_selectedOrb.GetComponent<WeigthOrb>() != null){
             _augmentWeigthOrb = !_augmentWeigthOrb;

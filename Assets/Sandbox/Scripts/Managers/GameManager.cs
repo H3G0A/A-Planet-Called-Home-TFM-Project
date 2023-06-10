@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         {
             OrbLauncher_.IsEnabled = false;
         }
-        else if(!OrbLauncher_.enabled)
+        else if(!FirstPersonController_.InWater && !OrbLauncher_.IsEnabled)
         {
             OrbLauncher_.IsEnabled = true;
         }

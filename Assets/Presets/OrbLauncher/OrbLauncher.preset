@@ -25,6 +25,10 @@ Preset:
     value: 
     objectReference: {fileID: 0}
   - target: {fileID: 0}
+    propertyPath: IsEnabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
     propertyPath: _force
     value: 0.035
     objectReference: {fileID: 0}
@@ -61,10 +65,6 @@ Preset:
     value: 
     objectReference: {fileID: 6016317886622445584, guid: e303382b79774d948bfcbb9f1634ec15, type: 3}
   - target: {fileID: 0}
-    propertyPath: _activeOrbs.Array.size
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
     propertyPath: _orbText
     value: 
     objectReference: {fileID: 0}
@@ -82,6 +82,10 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _mainCamera
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _FPController
     value: 
     objectReference: {fileID: 0}
   m_ExcludedProperties: []

@@ -10,6 +10,8 @@ public class DispersionOrb : OrbBehaviour
     [SerializeField] bool _verticalPush = false;
 
     ImpactReceiver _impactReceiver;
+    CharacterController _charController;
+    FirstPersonController _FPController;
     public override int ID { get; protected set; } = (int)GlobalParameters.Orbs.DISPERSION;
     //int _id = (int) GlobalParameters.Orbs.DISPERSION;
 
@@ -31,15 +33,14 @@ public class DispersionOrb : OrbBehaviour
             }
             else if (_collider.gameObject.CompareTag(GlobalParameters.PLAYER_TAG)) //Range hits player
             {
-                CharacterController _charController = _collider.GetComponent<CharacterController>();
                 
+                if (!_impactReceiver) _impactReceiver = _collider.GetComponent<ImpactReceiver>();
+                if (!_charController) _charController = _collider.GetComponent<CharacterController>();
+                if (!_FPController) _FPController = _collider.GetComponent<FirstPersonController>();
+
                 Vector3 _forceDirection = (_collider.transform.TransformPoint(_charController.center) - this.transform.position);
 
-                if (!_impactReceiver)
-                {
-                    _impactReceiver = _collider.GetComponent<ImpactReceiver>();
-                }
-
+                if(_FPController._verticalVelocity < 0) _FPController._verticalVelocity = 0;
                 _impactReceiver.AddImpact(_forceDirection, _force);
             } 
             else if(_collider.gameObject.CompareTag(GlobalParameters.BREAKABLE_WALL_TAG)) //Range hits breakable wall

@@ -16,10 +16,8 @@ public class WeigthOrb : OrbBehaviour
         if(objectCollision.tag.Equals(GlobalParameters.DISPLACE_BOX_TAG)){
             if(_augment){
                 rb.constraints = RigidbodyConstraints.FreezePosition;
-                Debug.Log(rb.constraints.ToString());
             }else{
                 rb.constraints = RigidbodyConstraints.FreezeRotation;
-                Debug.Log(rb.constraints.ToString());
             }
         }
         if(objectCollision.tag.Equals(GlobalParameters.ELEVATOR_TAG)){

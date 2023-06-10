@@ -22,7 +22,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 
 	[Space(10)]
 	[SerializeField] Vector3 _horizontalVelocity = Vector3.zero;
-	[SerializeField] float _verticalVelocity;
+	public float _verticalVelocity;
 
 	[Space(10)]
 	[Tooltip("The height the player can jump")]
@@ -39,6 +39,11 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 	[Space(10)]
 	[Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
 	[SerializeField] float _fallTimeout = 0.15f;
+
+	[Space(10)]
+	[Tooltip("0: Regular Weight \n 1: Heavy Weight \n -1: Light Weight")]
+	[SerializeField] int _playerWeight = 0;
+	public bool _canChangeWeight = false;
 
 
 	[Header("Player Grounded")]
@@ -61,10 +66,6 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 	[Space(10)]
 	[Tooltip("Always bigger than the distance used for the grounded check")]
 	[SerializeField] float _slopeCheckDistance = .2f;
-
-	[Space(10)]
-	[Tooltip("0: Regular Weight \n 1: Heavy Weight \n -1: Light Weight")]
-	[SerializeField] int _playerWeight = 0;
 
 
 	[Header("Player On Ice")]
@@ -282,12 +283,21 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
             }
         }
 
-		slipDirection.Normalize();
-		if (slipDirection != Vector3.zero && _lastGroundedPoint.y < this.transform.position.y)
-		{
-			_horizontalVelocity = Vector3.zero;
-		}
-		MoveCharacter(_edgeSlipSpeed * Time.deltaTime * slipDirection);
+		//The displacement will only take effect if the edge height is between the raycast and the checkbox
+		Vector3 halfExtents = new(_edgeCheckLength, .01f, _edgeCheckLength);
+		Vector3 boxSpawnPoint = new(_spawnPoint.x, _spawnPoint.y + _controller.radius, _spawnPoint.z);
+
+		bool cancelSlip = Physics.CheckBox(boxSpawnPoint, halfExtents, this.transform.rotation, _groundLayers, QueryTriggerInteraction.Ignore);
+        if (!cancelSlip)
+        {
+			slipDirection.Normalize();
+			if (slipDirection != Vector3.zero && _lastGroundedPoint.y < this.transform.position.y && _verticalVelocity <= 0)
+			{
+				_horizontalVelocity = Vector3.zero;
+
+			}
+			MoveCharacter(_edgeSlipSpeed * Time.deltaTime * slipDirection);
+        }
 	}
 
 	private void IceCheck()
@@ -544,6 +554,10 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 		Gizmos.DrawRay(_edgeSpawnPoint, northWest * _edgeCheckLength);
 		Gizmos.DrawRay(_edgeSpawnPoint, SouthEast * _edgeCheckLength);
 		Gizmos.DrawRay(_edgeSpawnPoint, SouthWest * _edgeCheckLength);
+		//Checkbox
+		Vector3 halfExtents = new(_edgeCheckLength, .01f, _edgeCheckLength);
+		Vector3 boxSpawnPoint = new(_edgeSpawnPoint.x, _edgeSpawnPoint.y + 0.5f, _edgeSpawnPoint.z);
+		Gizmos.DrawCube(boxSpawnPoint, halfExtents * 2);
 
 		//SLOPE CHECK GIZMO
 		Gizmos.color = Color.red;
