@@ -122,7 +122,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _edgeCheckLength
-    value: 0.75
+    value: 0.53
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _edgeSlipSpeed

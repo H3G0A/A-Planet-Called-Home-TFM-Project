@@ -308,7 +308,7 @@ MonoBehaviour:
   _waterLayers:
     serializedVersion: 2
     m_Bits: 16
-  _cinemachineCameraTarget: {fileID: 4135013735270702863}
+  _cinemachineCameraTarget: {fileID: 0}
   _topClamp: 90
   _bottomClamp: -90
   _dmgImage: {fileID: 0}
