@@ -295,7 +295,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   _edgeCheckOffset: 0.1
-  _edgeCheckLength: 0.75
+  _edgeCheckLength: 0.53
   _edgeSlipSpeed: 2
   _slopeCheckDistance: 0.4
   _playerWeight: 0

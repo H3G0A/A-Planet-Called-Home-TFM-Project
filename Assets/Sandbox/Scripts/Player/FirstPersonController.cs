@@ -251,12 +251,21 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 		// Spawn a cross of 4 raycast to check for edged
 		Vector3 _spawnPoint = new(transform.position.x, transform.position.y + _edgeCheckOffset, transform.position.z);
 
-		Ray[] casts = new Ray[4];
+		Ray[] casts = new Ray[8];
 		//Cardinal directions
 		casts[0] = new Ray(_spawnPoint, transform.forward);
 		casts[1] = new Ray(_spawnPoint, - transform.forward);
 		casts[2] = new Ray(_spawnPoint, transform.right);
 		casts[3] = new Ray(_spawnPoint, - transform.right);
+		//Diagonals
+		Vector3 northEast = (transform.forward + transform.right).normalized;
+		Vector3 northWest = (transform.forward - transform.right).normalized;
+		Vector3 SouthEast = (- transform.forward + transform.right).normalized;
+		Vector3 SouthWest = (- transform.forward - transform.right).normalized;
+		casts[4] = new Ray(_spawnPoint, northEast);
+		casts[5] = new Ray(_spawnPoint, northWest);
+		casts[6] = new Ray(_spawnPoint, SouthEast);
+		casts[7] = new Ray(_spawnPoint, SouthWest);
 
 		// If edged are found, move the player in the opposite direction to make him fall
 		Vector3 slipDirection = Vector3.zero;
@@ -269,6 +278,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
         }
 
 		slipDirection.Normalize();
+		if (slipDirection != Vector3.zero) _horizontalVelocity = Vector3.zero;
 		MoveCharacter(_edgeSlipSpeed * Time.deltaTime * slipDirection);
 	}
 
@@ -512,10 +522,20 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 		Vector3 _edgeSpawnPoint = new(transform.position.x, transform.position.y + _edgeCheckOffset, transform.position.z);
 
 		Gizmos.color = Color.yellow;
+		//Cardinal directions
 		Gizmos.DrawRay(_edgeSpawnPoint, transform.forward * _edgeCheckLength);
 		Gizmos.DrawRay(_edgeSpawnPoint, - transform.forward * _edgeCheckLength);
 		Gizmos.DrawRay(_edgeSpawnPoint, transform.right * _edgeCheckLength);
 		Gizmos.DrawRay(_edgeSpawnPoint, - transform.right * _edgeCheckLength);
+		//Diagonals
+		Vector3 northEast = (transform.forward + transform.right).normalized;
+		Vector3 northWest = (transform.forward - transform.right).normalized;
+		Vector3 SouthEast = (-transform.forward + transform.right).normalized;
+		Vector3 SouthWest = (-transform.forward - transform.right).normalized;
+		Gizmos.DrawRay(_edgeSpawnPoint, northEast * _edgeCheckLength);
+		Gizmos.DrawRay(_edgeSpawnPoint, northWest * _edgeCheckLength);
+		Gizmos.DrawRay(_edgeSpawnPoint, SouthEast * _edgeCheckLength);
+		Gizmos.DrawRay(_edgeSpawnPoint, SouthWest * _edgeCheckLength);
 
 		//SLOPE CHECK GIZMO
 		Gizmos.color = Color.red;
