@@ -103,6 +103,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 	float _waterCheckRadius = .01f;
 	float _speedChangeRate;
 	float _heatPercentage;
+	Vector3 _lastGroundedPoint;
 	// Timers
 	float _fallTimeoutDelta;
 
@@ -213,6 +214,10 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
         {
 			SlipCheck(); //Check if stuck on edge
         }
+        else if(_grounded || _inWater)
+        {
+			_lastGroundedPoint = this.transform.position;
+        }
 	}
 
 	private void WaterCheck()
@@ -278,7 +283,10 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
         }
 
 		slipDirection.Normalize();
-		if (slipDirection != Vector3.zero) _horizontalVelocity = Vector3.zero;
+		if (slipDirection != Vector3.zero && _lastGroundedPoint.y < this.transform.position.y)
+		{
+			_horizontalVelocity = Vector3.zero;
+		}
 		MoveCharacter(_edgeSlipSpeed * Time.deltaTime * slipDirection);
 	}
 
