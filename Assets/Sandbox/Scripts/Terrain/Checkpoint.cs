@@ -16,6 +16,7 @@ public class Checkpoint : MonoBehaviour
             if(playerFPController._lastCheckpoint != playerSpawnPoint.position)
             {
                 playerFPController._lastCheckpoint = playerSpawnPoint.position;
+
                 DataPersistenceManager.Instance.SaveGame();
             }
         }

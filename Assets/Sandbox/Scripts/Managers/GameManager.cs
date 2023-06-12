@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public bool GamePaused { get; private set; }
     public PlayerInputController PlayerInputController_;
     public OrbLauncher OrbLauncher_;
+    public FirstPersonController FirstPersonController_;
+    public CharacterController PlayerController;
    
     public GlobalParameters.Scenes CurrentLevel;
 
@@ -26,6 +29,20 @@ public class GameManager : MonoBehaviour, IDataPersistence
     {
         Initialize();
         GamePaused = false;
+    }
+
+    
+
+    private void Update()
+    {
+        if (FirstPersonController_.InWater)
+        {
+            OrbLauncher_.IsEnabled = false;
+        }
+        else if(!FirstPersonController_.InWater && !OrbLauncher_.IsEnabled)
+        {
+            OrbLauncher_.IsEnabled = true;
+        }
     }
 
     private void Initialize()
@@ -99,6 +116,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
         OrbLauncher_.LoadOrbs();
     }
 
+    public void PlayerRespawn()
+    {
+        StartCoroutine(Respawn());
+    }
+
     public void LoadData(GameData data)
     {
         //Level
@@ -133,5 +155,25 @@ public class GameManager : MonoBehaviour, IDataPersistence
                 data.ActiveOrbs.Add(orbId);
             }
         }
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////
+    
+    private IEnumerator Respawn()
+    {
+        SceneLoader.Instance.LoadingScreen.SetActive(true);
+
+        PlayerInputController_.enabled = false;
+        
+        yield return new WaitForSeconds(1);
+
+        PlayerController.enabled = false;
+        FirstPersonController_.transform.position = FirstPersonController_._lastCheckpoint;
+        PlayerController.enabled = true;
+
+        PlayerInputController_.enabled = true;
+
+        SceneLoader.Instance.LoadingScreen.SetActive(false);
     }
 }

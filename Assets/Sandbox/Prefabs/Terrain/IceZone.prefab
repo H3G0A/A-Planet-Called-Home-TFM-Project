@@ -116,4 +116,4 @@ MonoBehaviour:
   _radius: 10
   _iceLayers:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 9

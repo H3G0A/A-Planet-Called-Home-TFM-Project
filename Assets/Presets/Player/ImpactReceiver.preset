@@ -37,15 +37,19 @@ Preset:
     value: 1000
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: _airDrag
-    value: 1
+    propertyPath: _currentMass
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _groundDrag
     value: 5
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: _currentMass
-    value: 0
+    propertyPath: _airDrag
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _iceDrag
+    value: 1
     objectReference: {fileID: 0}
   m_ExcludedProperties: []

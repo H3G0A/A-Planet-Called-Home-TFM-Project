@@ -259,7 +259,15 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3014358216475996938, guid: 2cf15655ff11a9b4197945871cd8f97d, type: 3}
+      propertyPath: _loadDataWithScene
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3014358216475996938, guid: 2cf15655ff11a9b4197945871cd8f97d, type: 3}
       propertyPath: InitializeDataIfNull
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3014358216475996938, guid: 2cf15655ff11a9b4197945871cd8f97d, type: 3}
+      propertyPath: _initializeDataIfNull
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7856122009844416053, guid: 2cf15655ff11a9b4197945871cd8f97d, type: 3}

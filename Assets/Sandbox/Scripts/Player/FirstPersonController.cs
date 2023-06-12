@@ -22,7 +22,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 
 	[Space(10)]
 	[SerializeField] Vector3 _horizontalVelocity = Vector3.zero;
-	[SerializeField] float _verticalVelocity;
+	public float _verticalVelocity;
 
 	[Space(10)]
 	[Tooltip("The height the player can jump")]
@@ -39,6 +39,11 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 	[Space(10)]
 	[Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
 	[SerializeField] float _fallTimeout = 0.15f;
+
+	[Space(10)]
+	[Tooltip("0: Regular Weight \n 1: Heavy Weight \n -1: Light Weight")]
+	[SerializeField] int _playerWeight = 0;
+	public bool _canChangeWeight = false;
 
 
 	[Header("Player Grounded")]
@@ -61,10 +66,6 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 	[Space(10)]
 	[Tooltip("Always bigger than the distance used for the grounded check")]
 	[SerializeField] float _slopeCheckDistance = .2f;
-
-	[Space(10)]
-	[Tooltip("0: Regular Weight \n 1: Heavy Weight \n -1: Light Weight")]
-	[SerializeField] int _playerWeight = 0;
 
 
 	[Header("Player On Ice")]
@@ -103,6 +104,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 	float _waterCheckRadius = .01f;
 	float _speedChangeRate;
 	float _heatPercentage;
+	Vector3 _lastGroundedPoint;
 	// Timers
 	float _fallTimeoutDelta;
 
@@ -146,6 +148,9 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 
 	void Start()
     {
+		GameManager.Instance.FirstPersonController_ = this;
+		GameManager.Instance.PlayerController = _controller;
+
 		_impactReceiver.ChangeMass(PlayerWeight);
 		_heatPercentage = 0.00f;
 		_inHeatZone = false;
@@ -211,6 +216,10 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
         {
 			SlipCheck(); //Check if stuck on edge
         }
+        else if(_grounded || _inWater)
+        {
+			_lastGroundedPoint = this.transform.position;
+        }
 	}
 
 	private void WaterCheck()
@@ -249,12 +258,21 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 		// Spawn a cross of 4 raycast to check for edged
 		Vector3 _spawnPoint = new(transform.position.x, transform.position.y + _edgeCheckOffset, transform.position.z);
 
-		Ray[] casts = new Ray[4];
+		Ray[] casts = new Ray[8];
 		//Cardinal directions
 		casts[0] = new Ray(_spawnPoint, transform.forward);
 		casts[1] = new Ray(_spawnPoint, - transform.forward);
 		casts[2] = new Ray(_spawnPoint, transform.right);
 		casts[3] = new Ray(_spawnPoint, - transform.right);
+		//Diagonals
+		Vector3 northEast = (transform.forward + transform.right).normalized;
+		Vector3 northWest = (transform.forward - transform.right).normalized;
+		Vector3 SouthEast = (- transform.forward + transform.right).normalized;
+		Vector3 SouthWest = (- transform.forward - transform.right).normalized;
+		casts[4] = new Ray(_spawnPoint, northEast);
+		casts[5] = new Ray(_spawnPoint, northWest);
+		casts[6] = new Ray(_spawnPoint, SouthEast);
+		casts[7] = new Ray(_spawnPoint, SouthWest);
 
 		// If edged are found, move the player in the opposite direction to make him fall
 		Vector3 slipDirection = Vector3.zero;
@@ -266,8 +284,21 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
             }
         }
 
-		slipDirection.Normalize();
-		MoveCharacter(_edgeSlipSpeed * Time.deltaTime * slipDirection);
+		//The displacement will only take effect if the edge height is between the raycast and the checkbox
+		Vector3 halfExtents = new(_edgeCheckLength, .01f, _edgeCheckLength);
+		Vector3 boxSpawnPoint = new(_spawnPoint.x, _spawnPoint.y + _controller.radius, _spawnPoint.z);
+
+		bool cancelSlip = Physics.CheckBox(boxSpawnPoint, halfExtents, this.transform.rotation, _groundLayers, QueryTriggerInteraction.Ignore);
+        if (!cancelSlip)
+        {
+			slipDirection.Normalize();
+			if (slipDirection != Vector3.zero && _lastGroundedPoint.y < this.transform.position.y && _verticalVelocity <= 0)
+			{
+				_horizontalVelocity = Vector3.zero;
+
+			}
+			MoveCharacter(_edgeSlipSpeed * Time.deltaTime * slipDirection);
+        }
 	}
 
 	private void IceCheck()
@@ -479,15 +510,17 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 
 	public void ChangeWeight(InputAction.CallbackContext ctx)
     {
-		PlayerWeight += (int) ctx.ReadValue<float>();
-
-		_impactReceiver.ChangeMass(PlayerWeight);
+        if (_canChangeWeight)
+        {
+			PlayerWeight += (int) ctx.ReadValue<float>();
+			_impactReceiver.ChangeMass(PlayerWeight);
+        }
     }
 
-	public void StopMovement()
+	public void StopVerticalMovement()
     {
 		_verticalVelocity = 0;
-		_horizontalVelocity = Vector3.zero;
+		//_horizontalVelocity = Vector3.zero;
     }
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -510,10 +543,24 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 		Vector3 _edgeSpawnPoint = new(transform.position.x, transform.position.y + _edgeCheckOffset, transform.position.z);
 
 		Gizmos.color = Color.yellow;
+		//Cardinal directions
 		Gizmos.DrawRay(_edgeSpawnPoint, transform.forward * _edgeCheckLength);
 		Gizmos.DrawRay(_edgeSpawnPoint, - transform.forward * _edgeCheckLength);
 		Gizmos.DrawRay(_edgeSpawnPoint, transform.right * _edgeCheckLength);
 		Gizmos.DrawRay(_edgeSpawnPoint, - transform.right * _edgeCheckLength);
+		//Diagonals
+		Vector3 northEast = (transform.forward + transform.right).normalized;
+		Vector3 northWest = (transform.forward - transform.right).normalized;
+		Vector3 SouthEast = (-transform.forward + transform.right).normalized;
+		Vector3 SouthWest = (-transform.forward - transform.right).normalized;
+		Gizmos.DrawRay(_edgeSpawnPoint, northEast * _edgeCheckLength);
+		Gizmos.DrawRay(_edgeSpawnPoint, northWest * _edgeCheckLength);
+		Gizmos.DrawRay(_edgeSpawnPoint, SouthEast * _edgeCheckLength);
+		Gizmos.DrawRay(_edgeSpawnPoint, SouthWest * _edgeCheckLength);
+		//Checkbox
+		Vector3 halfExtents = new(_edgeCheckLength, .01f, _edgeCheckLength);
+		Vector3 boxSpawnPoint = new(_edgeSpawnPoint.x, _edgeSpawnPoint.y + 0.5f, _edgeSpawnPoint.z);
+		Gizmos.DrawCube(boxSpawnPoint, halfExtents * 2);
 
 		//SLOPE CHECK GIZMO
 		Gizmos.color = Color.red;

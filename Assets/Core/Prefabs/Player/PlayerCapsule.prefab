@@ -218,34 +218,6 @@ MonoBehaviour:
     m_ActionName: Player/Shoot[/Mouse/leftButton]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 85a60209-7bde-4b5d-acb5-ecb805a02858
-    m_ActionName: Water Surface/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 0e844fed-9672-489c-8680-22aca9445ba8
-    m_ActionName: Water Surface/Look[/Mouse/delta]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 9979318a-764d-4361-a5f9-a05d4027a5ce
-    m_ActionName: Water Surface/Jump[/Keyboard/space]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: b5f4a0d6-92d3-4245-b0a1-25a683376338
-    m_ActionName: Water Diving/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: f5cafa10-4a7c-44f4-83d8-f8f94b5a381b
-    m_ActionName: Water Diving/Look[/Mouse/delta]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 19deff8b-e65e-46a2-8cf9-0f9c81938e30
-    m_ActionName: Water Diving/Jump[/Keyboard/space]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 50ed0220-064e-4d76-bfb0-66943a44f236
-    m_ActionName: Water Diving/Sprint[/Keyboard/leftShift]
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: d01bd2e2-40ad-450f-b645-d47920863bac
     m_ActionName: Ground/ChangeOrb[/Keyboard/q,/Keyboard/e,/Keyboard/1,/Keyboard/2,/Keyboard/3]
   - m_PersistentCalls:
@@ -256,6 +228,14 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 95a600fb-d012-48af-b59f-6a09ac4203c5
     m_ActionName: Ground/Change Weight[/Keyboard/v,/Keyboard/c]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 868e7e54-a3a6-401c-86b0-89329529ce91
+    m_ActionName: Ground/ChangeOrbDirectly[/Keyboard/1,/Keyboard/2,/Keyboard/3]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: faca21b0-46f2-4610-8b78-e91e9fade7de
+    m_ActionName: Menus/Escape[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Ground
@@ -276,6 +256,7 @@ MonoBehaviour:
   _moveSpeed: 4
   _sprintSpeed: 6
   _currentSpeed: 0
+  _lastCheckpoint: {x: 0, y: 0, z: 0}
   _groundedAcceleration: 10
   _groundedDeceleration: 10
   _horizontalVelocity: {x: 0, y: 0, z: 0}
@@ -286,18 +267,19 @@ MonoBehaviour:
   _airboneAcceleration: 5
   _airboneDeceleration: 0.5
   _fallTimeout: 0.15
+  _playerWeight: 0
+  _canChangeWeight: 0
   _grounded: 1
   _groundedOffset: -0.05
-  _groundedCheckRadius: 0.5
+  _groundedCheckRadius: 0.45
   _groundedCastDistance: 0.08
   _groundLayers:
     serializedVersion: 2
     m_Bits: 9
   _edgeCheckOffset: 0.1
-  _edgeCheckLength: 0.75
+  _edgeCheckLength: 0.53
   _edgeSlipSpeed: 2
   _slopeCheckDistance: 0.4
-  _playerWeight: 0
   _onIce: 0
   _iceSpeedMultiplier: 2
   _iceAcceleration: 5
@@ -307,10 +289,10 @@ MonoBehaviour:
   _waterLayers:
     serializedVersion: 2
     m_Bits: 16
-  _cinemachineCameraTarget: {fileID: 4135013735270702863}
+  _cinemachineCameraTarget: {fileID: 0}
   _topClamp: 90
   _bottomClamp: -90
-  cursorLocked: 1
+  _dmgImage: {fileID: 0}
 --- !u!114 &1236055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349,6 +331,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4135013735270702856}
     m_Modifications:
+    - target: {fileID: 3674210042753416164, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
+      propertyPath: _force
+      value: 0.035
+      objectReference: {fileID: 0}
+    - target: {fileID: 3674210042753416164, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
+      propertyPath: _orbText
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3674210042753416164, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
+      propertyPath: _mainCamera
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3674210042753416164, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
+      propertyPath: _orbWeigthText
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3674210042753416184, guid: c2b04cc715b49714e94dfa9b213393e7, type: 3}
       propertyPath: m_RootOrder
       value: 0
