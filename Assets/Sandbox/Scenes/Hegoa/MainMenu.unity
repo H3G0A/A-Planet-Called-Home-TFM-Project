@@ -263,6 +263,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3014358216475996938, guid: 2cf15655ff11a9b4197945871cd8f97d, type: 3}
+      propertyPath: _useDataPersistence
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3014358216475996938, guid: 2cf15655ff11a9b4197945871cd8f97d, type: 3}
       propertyPath: InitializeDataIfNull
       value: 0
       objectReference: {fileID: 0}

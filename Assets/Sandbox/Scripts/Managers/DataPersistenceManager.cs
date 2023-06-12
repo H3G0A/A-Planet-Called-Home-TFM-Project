@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.SceneManagement;
+using static GlobalParameters;
 
 public class DataPersistenceManager : MonoBehaviour
 {
@@ -122,9 +123,4 @@ public class DataPersistenceManager : MonoBehaviour
     {
         return _gameData != null;
     }
-
-    //private void OnApplicationQuit()
-    //{
-    //    SaveGame();
-    //}
 }

@@ -6,6 +6,7 @@ using static GlobalParameters;
 
 public class FirstPersonController : MonoBehaviour, IDataPersistence
 {
+
 	[Header("Player")]
 	[Tooltip("Move speed of the character in m/s")]
 	[SerializeField] float _moveSpeed = 4.0f;

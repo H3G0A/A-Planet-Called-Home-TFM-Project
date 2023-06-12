@@ -14,7 +14,6 @@ public class OrbLauncher : MonoBehaviour
     [SerializeField] float _force = .035f;
     [SerializeField] float _range = 100;
     [SerializeField] float _fireRate = .5f;
-    [SerializeField] bool _canShoot = false;
 
     
     [Header("Orbs")]

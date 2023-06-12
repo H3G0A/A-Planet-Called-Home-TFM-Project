@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static GlobalParameters;
 
-public class Checkpoint : MonoBehaviour
+public class CheckpointLogic : MonoBehaviour
 {
     public Transform playerSpawnPoint;
 

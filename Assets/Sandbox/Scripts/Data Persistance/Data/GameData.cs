@@ -15,7 +15,7 @@ public class GameData
     {
         int dispersionOrbID = (int)Orbs.DISPERSION;
 
-        this.CurrentLevel = Scenes.HegoaSandbox.ToString();
+        this.CurrentLevel = Scenes.Fungi_Spawn.ToString();
         this.ActiveOrbs = new() { dispersionOrbID };
         this.LastCheckpoint = new float[] { 0, 0, 0 };
     }
