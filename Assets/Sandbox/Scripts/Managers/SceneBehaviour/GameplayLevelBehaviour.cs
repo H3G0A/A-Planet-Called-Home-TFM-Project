@@ -12,6 +12,10 @@ public class GameplayLevelBehaviour : MonoBehaviour
 	private void Awake()
     {
 		Cursor.lockState = CursorLockMode.Locked;
-		GameManager.Instance.CurrentLevel = _currentLevel;
+    }
+
+    private void Start()
+    {
+        GameManager.Instance.CurrentLevel = _currentLevel;
     }
 }

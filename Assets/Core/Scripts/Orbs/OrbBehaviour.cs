@@ -6,17 +6,12 @@ using static GlobalParameters;
 public abstract class OrbBehaviour : MonoBehaviour
 {
     public abstract int ID { get; protected set; }
-    [SerializeField] protected GameObject _prefab;
 
     //List of object TAGS which their collisions with the orb will be ignored
     readonly List<string> _ignoreCollision = new(){
                                                     ORB_TAG,
                                                     PLAYER_TAG
                                                     };
-
-    readonly List<string> _applyOnTrigger = new() {
-                                                   WATER_TAG
-                                                   };
 
     private void Start() //Destroy after a while if has not collided
     {

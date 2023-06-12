@@ -7,7 +7,7 @@ public class SceneLoader : MonoBehaviour
 {
     public static SceneLoader Instance { get; private set; }
 
-    [SerializeField] GameObject _loadingScreen;
+    public GameObject LoadingScreen;
 
     private void Awake()
     {
@@ -22,21 +22,6 @@ public class SceneLoader : MonoBehaviour
         }
     }
 
-    private void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    private void OnDisable()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        DataPersistenceManager.Instance.LoadGame();
-    }
-
     public void LoadScene(GlobalParameters.Scenes sceneName)
     {
         StartCoroutine(LoadingCorrutine(sceneName));
@@ -45,7 +30,7 @@ public class SceneLoader : MonoBehaviour
     private IEnumerator LoadingCorrutine(GlobalParameters.Scenes sceneName)
     {
         //Show loading screen while scene is loading
-        _loadingScreen.SetActive(true);
+        LoadingScreen.SetActive(true);
         
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -70,6 +55,6 @@ public class SceneLoader : MonoBehaviour
         scene.allowSceneActivation = true;
         
         //Hide loading screen
-        _loadingScreen.SetActive(false);
+        LoadingScreen.SetActive(false);
     }
 }
