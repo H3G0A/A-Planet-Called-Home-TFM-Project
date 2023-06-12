@@ -149,6 +149,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 	void Start()
     {
 		GameManager.Instance.FirstPersonController_ = this;
+		GameManager.Instance.PlayerController = _controller;
 
 		_impactReceiver.ChangeMass(PlayerWeight);
 		_heatPercentage = 0.00f;
@@ -509,15 +510,17 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 
 	public void ChangeWeight(InputAction.CallbackContext ctx)
     {
-		PlayerWeight += (int) ctx.ReadValue<float>();
-
-		_impactReceiver.ChangeMass(PlayerWeight);
+        if (_canChangeWeight)
+        {
+			PlayerWeight += (int) ctx.ReadValue<float>();
+			_impactReceiver.ChangeMass(PlayerWeight);
+        }
     }
 
-	public void StopMovement()
+	public void StopVerticalMovement()
     {
 		_verticalVelocity = 0;
-		_horizontalVelocity = Vector3.zero;
+		//_horizontalVelocity = Vector3.zero;
     }
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////

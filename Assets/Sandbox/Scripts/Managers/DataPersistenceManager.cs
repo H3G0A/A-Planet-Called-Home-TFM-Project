@@ -11,7 +11,7 @@ public class DataPersistenceManager : MonoBehaviour
 
     [Header("Debugging")]
     [SerializeField] private bool _initializeDataIfNull;
-    [SerializeField] private bool _loadDataWithScene;
+    [SerializeField] private bool _useDataPersistence;
 
     private GameData _gameData;
     private List<IDataPersistence> _dataPersistenceObjects;
@@ -22,7 +22,7 @@ public class DataPersistenceManager : MonoBehaviour
     {
 #if !UNITY_EDITOR
         _initializeDataIfNull = false;
-        _loadDataWithScene = true;
+        _useDataPersistence = true;
 #endif
 
         Initialize();
@@ -54,7 +54,7 @@ public class DataPersistenceManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if(_loadDataWithScene) LoadGame();
+        LoadGame();
     }
 
     private List<IDataPersistence> FindAllDataPersistenceObjects()
@@ -66,6 +66,8 @@ public class DataPersistenceManager : MonoBehaviour
 
     public void NewGame()
     {
+        if (!_useDataPersistence) return;
+
         Debug.Log("New Game");
         this._gameData = new GameData();
         _dataHandler.Save(_gameData);
@@ -74,6 +76,8 @@ public class DataPersistenceManager : MonoBehaviour
 
     public void LoadGame()
     {
+        if (!_useDataPersistence) return;
+
         Debug.Log("Load Game");
         _gameData = _dataHandler.Load();
 
@@ -101,6 +105,8 @@ public class DataPersistenceManager : MonoBehaviour
 
     public void SaveGame()
     {
+        if (!_useDataPersistence) return;
+
         Debug.Log("Save Game");
         _dataPersistenceObjects = FindAllDataPersistenceObjects();
 
