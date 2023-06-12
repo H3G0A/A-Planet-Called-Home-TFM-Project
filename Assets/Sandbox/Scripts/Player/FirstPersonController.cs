@@ -30,7 +30,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 	[Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
 	[SerializeField] float _gravity = -15.0f;
 	[SerializeField] float _terminalVelocity = 53.0f;
-
+	[SerializeField] float _heatTime = 10.0f;
 	[Space(10)]
 	[Tooltip("Acceleration while airbone")]
 	[SerializeField] float _airboneAcceleration = 5.0f;
@@ -172,6 +172,9 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 
 		//Apply movement
 		ApplyMovement();
+
+		//Heat timer
+		heatUpdate();
     }
 
     void LateUpdate()
@@ -204,6 +207,21 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 				Debug.Log("Saliendo zona de calor");
 				_inHeatZone = false;
 				break;
+		}
+	}
+
+	private void heatUpdate(){
+		if(_heatTime >= 0){
+			if(_inHeatZone) 
+			{
+				_heatTime -= Time.deltaTime;
+			} else 
+			{
+				_heatTime = 10.0f;
+			}
+		} else {
+			GameManager.Instance.PlayerRespawn();
+			_heatTime = 15.0f;
 		}
 	}
 
