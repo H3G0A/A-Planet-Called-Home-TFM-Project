@@ -71,7 +71,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2521654737659715861}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ElevatorBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 2521654738002714270}
   - component: {fileID: 2521654738002714271}
   - component: {fileID: 2521654738002714259}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Elevator
   m_TagString: Elevator
   m_Icon: {fileID: 0}
