@@ -20,5 +20,14 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Sandbox/Scenes/Hegoa/FungiPlanet/Zones/Fungi_End.unity
     guid: d20249e53a101e6459c417a03645d7f1
+  - enabled: 1
+    path: Assets/Sandbox/Scenes/HeatPlanet/Heat_Spawn.unity
+    guid: 20b6aefe8b920f74b9867cc93be7f291
+  - enabled: 1
+    path: Assets/Sandbox/Scenes/HeatPlanet/Heat_Caves.unity
+    guid: 94355ddb110ef91438facfeaf79b07d8
+  - enabled: 1
+    path: Assets/Sandbox/Scenes/HeatPlanet/Heat_End.unity
+    guid: c557b64ff9173bd4eb5ea57df4d5633c
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7, type: 2}

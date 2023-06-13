@@ -228,7 +228,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 				_heatTime = 10.0f;
 			}
 		} else {
-			GameManager.Instance.PlayerRespawn();
+			PlayerRespawn();
 			_heatTime = 15.0f;
 		}
 	}
