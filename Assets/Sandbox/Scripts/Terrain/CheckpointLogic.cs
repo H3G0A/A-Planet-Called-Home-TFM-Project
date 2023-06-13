@@ -13,9 +13,9 @@ public class CheckpointLogic : MonoBehaviour
         {
             FirstPersonController playerFPController = other.GetComponent<FirstPersonController>();
             
-            if(playerFPController._lastCheckpoint != playerSpawnPoint.position)
+            if(playerFPController.LastCheckpoint.position != playerSpawnPoint.position)
             {
-                playerFPController._lastCheckpoint = playerSpawnPoint.position;
+                playerFPController.SaveCheckpoint(playerSpawnPoint.position);
 
                 DataPersistenceManager.Instance.SaveGame();
             }

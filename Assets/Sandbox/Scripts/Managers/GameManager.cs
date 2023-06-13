@@ -118,11 +118,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
         OrbLauncher_.LoadOrbs();
     }
 
-    public void PlayerRespawn()
-    {
-        StartCoroutine(Respawn());
-    }
-
     public void LoadData(GameData data)
     {
         //Level
@@ -157,25 +152,5 @@ public class GameManager : MonoBehaviour, IDataPersistence
                 data.ActiveOrbs.Add(orbId);
             }
         }
-    }
-
-
-    ///////////////////////////////////////////////////////////////////////
-    
-    private IEnumerator Respawn()
-    {
-        SceneLoader.Instance.LoadingScreen.SetActive(true);
-
-        PlayerInputController_.enabled = false;
-        
-        yield return new WaitForSeconds(1);
-
-        PlayerController.enabled = false;
-        FirstPersonController_.transform.position = FirstPersonController_._lastCheckpoint;
-        PlayerController.enabled = true;
-
-        PlayerInputController_.enabled = true;
-
-        SceneLoader.Instance.LoadingScreen.SetActive(false);
     }
 }

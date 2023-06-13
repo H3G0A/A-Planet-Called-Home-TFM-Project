@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,12 @@ using static GlobalParameters;
 
 public class FirstPersonController : MonoBehaviour, IDataPersistence
 {
+	[Serializable]
+	public class Checkpoint
+    {
+		public Vector3 position;
+		public Scenes scene;
+    }
 
 	[Header("Player")]
 	[Tooltip("Move speed of the character in m/s")]
@@ -13,7 +20,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 	[Tooltip("Sprint speed of the character in m/s")]
 	[SerializeField] float _sprintSpeed = 6.0f;
 	[SerializeField] float _currentSpeed;
-	public Vector3 _lastCheckpoint;
+	public Checkpoint LastCheckpoint = new Checkpoint();
 
 	[Space(10)]
 	[Tooltip("Acceleration in terrain")]
@@ -524,9 +531,39 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 		//_horizontalVelocity = Vector3.zero;
     }
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	public void SaveCheckpoint(Vector3 position)
+    {
+		LastCheckpoint.position = position;
+		LastCheckpoint.scene = GameManager.Instance.CurrentLevel;
+	}
 
-	private void OnDrawGizmosSelected()
+	public void PlayerRespawn()
+	{
+		StartCoroutine(Respawn());
+	}
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private IEnumerator Respawn()
+    {
+        SceneLoader.Instance.LoadingScreen.SetActive(true);
+
+        _inputController.enabled = false;
+
+        yield return new WaitForSeconds(1);
+
+        _controller.enabled = false;
+        this.transform.position = this.LastCheckpoint.position;
+		_controller.enabled = true;
+
+		_inputController.enabled = true;
+
+        SceneLoader.Instance.LoadingScreen.SetActive(false);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private void OnDrawGizmosSelected()
     {
 
 		//GROUNDED CHECK GIZMO
@@ -591,15 +628,25 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
-		this._lastCheckpoint = new(data.LastCheckpoint[0], data.LastCheckpoint[1], data.LastCheckpoint[2]);
+		//Checks if saved checkpoint belongs to this scene. If not, do not move the player and set new checkpoint
+		this.LastCheckpoint.scene = (Scenes) Enum.Parse(typeof(Scenes), data.LastCheckpointScene);
+		this.LastCheckpoint.position = new(data.LastCheckpointPosition[0], data.LastCheckpointPosition[1], data.LastCheckpointPosition[2]);
 
-		_controller.enabled = false;
-		this.transform.position = this._lastCheckpoint;
-		_controller.enabled = true;
+		if (this.LastCheckpoint.scene == GameManager.Instance.CurrentLevel)
+        {
+			_controller.enabled = false;
+			this.transform.position = this.LastCheckpoint.position;
+			_controller.enabled = true;
+        }
+        else
+        {
+			SaveCheckpoint(this.transform.position);
+        }
     }
 
     public void SaveData(ref GameData data)
     {
-		data.LastCheckpoint = new float[] { _lastCheckpoint.x, _lastCheckpoint.y, _lastCheckpoint.z};
+		data.LastCheckpointPosition = new float[] { LastCheckpoint.position.x, LastCheckpoint.position.y, LastCheckpoint.position.z};
+		data.LastCheckpointScene = this.LastCheckpoint.scene.ToString();
     }
 }

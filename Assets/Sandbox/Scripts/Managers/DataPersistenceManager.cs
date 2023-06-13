@@ -56,6 +56,7 @@ public class DataPersistenceManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         LoadGame();
+        if (scene.name != Scenes.MainMenu.ToString()) SaveGame();
     }
 
     private List<IDataPersistence> FindAllDataPersistenceObjects()

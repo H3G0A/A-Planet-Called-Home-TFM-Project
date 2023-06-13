@@ -7,7 +7,8 @@ using static GlobalParameters;
 public class GameData
 {
     public string CurrentLevel;
-    public float[] LastCheckpoint;
+    public float[] LastCheckpointPosition;
+    public string LastCheckpointScene;
     public List<int> ActiveOrbs;
 
     //Empty constructor for new game
@@ -15,14 +16,15 @@ public class GameData
     {
         int dispersionOrbID = (int)Orbs.DISPERSION;
 
-        this.CurrentLevel = Scenes.Fungi_Spawn.ToString();
+        this.CurrentLevel = Scenes.Fungi_IceOrb.ToString();
         this.ActiveOrbs = new() { dispersionOrbID };
-        this.LastCheckpoint = new float[] { 0, 0, 0 };
+        this.LastCheckpointPosition = new float[] { 0, 0, 0 };
+        this.LastCheckpointScene = this.CurrentLevel;
     }
 
     public override string ToString()
     {
-        string result = "Current Level: " + CurrentLevel + "; Last Checkpoint: " + LastCheckpoint + "; ActiveOrbs: ";
+        string result = "Current Level: " + CurrentLevel + "; Last Checkpoint: " + LastCheckpointPosition + "; ActiveOrbs: ";
         foreach(int orb in ActiveOrbs) { result += orb.ToString() + ", "; }
         return result;
     }

@@ -13,6 +13,7 @@ public class LoadingZone : MonoBehaviour
         {
             other.GetComponent<PlayerInputController>().enabled = false;
             GameManager.Instance.CurrentLevel = _nextScene;
+            DataPersistenceManager.Instance.SaveGame();
             SceneLoader.Instance.LoadScene(_nextScene);
         }
     }
