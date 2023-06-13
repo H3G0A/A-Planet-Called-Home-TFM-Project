@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -56,7 +57,7 @@ public class DataPersistenceManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         LoadGame();
-        if (scene.name != Scenes.MainMenu.ToString()) SaveGame();
+        if (Enum.TryParse(scene.name, true, out GameLevels _)) SaveGame();
     }
 
     private List<IDataPersistence> FindAllDataPersistenceObjects()
@@ -73,6 +74,7 @@ public class DataPersistenceManager : MonoBehaviour
         Debug.Log("New Game");
         this._gameData = new GameData();
         _dataHandler.Save(_gameData);
+
         LoadGame();
     }
 
@@ -81,11 +83,16 @@ public class DataPersistenceManager : MonoBehaviour
         if (!_useDataPersistence) return;
 
         Debug.Log("Load Game");
-        _gameData = _dataHandler.Load();
+        this._gameData = _dataHandler.Load();
+
+        foreach (int i in _gameData.ActiveOrbs)
+        {
+            Debug.Log(i);
+        }
 
         _dataPersistenceObjects = FindAllDataPersistenceObjects();
 
-        if (_gameData == null)
+        if (this._gameData == null)
         {
             if (_initializeDataIfNull)
             {

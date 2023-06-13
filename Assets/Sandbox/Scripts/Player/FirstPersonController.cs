@@ -198,7 +198,6 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 				_touchingWater = true;
 				break;
 			case HEAT_ZONE_TAG:
-				Debug.Log("Entrando zona de calor");
 				_inHeatZone = true;
 				break;
         }
@@ -212,7 +211,6 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 				_touchingWater = false;
 				break;
 			case HEAT_ZONE_TAG:
-				Debug.Log("Saliendo zona de calor");
 				_inHeatZone = false;
 				break;
 		}

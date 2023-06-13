@@ -120,6 +120,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
+        Debug.Log("Load Manager Data");
         //Level
         this.CurrentLevel = (GlobalParameters.GameLevels) Enum.Parse(typeof(GlobalParameters.GameLevels), data.CurrentLevel);
 
