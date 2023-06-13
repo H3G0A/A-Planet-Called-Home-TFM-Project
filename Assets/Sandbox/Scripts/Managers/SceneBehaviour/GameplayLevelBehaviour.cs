@@ -7,7 +7,7 @@ public class GameplayLevelBehaviour : MonoBehaviour
 {
 	[Header("Mouse Cursor Settings")]
 	[SerializeField] CursorLockMode _cursorState = CursorLockMode.Locked;
-	[SerializeField] Scenes _currentLevel;
+	[SerializeField] GameLevels _currentLevel;
 
 	private void Awake()
     {

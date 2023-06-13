@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,13 +22,14 @@ public class MainMenu : MonoBehaviour
 
     public void OnContinue()
     {
-        SceneLoader.Instance.LoadScene(GameManager.Instance.CurrentLevel);
+        Scenes sceneToLoad = (Scenes) Enum.Parse(typeof(Scenes), GameManager.Instance.CurrentLevel.ToString());
+        SceneLoader.Instance.LoadScene(sceneToLoad);
     }
 
     public void OnNewGame()
     {
         DataPersistenceManager.Instance.NewGame();
-        SceneLoader.Instance.LoadScene(GameManager.Instance.CurrentLevel);
+        SceneLoader.Instance.LoadScene(Scenes.NewGameCinematic);
     }
 
     public void OnExit()
