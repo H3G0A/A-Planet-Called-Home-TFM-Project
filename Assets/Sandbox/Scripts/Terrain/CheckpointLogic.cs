@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static GlobalParameters;
 
-public class Checkpoint : MonoBehaviour
+public class CheckpointLogic : MonoBehaviour
 {
     public Transform playerSpawnPoint;
 
@@ -13,9 +13,9 @@ public class Checkpoint : MonoBehaviour
         {
             FirstPersonController playerFPController = other.GetComponent<FirstPersonController>();
             
-            if(playerFPController._lastCheckpoint != playerSpawnPoint.position)
+            if(playerFPController.LastCheckpoint.position != playerSpawnPoint.position)
             {
-                playerFPController._lastCheckpoint = playerSpawnPoint.position;
+                playerFPController.SaveCheckpoint(playerSpawnPoint.position);
 
                 DataPersistenceManager.Instance.SaveGame();
             }

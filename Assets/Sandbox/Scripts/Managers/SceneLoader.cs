@@ -24,10 +24,10 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadScene(GlobalParameters.Scenes sceneName)
     {
-        StartCoroutine(LoadingCorrutine(sceneName));
+        StartCoroutine(LoadSceneCorrutine(sceneName));
     }
 
-    private IEnumerator LoadingCorrutine(GlobalParameters.Scenes sceneName)
+    private IEnumerator LoadSceneCorrutine(GlobalParameters.Scenes sceneName)
     {
         //Show loading screen while scene is loading
         LoadingScreen.SetActive(true);
@@ -36,7 +36,6 @@ public class SceneLoader : MonoBehaviour
 
         //Start loading scene
         AsyncOperation scene = SceneManager.LoadSceneAsync(sceneName.ToString());
-
 
         //Prevent scene from completely loading
         scene.allowSceneActivation = false;
@@ -50,10 +49,9 @@ public class SceneLoader : MonoBehaviour
             yield return null;
         }
 
-
         //Allow scene to completely load
         scene.allowSceneActivation = true;
-        
+
         //Hide loading screen
         LoadingScreen.SetActive(false);
     }

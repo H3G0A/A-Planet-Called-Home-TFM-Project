@@ -11,7 +11,7 @@ public class GameplayLevelBehaviour : MonoBehaviour
 
 	private void Awake()
     {
-		Cursor.lockState = CursorLockMode.Locked;
+		Cursor.lockState = _cursorState;
     }
 
     private void Start()

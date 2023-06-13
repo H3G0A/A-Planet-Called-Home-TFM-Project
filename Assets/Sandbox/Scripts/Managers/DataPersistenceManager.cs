@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.SceneManagement;
+using static GlobalParameters;
 
 public class DataPersistenceManager : MonoBehaviour
 {
@@ -55,6 +56,7 @@ public class DataPersistenceManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         LoadGame();
+        if (scene.name != Scenes.MainMenu.ToString()) SaveGame();
     }
 
     private List<IDataPersistence> FindAllDataPersistenceObjects()
@@ -122,9 +124,4 @@ public class DataPersistenceManager : MonoBehaviour
     {
         return _gameData != null;
     }
-
-    //private void OnApplicationQuit()
-    //{
-    //    SaveGame();
-    //}
 }

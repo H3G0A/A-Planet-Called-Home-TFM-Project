@@ -9,7 +9,7 @@ public class DeathZone : MonoBehaviour
     {
         if (other.CompareTag(PLAYER_TAG))
         {
-            GameManager.Instance.PlayerRespawn();
+            other.GetComponent<FirstPersonController>().PlayerRespawn();
         }
     }
 }

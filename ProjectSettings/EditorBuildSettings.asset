@@ -9,8 +9,17 @@ EditorBuildSettings:
     path: Assets/Sandbox/Scenes/Hegoa/MainMenu.unity
     guid: 8e162fd6397879d489c6f3ec7522f03f
   - enabled: 1
-    path: Assets/Sandbox/Scenes/Hegoa/HegoaSandbox.unity
-    guid: 5db12566c5ac16c40b2ef8361d1fc6da
+    path: Assets/Sandbox/Scenes/Hegoa/FungiPlanet/Zones/Fungi_Spawn.unity
+    guid: 6cbfb194b3d99254daf5526970878627
+  - enabled: 1
+    path: Assets/Sandbox/Scenes/Hegoa/FungiPlanet/Zones/Fungi_DispersionOrb.unity
+    guid: b4842a22fddd9ba4588bd715731cb747
+  - enabled: 1
+    path: Assets/Sandbox/Scenes/Hegoa/FungiPlanet/Zones/Fungi_IceOrb.unity
+    guid: e4e0dcae3da783e4f9c08213db96994c
+  - enabled: 1
+    path: Assets/Sandbox/Scenes/Hegoa/FungiPlanet/Zones/Fungi_End.unity
+    guid: d20249e53a101e6459c417a03645d7f1
   - enabled: 1
     path: Assets/Sandbox/Scenes/HeatPlanet/Heat_Spawn.unity
     guid: 20b6aefe8b920f74b9867cc93be7f291
