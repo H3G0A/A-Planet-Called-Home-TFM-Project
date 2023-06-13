@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2289631348011031889}
   - component: {fileID: 2289631348011031901}
   - component: {fileID: 2289631348011031898}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: LightCrystal
   m_TagString: LuminousCrystal
   m_Icon: {fileID: 0}
@@ -111,7 +111,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0
+  m_Intensity: 0.2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208

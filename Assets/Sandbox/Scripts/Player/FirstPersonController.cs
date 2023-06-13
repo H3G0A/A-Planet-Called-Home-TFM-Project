@@ -190,7 +190,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 		CameraRotation();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         switch (other.tag)
         {
@@ -575,7 +575,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 		_controller.enabled = true;
 
 		_inputController.enabled = true;
-
+		_inHeatZone = false;
         SceneLoader.Instance.LoadingScreen.SetActive(false);
     }
 
