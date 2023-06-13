@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Sandbox/Scenes/Hegoa/MainMenu.unity
     guid: 8e162fd6397879d489c6f3ec7522f03f
   - enabled: 1
+    path: Assets/Sandbox/Scenes/Hegoa/NewGameCinematic.unity
+    guid: 063b7a7a93076c14d9359c211b0a249f
+  - enabled: 1
     path: Assets/Sandbox/Scenes/Hegoa/FungiPlanet/Zones/Fungi_Spawn.unity
     guid: 6cbfb194b3d99254daf5526970878627
   - enabled: 1
@@ -29,5 +32,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Sandbox/Scenes/HeatPlanet/Heat_End.unity
     guid: c557b64ff9173bd4eb5ea57df4d5633c
+  - enabled: 1
+    path: Assets/Sandbox/Scenes/Hegoa/EndGameCinematic.unity
+    guid: 3b94c9dd2a0b6814fa84c475bf8aa2ee
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7, type: 2}

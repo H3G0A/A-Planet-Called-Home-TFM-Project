@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public FirstPersonController FirstPersonController_;
     public CharacterController PlayerController;
    
-    public GlobalParameters.Scenes CurrentLevel;
+    public GlobalParameters.GameLevels CurrentLevel;
 
     [Serializable]
     public class Orb
@@ -121,7 +121,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void LoadData(GameData data)
     {
         //Level
-        this.CurrentLevel = (GlobalParameters.Scenes) Enum.Parse(typeof(GlobalParameters.Scenes), data.CurrentLevel);
+        this.CurrentLevel = (GlobalParameters.GameLevels) Enum.Parse(typeof(GlobalParameters.Scenes), data.CurrentLevel);
 
         //Orbs
         foreach(Orb orb in OrbStash)

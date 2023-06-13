@@ -11,7 +11,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 	public class Checkpoint
     {
 		public Vector3 position;
-		public Scenes scene;
+		public GameLevels scene;
     }
 
 	[Header("Player")]
@@ -647,7 +647,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
     public void LoadData(GameData data)
     {
 		//Checks if saved checkpoint belongs to this scene. If not, do not move the player and set new checkpoint
-		this.LastCheckpoint.scene = (Scenes) Enum.Parse(typeof(Scenes), data.LastCheckpointScene);
+		this.LastCheckpoint.scene = (GameLevels) Enum.Parse(typeof(GameLevels), data.LastCheckpointScene);
 		this.LastCheckpoint.position = new(data.LastCheckpointPosition[0], data.LastCheckpointPosition[1], data.LastCheckpointPosition[2]);
 
 		if (this.LastCheckpoint.scene == GameManager.Instance.CurrentLevel)

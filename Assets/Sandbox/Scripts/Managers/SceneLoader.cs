@@ -22,6 +22,22 @@ public class SceneLoader : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        //Hide loading screen
+        LoadingScreen.SetActive(false);
+    }
+
     public void LoadScene(GlobalParameters.Scenes sceneName)
     {
         StartCoroutine(LoadSceneCorrutine(sceneName));
@@ -51,8 +67,5 @@ public class SceneLoader : MonoBehaviour
 
         //Allow scene to completely load
         scene.allowSceneActivation = true;
-
-        //Hide loading screen
-        LoadingScreen.SetActive(false);
     }
 }
