@@ -8,6 +8,7 @@ public class IceOrb : OrbBehaviour
     [SerializeField] float _radius;
     [SerializeField] GameObject _iceZone;
     [SerializeField] GameObject _frozenWater;
+    [SerializeField] LayerMask _groundLayers;
 
     public override int ID { get; protected set; } = (int)GlobalParameters.Orbs.ICE;
     // readonly public int _id = (int)GlobalParameters.Orbs.ICE;
@@ -24,7 +25,7 @@ public class IceOrb : OrbBehaviour
             _breakablWallRenderer.material.SetColor("_Color", Color.white);
             breakableWallScript.hitByIceOrb();
         }
-        else if(objectCollision.layer == GROUND_LAYER)
+        else if(objectCollision.layer == GROUND_LAYER || objectCollision.layer == 0)
         {
             Instantiate(_iceZone, transform.position, Quaternion.identity);
         }

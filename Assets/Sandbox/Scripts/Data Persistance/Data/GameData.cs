@@ -16,7 +16,7 @@ public class GameData
     {
         int dispersionOrbID = (int)Orbs.DISPERSION;
 
-        this.CurrentLevel = Scenes.Fungi_IceOrb.ToString();
+        this.CurrentLevel = Scenes.Fungi_Spawn.ToString();
         this.ActiveOrbs = new() { dispersionOrbID };
         this.LastCheckpointPosition = new float[] { 0, 0, 0 };
         this.LastCheckpointScene = this.CurrentLevel;
