@@ -163,10 +163,10 @@ public class OrbLauncher : MonoBehaviour
                 _orbText.text = "Orbe de dispersión";
                 break;
             case 1:
-                _orbText.text = "Orbe de gravedad";
+                _orbText.text = "Orbe de hielo";
                 break;
             case 2:
-                _orbText.text = "Orbe de hielo";
+                _orbText.text = "Orbe de gravedad";
                 break;
         }
     }
