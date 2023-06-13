@@ -10404,7 +10404,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1641058219017579835, guid: 6c369a93ff0762b45a2c6e1bda299573, type: 3}
       propertyPath: _currentLevel
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6c369a93ff0762b45a2c6e1bda299573, type: 3}
@@ -11128,6 +11128,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6292157425054646767, guid: c32d7de4e36a7314fa0a4b43b398d576, type: 3}
+      propertyPath: _nextScene
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6557229145396552909, guid: c32d7de4e36a7314fa0a4b43b398d576, type: 3}
       propertyPath: m_Mesh
       value: 
