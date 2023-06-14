@@ -3,17 +3,27 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - CinemachineTarget
+  - Orb
+  - Ice
+  - DisplaceBox
+  - Elevator
+  - Water
+  - BreakableWall
+  - LuminousCrystal
+  - HeatZone
+  - WorldBounds
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Player
+  - Orb
+  - Ice
   - 
   - 
   - 
