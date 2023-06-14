@@ -16768,7 +16768,7 @@ PrefabInstance:
       objectReference: {fileID: 1613218108}
     - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: _groundLayers.m_Bits
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 285370555, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: _groundedCheckRadius
