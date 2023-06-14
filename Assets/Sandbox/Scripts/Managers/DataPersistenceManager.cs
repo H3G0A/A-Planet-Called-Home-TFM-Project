@@ -56,6 +56,7 @@ public class DataPersistenceManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        Debug.Log("SceneLoaded: " + scene.name);
         LoadGame();
         if (Enum.TryParse(scene.name, true, out GameLevels _)) SaveGame();
     }
@@ -84,11 +85,6 @@ public class DataPersistenceManager : MonoBehaviour
 
         Debug.Log("Load Game");
         this._gameData = _dataHandler.Load();
-
-        foreach (int i in _gameData.ActiveOrbs)
-        {
-            Debug.Log(i);
-        }
 
         _dataPersistenceObjects = FindAllDataPersistenceObjects();
 
@@ -131,4 +127,8 @@ public class DataPersistenceManager : MonoBehaviour
     {
         return _gameData != null;
     }
+
+    ////////////////////////////////////////////////////////////////////
+    
+
 }

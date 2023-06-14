@@ -56,6 +56,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
         }
         else if (Instance != this)
         {
+            //If gameObject is active it's LoadData method will be called on scene load along with the persistente manager's
+            gameObject.SetActive(false);
             Destroy(gameObject);
         }
     }
@@ -120,13 +122,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
-        Debug.Log("Load Manager Data");
         //Level
         this.CurrentLevel = (GlobalParameters.GameLevels) Enum.Parse(typeof(GlobalParameters.GameLevels), data.CurrentLevel);
 
         //Orbs
         foreach(Orb orb in OrbStash)
         {
+            orb.Available = false;
             int orbId = orb.Prefab.GetComponent<OrbBehaviour>().ID;
 
             if (data.ActiveOrbs.Contains(orbId))
@@ -142,9 +144,9 @@ public class GameManager : MonoBehaviour, IDataPersistence
         data.CurrentLevel = this.CurrentLevel.ToString();
 
         //Orbs
-        data.ActiveOrbs = new List<int>();
+        data.ActiveOrbs.Clear();
 
-        foreach(Orb orb in OrbStash)
+        foreach (Orb orb in OrbStash)
         {
             int orbId = orb.Prefab.GetComponent<OrbBehaviour>().ID;
 
