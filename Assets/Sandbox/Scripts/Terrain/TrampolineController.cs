@@ -27,7 +27,7 @@ public class TrampolineController : MonoBehaviour
         if (_playerController.PlayerWeight != 1)
         {
             _playerController.StopVerticalMovement();
-            _impactReceiver.OverrideForce(transform.up, _force);
+            _impactReceiver.OverrideForce(Vector3.up, _force);
         }
     }
 }
