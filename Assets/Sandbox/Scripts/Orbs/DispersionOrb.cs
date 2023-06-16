@@ -8,12 +8,24 @@ public class DispersionOrb : OrbBehaviour
     [SerializeField] float _radius;
     [SerializeField] bool _diagonalPush = true;
     [SerializeField] bool _verticalPush = false;
+    [SerializeField] float _explosionTimer = 1f;
 
     ImpactReceiver _impactReceiver;
     CharacterController _charController;
     FirstPersonController _FPController;
+
     public override int ID { get; protected set; } = (int)GlobalParameters.Orbs.DISPERSION;
-    //int _id = (int) GlobalParameters.Orbs.DISPERSION;
+
+
+
+    protected override void OnCollisionEnter(Collision collision)
+    {
+        this.gameObject.GetComponent<Collider>().enabled = false;
+        this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+
+        StartCoroutine(DelayedEffect(collision));
+
+    }
 
     protected override void ApplyEffect(Collision collision) //The orb pushes all objects inside radius away
     {
@@ -81,5 +93,17 @@ public class DispersionOrb : OrbBehaviour
         }
         
         return _forceDirection.normalized;
+    }
+
+    ///////////////////////////////////////////////////////////////
+    
+    private IEnumerator DelayedEffect(Collision collision)
+    {
+        this.transform.parent = collision.transform;
+
+        yield return new WaitForSeconds(_explosionTimer);
+        
+        ApplyEffect(collision);
+        Destroy(gameObject);
     }
 }

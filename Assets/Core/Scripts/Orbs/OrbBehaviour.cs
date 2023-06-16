@@ -18,7 +18,7 @@ public abstract class OrbBehaviour : MonoBehaviour
         Destroy(this.gameObject, 5);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    protected virtual void OnCollisionEnter(Collision collision)
     {
         if (!_ignoreCollision.Contains(collision.collider.tag))
         {

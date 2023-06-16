@@ -82,3 +82,4 @@ MonoBehaviour:
   _radius: 2
   _diagonalPush: 0
   _verticalPush: 0
+  _explosionTimer: 0.6
