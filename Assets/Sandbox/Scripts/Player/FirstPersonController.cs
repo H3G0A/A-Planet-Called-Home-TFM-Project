@@ -99,6 +99,10 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 	// cinemachine
 
 	[SerializeField] GameObject _dmgImage;
+
+	[SerializeField] GameObject _playerModel;
+
+	Animator _playerAnimator;
 	float _cinemachineTargetPitch;
 
 	// player
@@ -163,6 +167,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 		_heatPercentage = 0.00f;
 		_inHeatZone = false;
 		_fallTimeoutDelta = _fallTimeout; // reset our timeouts on start
+		_playerAnimator = _playerModel.GetComponent<Animator>();
 	}
 
     void Update()
@@ -183,6 +188,9 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 
 		//Heat timer
 		heatUpdate();
+
+		//Animations
+		animationUpdate();
     }
 
     void LateUpdate()
@@ -216,7 +224,8 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 		}
 	}
 
-	private void heatUpdate(){
+	private void heatUpdate()
+	{
 		if(_heatTime >= 0){
 			if(_inHeatZone) 
 			{
@@ -229,6 +238,11 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 			PlayerRespawn();
 			_heatTime = 15.0f;
 		}
+	}
+
+	private void animationUpdate()
+	{
+		_playerAnimator.SetFloat("Velocity", _horizontalVelocity.magnitude);
 	}
 
     private void GroundCheck()
