@@ -42718,6 +42718,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7272356606137895739, guid: a7ad03de2e7c2974488dd8c043c104ae, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7ad03de2e7c2974488dd8c043c104ae, type: 3}
 --- !u!43 &1564366243

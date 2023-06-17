@@ -10,6 +10,8 @@ public class DispersionOrb : OrbBehaviour
     [SerializeField] bool _verticalPush = false;
     [SerializeField] float _explosionTimer = 1f;
 
+    GameObject _collisionObject = null;
+
     ImpactReceiver _impactReceiver;
     CharacterController _charController;
     FirstPersonController _FPController;
@@ -20,9 +22,10 @@ public class DispersionOrb : OrbBehaviour
 
     protected override void OnCollisionEnter(Collision collision)
     {
-        this.gameObject.GetComponent<Collider>().enabled = false;
         this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+        this.gameObject.GetComponent<Collider>().enabled = false;
 
+        _collisionObject = collision.gameObject;
         StartCoroutine(DelayedEffect(collision));
     }
 
@@ -35,9 +38,8 @@ public class DispersionOrb : OrbBehaviour
             Rigidbody rb = _collider.GetComponent<Rigidbody>();
             if(rb != null) //Range hits RigidBody
             {
-                Debug.Log(collision.GetContact(0).normal);
                 //Only move the object if the orb has not collided with its top face directly
-                if(collision.gameObject != _collider.gameObject || collision.GetContact(0).normal != Vector3.up)
+                if(_collisionObject != _collider.gameObject || collision.GetContact(0).normal != Vector3.down)
                 {
                     Vector3 _forceDirection = CalculateForceDirection(this.transform.position, _collider.transform.position);
                     rb.AddForce(_forceDirection * _force, ForceMode.Impulse);
@@ -101,7 +103,7 @@ public class DispersionOrb : OrbBehaviour
         this.transform.parent = collision.transform;
 
         yield return new WaitForSeconds(_explosionTimer);
-        
+
         ApplyEffect(collision);
         Destroy(gameObject);
     }
