@@ -15,7 +15,7 @@ MonoBehaviour:
   prefabs:
   - gameObject: {fileID: 919132149155446097, guid: 0e391bdbf2c81264696d9df16545e6e8, type: 3}
     settings:
-      m_Strength: 82.139175
+      m_Strength: 50
       m_RotationRangeMin: {x: -90, y: 0, z: 0}
       m_RotationRangeMax: {x: -90, y: 0, z: 0}
       m_ScaleRangeMin: {x: 1, y: 1, z: 1}
@@ -255,7 +255,7 @@ MonoBehaviour:
     name: grande_peque11
   - gameObject: {fileID: 919132149155446097, guid: 705606c539574554c8a95b0b99046f51, type: 3}
     settings:
-      m_Strength: 55.603096
+      m_Strength: 50
       m_RotationRangeMin: {x: -90, y: 0, z: 0}
       m_RotationRangeMax: {x: -90, y: 0, z: 0}
       m_ScaleRangeMin: {x: 1, y: 1, z: 1}
