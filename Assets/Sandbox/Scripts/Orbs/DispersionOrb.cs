@@ -24,7 +24,6 @@ public class DispersionOrb : OrbBehaviour
         this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
 
         StartCoroutine(DelayedEffect(collision));
-
     }
 
     protected override void ApplyEffect(Collision collision) //The orb pushes all objects inside radius away
@@ -36,6 +35,7 @@ public class DispersionOrb : OrbBehaviour
             Rigidbody rb = _collider.GetComponent<Rigidbody>();
             if(rb != null) //Range hits RigidBody
             {
+                Debug.Log(collision.GetContact(0).normal);
                 //Only move the object if the orb has not collided with its top face directly
                 if(collision.gameObject != _collider.gameObject || collision.GetContact(0).normal != Vector3.up)
                 {
@@ -70,13 +70,12 @@ public class DispersionOrb : OrbBehaviour
     {
         Vector3 _forceDirection = objectPosition - explosionCenter;
 
+        float _XAxis = Mathf.Abs(_forceDirection.x);
+        float _ZAxis = Mathf.Abs(_forceDirection.z);
 
         if (!_diagonalPush)
         {
             //Push only in the direction of the strongest axis
-            float _XAxis = Mathf.Abs(_forceDirection.x);
-            float _ZAxis = Mathf.Abs(_forceDirection.z);
-            
             if (_XAxis > _ZAxis)
             {
                 _forceDirection.z = 0;
