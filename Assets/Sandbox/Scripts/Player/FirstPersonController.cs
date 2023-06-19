@@ -122,6 +122,11 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 	PlayerInputController _inputController;
 	DmgEffect _dmgEffect;
 
+	//Animations
+	[Header("Animations")]
+	[SerializeField] GameObject _playerBody;
+	Animator _playerAnimator;
+	
 	// Getter and setters
 	public int PlayerWeight
     {
@@ -152,6 +157,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 		_impactReceiver = GetComponent<ImpactReceiver>();
 		_inputController = GetComponent<PlayerInputController>();
 		_dmgEffect = _dmgImage.GetComponent<DmgEffect>();
+		_playerAnimator = _playerBody.GetComponent<Animator>();
 	}
 
 	void Start()
@@ -183,6 +189,9 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 
 		//Heat timer
 		heatUpdate();
+
+		//UpdateAnimations
+		updateAnimations();
     }
 
     void LateUpdate()
@@ -203,6 +212,10 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
         }
     }
 
+	private void updateAnimations()
+	{
+		_playerAnimator.SetFloat("Speed", _horizontalVelocity.magnitude);
+	}
     private void OnTriggerExit(Collider other)
     {
 		switch (other.tag)
