@@ -183,6 +183,9 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 
 		//Heat timer
 		heatUpdate();
+
+		//UpdateAnimations
+		updateAnimations();
     }
 
     void LateUpdate()
@@ -203,6 +206,10 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
         }
     }
 
+	private void updateAnimations()
+	{
+		
+	}
     private void OnTriggerExit(Collider other)
     {
 		switch (other.tag)
