@@ -123,8 +123,10 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 	DmgEffect _dmgEffect;
 
 	//Animations
+	[Header("Animations")]
+	[SerializeField] GameObject _playerBody;
 	Animator _playerAnimator;
-
+	
 	// Getter and setters
 	public int PlayerWeight
     {
@@ -155,7 +157,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 		_impactReceiver = GetComponent<ImpactReceiver>();
 		_inputController = GetComponent<PlayerInputController>();
 		_dmgEffect = _dmgImage.GetComponent<DmgEffect>();
-		_playerAnimator = GetComponent<Animator>();
+		_playerAnimator = _playerBody.GetComponent<Animator>();
 	}
 
 	void Start()
