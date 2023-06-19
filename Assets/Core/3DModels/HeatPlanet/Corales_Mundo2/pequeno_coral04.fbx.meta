@@ -3,7 +3,12 @@ guid: fccf341812e11aa489acd608180334c4
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: CT_Palletevaporwave
+    second: {fileID: 2800000, guid: c1a7c22f29b8c85438f5db265eb40551, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
