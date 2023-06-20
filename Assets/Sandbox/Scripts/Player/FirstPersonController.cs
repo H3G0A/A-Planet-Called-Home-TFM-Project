@@ -302,7 +302,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 		Vector3 slipDirection = Vector3.zero;
 		foreach(Ray cast in casts)
         {
-			if(Physics.Raycast(cast, _edgeCheckLength, _groundLayers))
+			if(Physics.Raycast(cast, _edgeCheckLength, _groundLayers, QueryTriggerInteraction.Ignore))
             {
 				slipDirection += -cast.direction;
             }
