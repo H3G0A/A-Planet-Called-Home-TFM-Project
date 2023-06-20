@@ -36,6 +36,7 @@ public class OrbLauncher : MonoBehaviour
 
     // Launcher
     private int _indexOrb;
+    private int _indexLastOrb;
 
     [Header("OrbRotation")]
     //CylinderOrb
@@ -133,7 +134,7 @@ public class OrbLauncher : MonoBehaviour
 
     public void ChangeOrb(InputAction.CallbackContext ctx){
         if (!IsEnabled) return;
-
+        _indexLastOrb = _indexOrb;
         int _nextValueOrbs = (int) ctx.ReadValue<float>();      
         _indexOrb += _nextValueOrbs;
         if(_indexOrb >= _chargedOrbs.Count){
@@ -143,13 +144,6 @@ public class OrbLauncher : MonoBehaviour
             _indexOrb = (_chargedOrbs.Count - 1);
         }
         Debug.Log("Next Value Orb:" + ctx.ReadValue<float>());
-        if(ctx.ReadValue<float>() > 0)
-        {
-            _cilinderOrb.transform.Rotate(new Vector3(0, -120, 0));
-        }
-        {
-            _cilinderOrb.transform.Rotate(new Vector3(0, 120, 0));
-        }
         _selectedOrb = _chargedOrbs[_indexOrb];
         ChangeOrbText();
         ChangeOrbRotation();
@@ -157,7 +151,7 @@ public class OrbLauncher : MonoBehaviour
 
     public void ChangeOrbDirectly(InputAction.CallbackContext ctx){
         if (!IsEnabled) return;
-
+        _indexLastOrb = _indexOrb;
         _indexOrb = (int) ctx.ReadValue<float>();   
         _selectedOrb = _chargedOrbs[_indexOrb];
         ChangeOrbText();
@@ -189,20 +183,45 @@ public class OrbLauncher : MonoBehaviour
 
     private void ChangeOrbRotation(){
         Vector3 newRotation = new Vector3(0,0,0);
-        Debug.Log(_indexOrb.ToString());
         switch(_indexOrb){
             case 0:
-               
+                if(_indexLastOrb == 1)
+                {
+                    newRotation = new Vector3(0, -120, 0);
+                } else 
+                {
+                    if (_indexLastOrb == 2)
+                    {
+                        newRotation = new Vector3(0, -240, 0);
+                    }
+                }
                 break;
             case 1:
-                newRotation = new Vector3(0, 120, 0);
-                _cilinderOrb.transform.Rotate(newRotation);
+                if(_indexLastOrb == 0)
+                {
+                    newRotation = new Vector3(0, 120, 0);
+                } else 
+                {
+                    if (_indexLastOrb == 2)
+                    {
+                        newRotation = new Vector3(0, -120, 0);
+                    }
+                }
                 break;
             case 2:
-                newRotation = new Vector3(0, 240, 0);
-                _cilinderOrb.transform.Rotate(newRotation);
+                if(_indexLastOrb == 1)
+                {
+                    newRotation = new Vector3(0, 120, 0);
+                } else 
+                {
+                    if (_indexLastOrb == 0)
+                    {
+                        newRotation = new Vector3(0, 240, 0);
+                    }
+                }
                 break;
         }
+        _cilinderOrb.transform.Rotate(newRotation);
     }
 
     private void ChangeAugmentText(){

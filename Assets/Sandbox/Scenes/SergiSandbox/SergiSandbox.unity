@@ -3332,6 +3332,14 @@ PrefabInstance:
       propertyPath: _orbWeigthText
       value: 
       objectReference: {fileID: 261505628}
+    - target: {fileID: 6334482532541443431, guid: 3a3af90c341bfad48b7e091090deddab, type: 3}
+      propertyPath: _chargedOrbs.Array.data[1]
+      value: 
+      objectReference: {fileID: 6016317886622445584, guid: e303382b79774d948bfcbb9f1634ec15, type: 3}
+    - target: {fileID: 6334482532541443431, guid: 3a3af90c341bfad48b7e091090deddab, type: 3}
+      propertyPath: _chargedOrbs.Array.data[2]
+      value: 
+      objectReference: {fileID: 8844603512878802888, guid: b0d919d4b48061745b51560fe4396cc3, type: 3}
     - target: {fileID: 8616685848737228372, guid: 3a3af90c341bfad48b7e091090deddab, type: 3}
       propertyPath: m_Name
       value: Player
@@ -11353,6 +11361,10 @@ PrefabInstance:
     - target: {fileID: 9005220659476430821, guid: 2d3a85ecde41a8246a79669975912b74, type: 3}
       propertyPath: field of view
       value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 9005220659476430821, guid: 2d3a85ecde41a8246a79669975912b74, type: 3}
+      propertyPath: near clip plane
+      value: 0.001
       objectReference: {fileID: 0}
     - target: {fileID: 9005220659476430823, guid: 2d3a85ecde41a8246a79669975912b74, type: 3}
       propertyPath: m_Name
