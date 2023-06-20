@@ -36,7 +36,12 @@ public class OrbLauncher : MonoBehaviour
 
     // Launcher
     private int _indexOrb;
-    
+
+    [Header("OrbRotation")]
+    //CylinderOrb
+    [SerializeField] GameObject _cilinderOrb;
+    [SerializeField] float _rotationSpeed;
+
     // Timers
     private float _fireRateDelta = 0;
 
@@ -58,6 +63,7 @@ public class OrbLauncher : MonoBehaviour
         _selectedOrb = _chargedOrbs[0];
         _indexOrb = 0;
         ChangeOrbText();
+        ChangeOrbRotation();
         ChangeAugmentText();
     }
 
@@ -136,8 +142,17 @@ public class OrbLauncher : MonoBehaviour
         if(_indexOrb < 0){
             _indexOrb = (_chargedOrbs.Count - 1);
         }
+        Debug.Log("Next Value Orb:" + ctx.ReadValue<float>());
+        if(ctx.ReadValue<float>() > 0)
+        {
+            _cilinderOrb.transform.Rotate(new Vector3(0, -120, 0));
+        }
+        {
+            _cilinderOrb.transform.Rotate(new Vector3(0, 120, 0));
+        }
         _selectedOrb = _chargedOrbs[_indexOrb];
         ChangeOrbText();
+        ChangeOrbRotation();
     }
 
     public void ChangeOrbDirectly(InputAction.CallbackContext ctx){
@@ -146,6 +161,7 @@ public class OrbLauncher : MonoBehaviour
         _indexOrb = (int) ctx.ReadValue<float>();   
         _selectedOrb = _chargedOrbs[_indexOrb];
         ChangeOrbText();
+        ChangeOrbRotation();
     }
 
     public void ChangeOrbWeigth(InputAction.CallbackContext ctx){
@@ -167,6 +183,24 @@ public class OrbLauncher : MonoBehaviour
                 break;
             case 2:
                 _orbText.text = "Orbe de gravedad";
+                break;
+        }
+    }
+
+    private void ChangeOrbRotation(){
+        Vector3 newRotation = new Vector3(0,0,0);
+        Debug.Log(_indexOrb.ToString());
+        switch(_indexOrb){
+            case 0:
+               
+                break;
+            case 1:
+                newRotation = new Vector3(0, 120, 0);
+                _cilinderOrb.transform.Rotate(newRotation);
+                break;
+            case 2:
+                newRotation = new Vector3(0, 240, 0);
+                _cilinderOrb.transform.Rotate(newRotation);
                 break;
         }
     }
