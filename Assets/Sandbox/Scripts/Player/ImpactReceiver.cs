@@ -19,6 +19,7 @@ public class ImpactReceiver : MonoBehaviour
     float _drag;
     bool _leftGround = false;
 
+    [SerializeField] GameObject _characterMassIndicator;
     FirstPersonController _firstPersonController;
 
     private void Awake()
@@ -29,6 +30,7 @@ public class ImpactReceiver : MonoBehaviour
     private void Update()
     {
         ManageForces();
+        ManageMassIndicator();
     }
     
     public void AddImpact(Vector3 dir, float force) //Simulate Rigidbody.AddForce()
@@ -95,6 +97,7 @@ public class ImpactReceiver : MonoBehaviour
     /// </summary>
     public void ChangeMass(int _playerWeight)
     {
+        Debug.Log("ChangeMass " + _playerWeight);
         switch (_playerWeight)
         {
             case 0:
@@ -108,6 +111,24 @@ public class ImpactReceiver : MonoBehaviour
             case -1:
                 _currentMass = _lightMass;
                 break;
+        }
+    }
+    
+    private void ManageMassIndicator()
+    {
+        if(_currentMass < _regularMass)
+        {
+            _characterMassIndicator.transform.position = Vector3.MoveTowards(_characterMassIndicator.transform.position, new Vector3(0.0f,0.25f,0.0f), 1f * Time.deltaTime);
+        } else 
+        {
+            if(_currentMass > _regularMass)
+            {
+                _characterMassIndicator.transform.position = Vector3.MoveTowards(_characterMassIndicator.transform.position, new Vector3(0.0f,-0.25f,0.0f), 1f * Time.deltaTime);
+            }
+            else 
+            {
+                _characterMassIndicator.transform.position = Vector3.MoveTowards(_characterMassIndicator.transform.position, new Vector3(0.0f,0.0f,0.0f), 1f * Time.deltaTime);
+            }
         }
     }
 }
