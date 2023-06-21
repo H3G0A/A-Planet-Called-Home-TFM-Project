@@ -5,10 +5,12 @@ using UnityEngine;
 public class BreakableWallController : MonoBehaviour
 {
     [SerializeField] bool _readyToBreak;
+    [SerializeField] Material _frozenMaterial;
     
     public void hitByIceOrb()
     {
         _readyToBreak = true;
+        gameObject.GetComponent<Renderer>().material = _frozenMaterial;
     }
 
     public void hitByDispersionOrb(){
