@@ -19,8 +19,14 @@ public class ImpactReceiver : MonoBehaviour
     float _drag;
     bool _leftGround = false;
 
-    [SerializeField] GameObject _characterMassIndicator;
     FirstPersonController _firstPersonController;
+
+    [Header("GravityIndicator")]
+    [SerializeField] GameObject _characterGravityIndicator;
+    [SerializeField] GameObject _lessGravityPosition;
+    [SerializeField] GameObject _normalGraviyPosition;
+    [SerializeField] GameObject _higgerGravityPosition;
+    [SerializeField] float _gravityIndicatorMoveSpeed;
 
     private void Awake()
     {
@@ -118,16 +124,20 @@ public class ImpactReceiver : MonoBehaviour
     {
         if(_currentMass < _regularMass)
         {
-            _characterMassIndicator.transform.position = Vector3.MoveTowards(_characterMassIndicator.transform.position, new Vector3(0.0f,0.25f,0.0f), 1f * Time.deltaTime);
+            
+            _characterGravityIndicator.transform.position = Vector3.MoveTowards(_characterGravityIndicator.transform.position, _lessGravityPosition.transform.position, _gravityIndicatorMoveSpeed * Time.deltaTime);
+            Debug.Log(_characterGravityIndicator.transform.position.ToString() +"/ Less: "+ _lessGravityPosition.transform.position.ToString());
         } else 
         {
             if(_currentMass > _regularMass)
             {
-                _characterMassIndicator.transform.position = Vector3.MoveTowards(_characterMassIndicator.transform.position, new Vector3(0.0f,-0.25f,0.0f), 1f * Time.deltaTime);
+                _characterGravityIndicator.transform.position = Vector3.MoveTowards(_characterGravityIndicator.transform.position, _higgerGravityPosition.transform.position, _gravityIndicatorMoveSpeed * Time.deltaTime);
+                Debug.Log(_characterGravityIndicator.transform.position.ToString() +"/ Higger: "+ _higgerGravityPosition.transform.position.ToString());
             }
             else 
             {
-                _characterMassIndicator.transform.position = Vector3.MoveTowards(_characterMassIndicator.transform.position, new Vector3(0.0f,0.0f,0.0f), 1f * Time.deltaTime);
+                _characterGravityIndicator.transform.position = Vector3.MoveTowards(_characterGravityIndicator.transform.position, _normalGraviyPosition.transform.position, _gravityIndicatorMoveSpeed * Time.deltaTime);
+                Debug.Log(_characterGravityIndicator.transform.position.ToString() +"/ Normal: "+ _normalGraviyPosition.transform.position.ToString());
             }
         }
     }
