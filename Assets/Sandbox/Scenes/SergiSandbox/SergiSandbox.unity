@@ -2829,6 +2829,11 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &475084793 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7942672480580456072, guid: 3a3af90c341bfad48b7e091090deddab, type: 3}
+  m_PrefabInstance: {fileID: 578792180}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &511838517
 Mesh:
   m_ObjectHideFlags: 0
@@ -2993,6 +2998,11 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &512917268 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2925237990184678903, guid: 3a3af90c341bfad48b7e091090deddab, type: 3}
+  m_PrefabInstance: {fileID: 578792180}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &540189590
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3480,6 +3490,10 @@ PrefabInstance:
       propertyPath: _cinemachineCameraTarget
       value: 
       objectReference: {fileID: 1478268319}
+    - target: {fileID: 4410845234449440285, guid: 3a3af90c341bfad48b7e091090deddab, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5119057437784936814, guid: 3a3af90c341bfad48b7e091090deddab, type: 3}
       propertyPath: m_Name
       value: PlayerGravityIndicator
@@ -3500,6 +3514,18 @@ PrefabInstance:
       propertyPath: _orbWeigthText
       value: 
       objectReference: {fileID: 261505628}
+    - target: {fileID: 6334482532541443431, guid: 3a3af90c341bfad48b7e091090deddab, type: 3}
+      propertyPath: _firstOrbCapsule
+      value: 
+      objectReference: {fileID: 1131321064}
+    - target: {fileID: 6334482532541443431, guid: 3a3af90c341bfad48b7e091090deddab, type: 3}
+      propertyPath: _thirdOrbCapsule
+      value: 
+      objectReference: {fileID: 475084793}
+    - target: {fileID: 6334482532541443431, guid: 3a3af90c341bfad48b7e091090deddab, type: 3}
+      propertyPath: _secondOrbCapsule
+      value: 
+      objectReference: {fileID: 512917268}
     - target: {fileID: 6334482532541443431, guid: 3a3af90c341bfad48b7e091090deddab, type: 3}
       propertyPath: _chargedOrbs.Array.data[1]
       value: 
@@ -5759,6 +5785,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1131321064 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4410845234449440285, guid: 3a3af90c341bfad48b7e091090deddab, type: 3}
+  m_PrefabInstance: {fileID: 578792180}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1174080039
 PrefabInstance:
   m_ObjectHideFlags: 0
