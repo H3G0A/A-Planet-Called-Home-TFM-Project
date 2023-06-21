@@ -43,8 +43,13 @@ public class OrbLauncher : MonoBehaviour
     [SerializeField] GameObject _cilinderOrb;
     [SerializeField] float _rotationSpeed;
 
+    [Header("OrbsCapsules")]
+    [SerializeField] GameObject _firstOrbCapsule;
+    [SerializeField] GameObject _secondOrbCapsule;
+    [SerializeField] GameObject _thirdOrbCapsule;
     // Timers
     private float _fireRateDelta = 0;
+
 
     void Awake()
     {        
@@ -71,6 +76,7 @@ public class OrbLauncher : MonoBehaviour
     void Update()
     {
         ManageCooldown();
+        visualizeChargedOrbs();
     }
 
     public void LoadOrbs()
@@ -88,6 +94,30 @@ public class OrbLauncher : MonoBehaviour
                     _FPController._canChangeWeight = true;
                 }
             }
+        }
+    }
+
+    public void visualizeChargedOrbs(){
+        if(_chargedOrbs.Count > 0)
+        {
+            _firstOrbCapsule.SetActive(true);
+        } else
+        {
+            _firstOrbCapsule.SetActive(false);
+        }
+        if(_chargedOrbs.Count > 1)
+        {
+             _secondOrbCapsule.SetActive(true);
+        } else
+        {
+            _secondOrbCapsule.SetActive(false);
+        }
+        if(_chargedOrbs.Count > 2)
+        {
+             _thirdOrbCapsule.SetActive(true);
+        } else
+        {
+            _thirdOrbCapsule.SetActive(false);
         }
     }
 
