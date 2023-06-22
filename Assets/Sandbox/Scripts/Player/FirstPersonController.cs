@@ -96,10 +96,22 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 	[SerializeField] float _topClamp = 90.0f;
 	[Tooltip("How far in degrees can you move the camera down")]
 	[SerializeField] float _bottomClamp = -90.0f;
-	// cinemachine
 
+
+	[Header("HUD")]
 	[SerializeField] GameObject _dmgImage;
 	float _cinemachineTargetPitch;
+
+
+	[Header("Audio")]
+	[SerializeField] AudioClip _stepSound;
+	[SerializeField] AudioClip _jumpSound;
+	[SerializeField] AudioClip _landingSound;
+	[SerializeField] AudioClip _changeGravSound;
+	[SerializeField] AudioClip _waterSplashSound;
+	[SerializeField] AudioClip _underwaterStepSound;
+	[SerializeField] AudioClip _waterDivingSound;
+	[SerializeField] AudioClip _playerBurningSound;
 
 	// player
 	float _targetSpeed;
@@ -126,7 +138,16 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 	[Header("Animations")]
 	[SerializeField] GameObject _playerBody;
 	Animator _playerAnimator;
-	
+
+	//Audio
+	AudioSource _audioSource;
+	bool _isStepSoundPlaying = false;
+	bool _wasAirborne = false;
+	bool _outOfWater = true;
+	bool _onWaterSurface = true;
+	bool _isHeatAudioPlaying = false;
+
+
 	// Getter and setters
 	public int PlayerWeight
     {
@@ -158,6 +179,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 		_inputController = GetComponent<PlayerInputController>();
 		_dmgEffect = _dmgImage.GetComponent<DmgEffect>();
 		_playerAnimator = _playerBody.GetComponent<Animator>();
+		_audioSource = GetComponent<AudioSource>();
 	}
 
 	void Start()
@@ -206,8 +228,16 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 			case WATER_TAG:
 				_touchingWater = true;
 				break;
+
 			case HEAT_ZONE_TAG:
 				_inHeatZone = true;
+				if (!_isHeatAudioPlaying)
+                {
+					_audioSource.clip = _playerBurningSound;
+					_audioSource.Play();
+					_isHeatAudioPlaying = true;
+
+				}
 				break;
         }
     }
@@ -216,6 +246,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 	{
 		_playerAnimator.SetFloat("Speed", _horizontalVelocity.magnitude);
 	}
+
     private void OnTriggerExit(Collider other)
     {
 		switch (other.tag)
@@ -225,6 +256,8 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 				break;
 			case HEAT_ZONE_TAG:
 				_inHeatZone = false;
+				_audioSource.Stop();
+				_isHeatAudioPlaying = false;
 				break;
 		}
 	}
@@ -252,11 +285,24 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
         if (!_grounded && _controller.velocity.y <= 0 && !_inWater)
         {
 			SlipCheck(); //Check if stuck on edge
-        }
+			_wasAirborne = true;
+		}
         else if(_grounded || _inWater)
         {
 			_lastGroundedPoint = this.transform.position;
+
+            if (_wasAirborne && _grounded && !_underWater)
+            {
+				_wasAirborne = false;
+				_audioSource.PlayOneShot(_landingSound);
+			}
+
         }
+        else
+        {
+			_wasAirborne = true;
+
+		}
 	}
 
 	private void WaterCheck()
@@ -269,8 +315,31 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 			Vector3 _spawnUnder = new(transform.position.x, transform.position.y + _controller.center.y + (_waterCheckRadius * 2) + .03f, transform.position.z);
 			_underWater = Physics.CheckSphere(_spawnUnder, _waterCheckRadius, _waterLayers, QueryTriggerInteraction.Collide);
 
-			if(_inWater) WaterLogic();
-        }
+            if (_inWater)
+            {
+				if (_outOfWater && PlayerWeight != 1)
+                {
+					_audioSource.PlayOneShot(_waterSplashSound);
+				}
+				else if (_onWaterSurface && PlayerWeight == 1)
+                {
+					_audioSource.PlayOneShot(_waterDivingSound);
+					_onWaterSurface = false;
+                }
+				else if(PlayerWeight != 1)
+                {
+					_onWaterSurface = true;
+				}
+				_outOfWater = false;
+
+				WaterLogic();
+            }
+            else
+            {
+				_outOfWater = true;
+				_onWaterSurface = true;
+			}
+		}
     }
 
 	private void HeatZoneCheck(){
@@ -396,6 +465,16 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
         {
 			_horizontalVelocity = _inputDirection * _currentSpeed;
 			AdjustForSlope(ref _horizontalVelocity);
+
+			bool nextStepReady = _currentSpeed != 0 && !_isStepSoundPlaying;
+			if (nextStepReady && _underWater)
+            {
+				StartCoroutine(StepSound(_underwaterStepSound));
+			}
+			else if (nextStepReady)
+            {
+				StartCoroutine(StepSound(_stepSound));
+			}
 		}
         else 
         {
@@ -503,6 +582,8 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 			{
 				// the square root of H * -2 * G = how much velocity needed to reach desired height
 				_verticalVelocity = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
+
+				_audioSource.PlayOneShot(_jumpSound);
 			}
         }
 		else
@@ -551,6 +632,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
         {
 			PlayerWeight += (int) ctx.ReadValue<float>();
 			_impactReceiver.ChangeMass(PlayerWeight);
+			_audioSource.PlayOneShot(_changeGravSound);
         }
     }
 
@@ -568,6 +650,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 
 	public void PlayerRespawn()
 	{
+		print("respawn");
 		StartCoroutine(Respawn());
 	}
 
@@ -590,9 +673,22 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
         SceneLoader.Instance.LoadingScreen.SetActive(false);
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
+	private IEnumerator StepSound(AudioClip audioClip)
+	{
+		_isStepSoundPlaying = true;
+		float waitTime = .6f;
+		if (_inputController.Sprint) waitTime = .35f;
 
-    private void OnDrawGizmosSelected()
+		_audioSource.PlayOneShot(audioClip);
+
+		yield return new WaitForSeconds(waitTime);
+
+		_isStepSoundPlaying = false;
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	private void OnDrawGizmosSelected()
     {
 
 		//GROUNDED CHECK GIZMO

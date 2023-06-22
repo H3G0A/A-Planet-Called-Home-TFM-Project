@@ -29,6 +29,7 @@ public class OrbLauncher : MonoBehaviour
     [Header("Aiming")]
     [SerializeField] Transform _firePoint;
     [SerializeField] Camera _mainCamera;
+    [SerializeField] LayerMask _layersToAim;
 
 
     [Header("Player")]
@@ -129,7 +130,7 @@ public class OrbLauncher : MonoBehaviour
         Vector3 _forceDirection = _mainCamera.ScreenToWorldPoint(new(Screen.width / 2, Screen.height / 2, 100)) - _firePoint.transform.position;
 
         // Raycast from camera to get impact point and shoot accordingly
-        bool _inRangeCollision = Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out RaycastHit _hit, _range, -1, QueryTriggerInteraction.Ignore);
+        bool _inRangeCollision = Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out RaycastHit _hit, _range, _layersToAim, QueryTriggerInteraction.Ignore);
 
         // If something was shoot the orb in it's direction
         if (_inRangeCollision)
