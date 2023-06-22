@@ -10,6 +10,13 @@ public class TrampolineController : MonoBehaviour
 
     ImpactReceiver _impactReceiver;
     FirstPersonController _playerController;
+    AudioSource _audioSource;
+
+
+    private void Awake()
+    {
+        _audioSource = GetComponent<AudioSource>();
+    }
 
     private void OnTriggerStay(Collider other)
     {
@@ -26,6 +33,8 @@ public class TrampolineController : MonoBehaviour
     {
         if (_playerController.PlayerWeight != 1)
         {
+            _audioSource.Play();
+
             _playerController.StopVerticalMovement();
             _impactReceiver.OverrideForce(Vector3.up, _force);
         }

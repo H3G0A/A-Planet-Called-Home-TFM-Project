@@ -29,14 +29,12 @@ public class OrbLauncher : MonoBehaviour
     [Header("Aiming")]
     [SerializeField] Transform _firePoint;
     [SerializeField] Camera _mainCamera;
+    [SerializeField] LayerMask _layersToAim;
 
 
     [Header("Player")]
     [SerializeField] FirstPersonController _FPController;
 
-    // Launcher
-    private int _indexOrb;
-    private int _indexLastOrb;
 
     [Header("OrbRotation")]
     //CylinderOrb
@@ -47,12 +45,27 @@ public class OrbLauncher : MonoBehaviour
     [SerializeField] GameObject _firstOrbCapsule;
     [SerializeField] GameObject _secondOrbCapsule;
     [SerializeField] GameObject _thirdOrbCapsule;
+
+
+    [Header("Audio")]
+    [SerializeField] AudioClip _shootingSound;
+    [SerializeField] AudioClip _orbChangeSound;
+    [SerializeField] AudioClip _changeGravityModeSound;
+
+    //Audio
+    AudioSource _audioSource;
+
+    // Launcher
+    private int _indexOrb;
+    private int _indexLastOrb;
+    
     // Timers
     private float _fireRateDelta = 0;
 
 
     void Awake()
-    {        
+    {
+        _audioSource = GetComponent<AudioSource>();
         // Make launcher point at the middle of the screen
         transform.LookAt(_mainCamera.ScreenToWorldPoint(new(Screen.width / 2, Screen.height / 2, 100)));
         transform.Rotate(90, 0, 0); // This rotation is only for the launcher's placeholder cylinder
@@ -129,16 +142,20 @@ public class OrbLauncher : MonoBehaviour
         Vector3 _forceDirection = _mainCamera.ScreenToWorldPoint(new(Screen.width / 2, Screen.height / 2, 100)) - _firePoint.transform.position;
 
         // Raycast from camera to get impact point and shoot accordingly
-        bool _inRangeCollision = Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out RaycastHit _hit, _range, -1, QueryTriggerInteraction.Ignore);
+        bool _inRangeCollision = Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out RaycastHit _hit, _range, _layersToAim, QueryTriggerInteraction.Ignore);
 
-        // If something was shoot the orb in it's direction
+        // If something was hit shoot the orb in it's direction
         if (_inRangeCollision)
         {
             _forceDirection = _hit.point - _firePoint.transform.position;
         }
 
         // If not on cooldown, shoot
-        if (_fireRateDelta <= 0) InstantiateOrb(_forceDirection);
+        if (_fireRateDelta <= 0)
+        {
+            _audioSource.PlayOneShot(_shootingSound);
+            InstantiateOrb(_forceDirection);
+        }
     }
 
     void InstantiateOrb(Vector3 _forceDirection)
@@ -164,6 +181,9 @@ public class OrbLauncher : MonoBehaviour
 
     public void ChangeOrb(InputAction.CallbackContext ctx){
         if (!IsEnabled) return;
+
+        if(_chargedOrbs.Count > 1) _audioSource.PlayOneShot(_orbChangeSound);
+
         _indexLastOrb = _indexOrb;
         int _nextValueOrbs = (int) ctx.ReadValue<float>();      
         _indexOrb += _nextValueOrbs;
@@ -181,6 +201,9 @@ public class OrbLauncher : MonoBehaviour
 
     public void ChangeOrbDirectly(InputAction.CallbackContext ctx){
         if (!IsEnabled) return;
+
+        if (_chargedOrbs.Count > 1) _audioSource.PlayOneShot(_orbChangeSound);
+
         _indexLastOrb = _indexOrb;
         _indexOrb = (int) ctx.ReadValue<float>();   
         _selectedOrb = _chargedOrbs[_indexOrb];
@@ -192,6 +215,8 @@ public class OrbLauncher : MonoBehaviour
         if (!IsEnabled) return;
 
         if (_selectedOrb.GetComponent<WeigthOrb>() != null){
+            _audioSource.PlayOneShot(_changeGravityModeSound);
+
             _augmentWeigthOrb = !_augmentWeigthOrb;
             ChangeAugmentText();
         } 

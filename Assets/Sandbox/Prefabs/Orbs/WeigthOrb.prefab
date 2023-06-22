@@ -78,4 +78,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8780f9465bc131446abe0af3172f7d2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _orbEffectSound: {fileID: 8300000, guid: 34a4b31b31dfb7541861eaa4db361ac5, type: 3}
   _augment: 0

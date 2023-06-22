@@ -78,7 +78,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
         // Stop listening for some inputs
         if (PlayerInputController_ != null) PlayerInputController_.enabled = false;
 
-        // Stop camera from moving
+        // Pause audio
+        AudioListener.pause = true;
 
     }
 
@@ -88,6 +89,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
         Time.timeScale = _lastTimeScale;
 
         if (PlayerInputController_ != null) PlayerInputController_.enabled = true;
+
+        AudioListener.pause = false;
     }
 
     public void EnableOrb(GlobalParameters.Orbs orbName)
