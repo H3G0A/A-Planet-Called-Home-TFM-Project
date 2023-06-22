@@ -1019,6 +1019,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -5743107085190104338, guid: 895a188564d1c1c46aa19e92931c7f0d, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5743107085190104338, guid: 895a188564d1c1c46aa19e92931c7f0d, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -169241385368757120, guid: 895a188564d1c1c46aa19e92931c7f0d, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 895a188564d1c1c46aa19e92931c7f0d, type: 3}
       propertyPath: m_Name
       value: ICONOPESO
