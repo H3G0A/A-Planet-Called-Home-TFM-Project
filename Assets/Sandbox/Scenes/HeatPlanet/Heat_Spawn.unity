@@ -40584,6 +40584,10 @@ PrefabInstance:
       propertyPath: _dialogs.Array.data[6]
       value: "Pulsa la [V] para bacete m\xE1s pesado"
       objectReference: {fileID: 0}
+    - target: {fileID: 8964608157960776008, guid: 683cf63f59565474e95777df3660cfa7, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8964608157960776010, guid: 683cf63f59565474e95777df3660cfa7, type: 3}
       propertyPath: m_RootOrder
       value: 4

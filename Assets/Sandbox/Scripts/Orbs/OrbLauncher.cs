@@ -127,11 +127,9 @@ public class OrbLauncher : MonoBehaviour
         if(_chargedOrbs.Count > 2)
         {
             if(_augmentWeigthOrb){
-                Debug.Log("Mas gravedad");
                 _thirdOrbCapsuleHiggerGravity.SetActive(true);
                 _thirdOrbCapsuleLesserGravity.SetActive(false);
             } else {
-                Debug.Log("Menos gravedad");
                 _thirdOrbCapsuleLesserGravity.SetActive(true);
                 _thirdOrbCapsuleHiggerGravity.SetActive(false);
             }
