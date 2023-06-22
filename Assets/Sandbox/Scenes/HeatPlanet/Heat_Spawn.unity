@@ -52511,6 +52511,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1429694124}
     m_Modifications:
+    - target: {fileID: 500535046172105238, guid: 34207044e2e24864dbddd6df7f290b6b, type: 3}
+      propertyPath: _orbToUnlock
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6349244648669170515, guid: 34207044e2e24864dbddd6df7f290b6b, type: 3}
       propertyPath: m_Name
       value: NewOrbContainer
@@ -52525,7 +52529,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6349244648669170519, guid: 34207044e2e24864dbddd6df7f290b6b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -16.499
+      value: -16.814
       objectReference: {fileID: 0}
     - target: {fileID: 6349244648669170519, guid: 34207044e2e24864dbddd6df7f290b6b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -52559,6 +52563,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6498904867899406765, guid: 34207044e2e24864dbddd6df7f290b6b, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6498904867899406765, guid: 34207044e2e24864dbddd6df7f290b6b, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 1e41b3d219651704f9c473e6545c5f86, type: 2}
     - target: {fileID: 8194102689644799011, guid: 34207044e2e24864dbddd6df7f290b6b, type: 3}
       propertyPath: _orbToUnlock
       value: 2
