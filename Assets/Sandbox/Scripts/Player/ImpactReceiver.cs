@@ -20,7 +20,6 @@ public class ImpactReceiver : MonoBehaviour
     bool _leftGround = false;
 
     FirstPersonController _firstPersonController;
-
     private void Awake()
     {
         _firstPersonController = this.GetComponent<FirstPersonController>();
@@ -95,6 +94,7 @@ public class ImpactReceiver : MonoBehaviour
     /// </summary>
     public void ChangeMass(int _playerWeight)
     {
+        Debug.Log("ChangeMass " + _playerWeight);
         switch (_playerWeight)
         {
             case 0:

@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class DispersionOrb : OrbBehaviour
 {
+    [SerializeField] AudioClip _stickSound;
+    [SerializeField] AudioClip _beepSound;
+
+    [Header("Explosion")]
     [SerializeField] float _force;
     [SerializeField] float _radius;
     [SerializeField] bool _diagonalPush = true;
     [SerializeField] bool _verticalPush = false;
     [SerializeField] float _explosionTimer = 1f;
+
+    GameObject _collisionObject = null;
 
     ImpactReceiver _impactReceiver;
     CharacterController _charController;
@@ -20,11 +26,11 @@ public class DispersionOrb : OrbBehaviour
 
     protected override void OnCollisionEnter(Collision collision)
     {
-        this.gameObject.GetComponent<Collider>().enabled = false;
         this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+        this.gameObject.GetComponent<Collider>().enabled = false;
 
+        _collisionObject = collision.gameObject;
         StartCoroutine(DelayedEffect(collision));
-
     }
 
     protected override void ApplyEffect(Collision collision) //The orb pushes all objects inside radius away
@@ -37,8 +43,13 @@ public class DispersionOrb : OrbBehaviour
             if(rb != null) //Range hits RigidBody
             {
                 //Only move the object if the orb has not collided with its top face directly
-                if(collision.gameObject != _collider.gameObject || collision.GetContact(0).normal != Vector3.up)
+                if(_collisionObject != _collider.gameObject || collision.GetContact(0).normal != Vector3.down)
                 {
+                    if (_collider.CompareTag(GlobalParameters.DISPLACE_BOX_TAG))
+                    {
+                        _collider.GetComponent<AudioSource>().Play();
+                    }
+
                     Vector3 _forceDirection = CalculateForceDirection(this.transform.position, _collider.transform.position);
                     rb.AddForce(_forceDirection * _force, ForceMode.Impulse);
                 }
@@ -64,19 +75,20 @@ public class DispersionOrb : OrbBehaviour
                 _lightCrystalController.increaseIntensity();
             }
         }
+
+        AudioSource.PlayClipAtPoint(_orbEffectSound, this.transform.position);
     }
 
     private Vector3 CalculateForceDirection(Vector3 explosionCenter, Vector3 objectPosition) //Direction when pushing a non-player object
     {
         Vector3 _forceDirection = objectPosition - explosionCenter;
 
+        float _XAxis = Mathf.Abs(_forceDirection.x);
+        float _ZAxis = Mathf.Abs(_forceDirection.z);
 
         if (!_diagonalPush)
         {
             //Push only in the direction of the strongest axis
-            float _XAxis = Mathf.Abs(_forceDirection.x);
-            float _ZAxis = Mathf.Abs(_forceDirection.z);
-            
             if (_XAxis > _ZAxis)
             {
                 _forceDirection.z = 0;
@@ -100,9 +112,11 @@ public class DispersionOrb : OrbBehaviour
     private IEnumerator DelayedEffect(Collision collision)
     {
         this.transform.parent = collision.transform;
+        _audioSource.PlayOneShot(_stickSound);
 
+        _audioSource.PlayOneShot(_beepSound);
         yield return new WaitForSeconds(_explosionTimer);
-        
+
         ApplyEffect(collision);
         Destroy(gameObject);
     }

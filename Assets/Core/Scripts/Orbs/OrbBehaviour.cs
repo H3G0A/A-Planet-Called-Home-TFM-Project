@@ -5,27 +5,29 @@ using static GlobalParameters;
 
 public abstract class OrbBehaviour : MonoBehaviour
 {
+    [Header("Audio")]
+    [SerializeField] protected AudioClip _orbEffectSound;
+    protected AudioSource _audioSource;
+
     public abstract int ID { get; protected set; }
 
-    //List of object TAGS which their collisions with the orb will be ignored
-    readonly List<string> _ignoreCollision = new(){
-                                                    ORB_TAG,
-                                                    PLAYER_TAG
-                                                    };
+    private void Awake()
+    {
+        _audioSource = GetComponent<AudioSource>();
+    }
 
     private void Start() //Destroy after a while if has not collided
     {
-        Destroy(this.gameObject, 5);
+        Destroy(this.gameObject, 3);
     }
 
     protected virtual void OnCollisionEnter(Collision collision)
     {
-        if (!_ignoreCollision.Contains(collision.collider.tag))
-        {
-            DisableOrb();
-            ApplyEffect(collision);
-            Destroy(this.gameObject);
-        }
+        
+        DisableOrb();
+        ApplyEffect(collision);
+        Destroy(this.gameObject);
+        
     }
 
     protected void DisableOrb()
