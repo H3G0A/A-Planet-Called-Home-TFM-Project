@@ -573,15 +573,12 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 		switch(PlayerWeight){
 			case -1:
 			 	_characterGravityIndicator.transform.position = Vector3.MoveTowards(_characterGravityIndicator.transform.position, _lessGravityPosition.transform.position, _gravityIndicatorMoveSpeed * Time.deltaTime);
-				Debug.Log("Less");
 				break;
 			case 0:
 				_characterGravityIndicator.transform.position = Vector3.MoveTowards(_characterGravityIndicator.transform.position, _normalGraviyPosition.transform.position, _gravityIndicatorMoveSpeed * Time.deltaTime);
-				Debug.Log("Normal");
 				break;
 			case 1:
 				 _characterGravityIndicator.transform.position = Vector3.MoveTowards(_characterGravityIndicator.transform.position, _higgerGravityPosition.transform.position, _gravityIndicatorMoveSpeed * Time.deltaTime);
-				 Debug.Log("Higger");
 				break;
 		}
 	}
