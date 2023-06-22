@@ -44,8 +44,8 @@ public class OrbLauncher : MonoBehaviour
     [Header("OrbsCapsules")]
     [SerializeField] GameObject _firstOrbCapsule;
     [SerializeField] GameObject _secondOrbCapsule;
-    [SerializeField] GameObject _thirdOrbCapsule;
-
+    [SerializeField] GameObject _thirdOrbCapsuleHiggerGravity;
+    [SerializeField] GameObject _thirdOrbCapsuleLesserGravity;
 
     [Header("Audio")]
     [SerializeField] AudioClip _shootingSound;
@@ -78,7 +78,6 @@ public class OrbLauncher : MonoBehaviour
         //Set reference in GameManager
         GameManager.Instance.OrbLauncher_ = this;
 
-        
         _selectedOrb = _chargedOrbs[0];
         _indexOrb = 0;
         ChangeOrbText();
@@ -127,10 +126,19 @@ public class OrbLauncher : MonoBehaviour
         }
         if(_chargedOrbs.Count > 2)
         {
-             _thirdOrbCapsule.SetActive(true);
+            if(_augmentWeigthOrb){
+                Debug.Log("Mas gravedad");
+                _thirdOrbCapsuleHiggerGravity.SetActive(true);
+                _thirdOrbCapsuleLesserGravity.SetActive(false);
+            } else {
+                Debug.Log("Menos gravedad");
+                _thirdOrbCapsuleLesserGravity.SetActive(true);
+                _thirdOrbCapsuleHiggerGravity.SetActive(false);
+            }
         } else
         {
-            _thirdOrbCapsule.SetActive(false);
+            _thirdOrbCapsuleHiggerGravity.SetActive(false);
+            _thirdOrbCapsuleLesserGravity.SetActive(false);
         }
     }
 
@@ -218,6 +226,10 @@ public class OrbLauncher : MonoBehaviour
             _audioSource.PlayOneShot(_changeGravityModeSound);
 
             _augmentWeigthOrb = !_augmentWeigthOrb;
+            if(_augmentWeigthOrb)
+            {
+                
+            }
             ChangeAugmentText();
         } 
     }
