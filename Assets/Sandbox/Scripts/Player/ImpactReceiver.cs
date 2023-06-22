@@ -20,14 +20,6 @@ public class ImpactReceiver : MonoBehaviour
     bool _leftGround = false;
 
     FirstPersonController _firstPersonController;
-
-    [Header("GravityIndicator")]
-    [SerializeField] GameObject _characterGravityIndicator;
-    [SerializeField] GameObject _lessGravityPosition;
-    [SerializeField] GameObject _normalGraviyPosition;
-    [SerializeField] GameObject _higgerGravityPosition;
-    [SerializeField] float _gravityIndicatorMoveSpeed;
-
     private void Awake()
     {
         _firstPersonController = this.GetComponent<FirstPersonController>();
@@ -36,7 +28,6 @@ public class ImpactReceiver : MonoBehaviour
     private void Update()
     {
         ManageForces();
-        ManageMassIndicator();
     }
     
     public void AddImpact(Vector3 dir, float force) //Simulate Rigidbody.AddForce()
@@ -117,25 +108,6 @@ public class ImpactReceiver : MonoBehaviour
             case -1:
                 _currentMass = _lightMass;
                 break;
-        }
-    }
-    
-    private void ManageMassIndicator()
-    {
-        if(_currentMass < _regularMass)
-        {
-            
-            _characterGravityIndicator.transform.position = Vector3.MoveTowards(_characterGravityIndicator.transform.position, _lessGravityPosition.transform.position, _gravityIndicatorMoveSpeed * Time.deltaTime);
-        } else 
-        {
-            if(_currentMass > _regularMass)
-            {
-                _characterGravityIndicator.transform.position = Vector3.MoveTowards(_characterGravityIndicator.transform.position, _higgerGravityPosition.transform.position, _gravityIndicatorMoveSpeed * Time.deltaTime);
-            }
-            else 
-            {
-                _characterGravityIndicator.transform.position = Vector3.MoveTowards(_characterGravityIndicator.transform.position, _normalGraviyPosition.transform.position, _gravityIndicatorMoveSpeed * Time.deltaTime);
-            }
         }
     }
 }

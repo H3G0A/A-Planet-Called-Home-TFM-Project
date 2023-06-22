@@ -113,6 +113,20 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 	[SerializeField] AudioClip _waterDivingSound;
 	[SerializeField] AudioClip _playerBurningSound;
 
+
+	[Header("Animations")]
+	[SerializeField] GameObject _playerBody;
+	Animator _playerAnimator;
+	
+	
+    [Header("GravityIndicator")]
+    [SerializeField] GameObject _characterGravityIndicator;
+    [SerializeField] GameObject _lessGravityPosition;
+    [SerializeField] GameObject _normalGraviyPosition;
+    [SerializeField] GameObject _higgerGravityPosition;
+    [SerializeField] float _gravityIndicatorMoveSpeed;
+
+
 	// player
 	float _targetSpeed;
 	float _acceleration;
@@ -133,12 +147,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 	ImpactReceiver _impactReceiver;
 	PlayerInputController _inputController;
 	DmgEffect _dmgEffect;
-
-	//Animations
-	[Header("Animations")]
-	[SerializeField] GameObject _playerBody;
-	Animator _playerAnimator;
-
+	
 	//Audio
 	AudioSource _audioSource;
 	bool _isStepSoundPlaying = false;
@@ -191,6 +200,8 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 		_heatPercentage = 0.00f;
 		_inHeatZone = false;
 		_fallTimeoutDelta = _fallTimeout; // reset our timeouts on start
+		_characterGravityIndicator.SetActive(false);
+		_characterGravityIndicator.transform.position = _normalGraviyPosition.transform.position;
 	}
 
     void Update()
@@ -214,6 +225,9 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 
 		//UpdateAnimations
 		updateAnimations();
+
+		//UpdateGravityIndicator
+		ManageMassIndicator();
     }
 
     void LateUpdate()
@@ -635,6 +649,22 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 			_audioSource.PlayOneShot(_changeGravSound);
         }
     }
+
+	private void ManageMassIndicator()
+	{
+		_characterGravityIndicator.SetActive(_canChangeWeight);
+		switch(PlayerWeight){
+			case -1:
+			 	_characterGravityIndicator.transform.position = Vector3.MoveTowards(_characterGravityIndicator.transform.position, _lessGravityPosition.transform.position, _gravityIndicatorMoveSpeed * Time.deltaTime);
+				break;
+			case 0:
+				_characterGravityIndicator.transform.position = Vector3.MoveTowards(_characterGravityIndicator.transform.position, _normalGraviyPosition.transform.position, _gravityIndicatorMoveSpeed * Time.deltaTime);
+				break;
+			case 1:
+				 _characterGravityIndicator.transform.position = Vector3.MoveTowards(_characterGravityIndicator.transform.position, _higgerGravityPosition.transform.position, _gravityIndicatorMoveSpeed * Time.deltaTime);
+				break;
+		}
+	}
 
 	public void StopVerticalMovement()
     {
