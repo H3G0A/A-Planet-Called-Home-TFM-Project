@@ -111,3 +111,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _orbToUnlock: 0
+  _orbPickupSound: {fileID: 8300000, guid: ec3a63642b20e0542ab8b9fed209267f, type: 3}

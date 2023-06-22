@@ -7,6 +7,13 @@ public class DialogManager : MonoBehaviour
 {
     [SerializeField] GameObject _dialogHUD;
     [SerializeField]  TMP_Text _dialogText;
+    AudioSource _audioSource;
+
+    private void Awake()
+    {
+        _audioSource = GetComponent<AudioSource>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +34,8 @@ public class DialogManager : MonoBehaviour
         _dialogHUD.SetActive(true);
         foreach(string dialogo in dialogList){
             _dialogText.text = dialogo;
+
+            _audioSource.Play();
             yield return new WaitForSeconds(5f);
         }
         _dialogHUD.SetActive(false);

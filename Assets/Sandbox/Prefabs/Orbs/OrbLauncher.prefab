@@ -97,6 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 712cb22f9b4531f419dc7dd6c90bca72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsEnabled: 1
   _force: 2000
   _range: 100
   _fireRate: 0.5
@@ -110,6 +111,18 @@ MonoBehaviour:
   _augmentWeigthOrb: 0
   _firePoint: {fileID: 3674210043524229222}
   _mainCamera: {fileID: 0}
+  _layersToAim:
+    serializedVersion: 2
+    m_Bits: 281
+  _FPController: {fileID: 0}
+  _cilinderOrb: {fileID: 0}
+  _rotationSpeed: 0
+  _firstOrbCapsule: {fileID: 0}
+  _secondOrbCapsule: {fileID: 0}
+  _thirdOrbCapsule: {fileID: 0}
+  _shootingSound: {fileID: 0}
+  _orbChangeSound: {fileID: 0}
+  _changeGravityModeSound: {fileID: 0}
 --- !u!1 &3674210043524229241
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,6 +8,7 @@ using static GlobalParameters;
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] GameObject _menuCanvas;
+    AudioSource _audioSource;
 
     PlayerControls _input;
     bool _isActive = false;
@@ -16,6 +17,7 @@ public class PauseMenu : MonoBehaviour
     private void Awake()
     {
         _input = new PlayerControls();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     private void OnEnable()
@@ -70,17 +72,23 @@ public class PauseMenu : MonoBehaviour
     //////////////////////////////////////////////// MENU BUTTONS //////////////////////////////////
     public void OnContinue()
     {
+        _audioSource.Play();
+
         DisableMenu();
     }
 
     public void OnMainMenu()
     {
+        _audioSource.Play();
+
         DisableMenu();
         SceneLoader.Instance.LoadScene(Scenes.MainMenu);
     }
 
     public void OnExit()
     {
+        _audioSource.Play();
+
         GameManager.Instance.ExitGame();
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////

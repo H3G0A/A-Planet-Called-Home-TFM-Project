@@ -29,12 +29,16 @@ public class IceOrb : OrbBehaviour
         {
             Instantiate(_iceZone, transform.position, Quaternion.identity);
         }
+
+        AudioSource.PlayClipAtPoint(_orbEffectSound, this.transform.position);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag(WATER_TAG))
         {
+            AudioSource.PlayClipAtPoint(_orbEffectSound, this.transform.position);
+
             DisableOrb();
 
             Vector3 _pos = new(transform.position.x, other.transform.position.y, transform.position.z);

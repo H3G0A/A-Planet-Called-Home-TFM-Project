@@ -45,7 +45,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerInputController_: {fileID: 0}
-  CurrentLevel: 
+  OrbLauncher_: {fileID: 0}
+  FirstPersonController_: {fileID: 0}
+  PlayerController: {fileID: 0}
+  CurrentLevel: 0
   OrbStash:
   - Prefab: {fileID: 3763091816190321520, guid: fbc8c6956626b1d48bbb724b1da96332, type: 3}
     Available: 1

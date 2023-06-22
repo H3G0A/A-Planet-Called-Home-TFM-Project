@@ -24,6 +24,8 @@ public class WeigthOrb : OrbBehaviour
             ElevatorMovementController elevator = objectCollision.GetComponent<ElevatorMovementController>();
             elevator.WeigthOrbImpact(_augment);
         }
+
+        AudioSource.PlayClipAtPoint(_orbEffectSound, this.transform.position);
     }
 
     public void changeAugment(bool _newAugment){

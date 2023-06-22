@@ -597,7 +597,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 				// the square root of H * -2 * G = how much velocity needed to reach desired height
 				_verticalVelocity = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
 
-				_audioSource.PlayOneShot(_jumpSound);
+				if(_groundJump) _audioSource.PlayOneShot(_jumpSound);
 			}
         }
 		else
@@ -707,9 +707,9 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 	{
 		_isStepSoundPlaying = true;
 		float waitTime = .6f;
-		if (_inputController.Sprint) waitTime = .35f;
+		if (_inputController.Sprint) waitTime = .45f;
 
-		_audioSource.PlayOneShot(audioClip);
+		if(_currentSpeed >= 1) _audioSource.PlayOneShot(audioClip);
 
 		yield return new WaitForSeconds(waitTime);
 

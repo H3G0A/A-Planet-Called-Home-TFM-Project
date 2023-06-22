@@ -78,6 +78,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d39928b76d401db49a84fc63f5d0fa12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _orbEffectSound: {fileID: 8300000, guid: ff9fe358b6df3fc4d8ac1ad123a3480d, type: 3}
+  _stickSound: {fileID: 8300000, guid: 11d5731c18c7005429a5743b8226c6e4, type: 3}
+  _beepSound: {fileID: 8300000, guid: d6eb8bd86e3171b499bae65253436ec3, type: 3}
   _force: 10
   _radius: 2
   _diagonalPush: 0
