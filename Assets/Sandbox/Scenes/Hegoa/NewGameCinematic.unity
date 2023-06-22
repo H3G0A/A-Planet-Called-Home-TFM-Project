@@ -426,6 +426,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6959241616779807466, guid: a4fd0b6c312d1fb46aa7b82c807772d8, type: 3}
+      propertyPath: m_TargetCamera
+      value: 
+      objectReference: {fileID: 1683402802}
     - target: {fileID: 8672253415489937601, guid: a4fd0b6c312d1fb46aa7b82c807772d8, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -513,10 +517,6 @@ PrefabInstance:
     - target: {fileID: 8672253415489937612, guid: a4fd0b6c312d1fb46aa7b82c807772d8, type: 3}
       propertyPath: m_Name
       value: ComicCinematic
-      objectReference: {fileID: 0}
-    - target: {fileID: 8672253415489937613, guid: a4fd0b6c312d1fb46aa7b82c807772d8, type: 3}
-      propertyPath: _nextScene
-      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a4fd0b6c312d1fb46aa7b82c807772d8, type: 3}
