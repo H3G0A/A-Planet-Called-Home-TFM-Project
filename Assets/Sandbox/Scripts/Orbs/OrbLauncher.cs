@@ -21,8 +21,6 @@ public class OrbLauncher : MonoBehaviour
     [SerializeField] List<GameObject> _chargedOrbs;
     
     [Space(10)]
-    [SerializeField] TMP_Text _orbText;
-    [SerializeField] TMP_Text _orbWeigthText;
     [SerializeField] bool _augmentWeigthOrb;
 
 
@@ -80,9 +78,7 @@ public class OrbLauncher : MonoBehaviour
 
         _selectedOrb = _chargedOrbs[0];
         _indexOrb = 0;
-        ChangeOrbText();
         ChangeOrbRotation();
-        ChangeAugmentText();
     }
 
     void Update()
@@ -201,7 +197,6 @@ public class OrbLauncher : MonoBehaviour
         }
         Debug.Log("Next Value Orb:" + ctx.ReadValue<float>());
         _selectedOrb = _chargedOrbs[_indexOrb];
-        ChangeOrbText();
         ChangeOrbRotation();
     }
 
@@ -213,7 +208,6 @@ public class OrbLauncher : MonoBehaviour
         _indexLastOrb = _indexOrb;
         _indexOrb = (int) ctx.ReadValue<float>();   
         _selectedOrb = _chargedOrbs[_indexOrb];
-        ChangeOrbText();
         ChangeOrbRotation();
     }
 
@@ -228,22 +222,7 @@ public class OrbLauncher : MonoBehaviour
             {
                 
             }
-            ChangeAugmentText();
         } 
-    }
-
-    private void ChangeOrbText(){
-        switch(_indexOrb){
-            case 0:
-                _orbText.text = "Orbe de dispersión";
-                break;
-            case 1:
-                _orbText.text = "Orbe de hielo";
-                break;
-            case 2:
-                _orbText.text = "Orbe de gravedad";
-                break;
-        }
     }
 
     private void ChangeOrbRotation(){
@@ -287,13 +266,5 @@ public class OrbLauncher : MonoBehaviour
                 break;
         }
         _cilinderOrb.transform.Rotate(newRotation);
-    }
-
-    private void ChangeAugmentText(){
-        if(_augmentWeigthOrb){
-            _orbWeigthText.text = "Aumento de peso";
-        }else{
-            _orbWeigthText.text = "Reducción de peso";
-        }
     }
 }

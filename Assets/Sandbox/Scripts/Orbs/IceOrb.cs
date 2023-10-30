@@ -25,7 +25,7 @@ public class IceOrb : OrbBehaviour
             _breakablWallRenderer.material.SetColor("_Color", Color.white);
             breakableWallScript.hitByIceOrb();
         }
-        else if(objectCollision.layer == GROUND_LAYER || objectCollision.layer == 0)
+        else if(objectCollision.CompareTag(WET_FLOOR_TAG))
         {
             Instantiate(_iceZone, transform.position, Quaternion.identity);
         }
