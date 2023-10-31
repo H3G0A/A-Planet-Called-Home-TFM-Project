@@ -15,6 +15,7 @@ TagManager:
   - HeatZone
   - WorldBounds
   - WetFloor
+  - Waterfall
   layers:
   - Default
   - TransparentFX
