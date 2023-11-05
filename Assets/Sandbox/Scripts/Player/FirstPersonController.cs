@@ -99,7 +99,6 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 
 
 	[Header("HUD")]
-	[SerializeField] GameObject _dmgImage;
 	float _cinemachineTargetPitch;
 
 
@@ -146,7 +145,6 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 	CharacterController _controller;
 	ImpactReceiver _impactReceiver;
 	PlayerInputController _inputController;
-	DmgEffect _dmgEffect;
 	
 	//Audio
 	AudioSource _audioSource;
@@ -186,7 +184,6 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 		_controller = GetComponent<CharacterController>();
 		_impactReceiver = GetComponent<ImpactReceiver>();
 		_inputController = GetComponent<PlayerInputController>();
-		_dmgEffect = _dmgImage.GetComponent<DmgEffect>();
 		_playerAnimator = _playerBody.GetComponent<Animator>();
 		_audioSource = GetComponent<AudioSource>();
 	}
@@ -370,7 +367,6 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 				_heatPercentage -= 0.01f;
 			}
 		}
-		_dmgEffect.ChangeColor(_heatPercentage);
 	}
 
 	private void SlipCheck()

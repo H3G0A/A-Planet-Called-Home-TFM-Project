@@ -111,7 +111,7 @@ public class DispersionOrb : OrbBehaviour
     
     private IEnumerator DelayedEffect(Collision collision)
     {
-        this.transform.parent = collision.transform;
+        this.transform.SetParent(collision.transform);
         _audioSource.PlayOneShot(_stickSound);
 
         _audioSource.PlayOneShot(_beepSound);

@@ -20,6 +20,8 @@ public static class GlobalParameters
     public const string LUMINOUS_CRYSTAL = "LuminousCrystal";
     public const string HEAT_ZONE_TAG = "HeatZone";
     public const string WORLD_BOUNDS_TAG = "WorldBounds";
+    public const string WET_FLOOR_TAG = "WetFloor";
+    public const string WATERFALL_TAG = "Waterfall";
 
     // LAYERS
     public const int GROUND_LAYER = 3;
