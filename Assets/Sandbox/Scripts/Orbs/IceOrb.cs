@@ -51,6 +51,8 @@ public class IceOrb : OrbBehaviour
         {
             DisableOrb();
 
+            AudioSource.PlayClipAtPoint(_orbEffectSound, this.transform.position);
+
             Vector3 pos = new(other.bounds.center.x, transform.position.y, other.bounds.center.z);
             GameObject block = Instantiate(_frozenBlock, pos, Quaternion.identity);
             other.GetComponent<FrozenBlockCounter>().SetNewBlock(block);
