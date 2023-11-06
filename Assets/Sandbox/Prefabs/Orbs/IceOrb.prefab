@@ -94,6 +94,7 @@ MonoBehaviour:
   _radius: 10
   _iceZone: {fileID: 3947131425236279134, guid: 8c517c524b64227448d76c5fada9bb5f, type: 3}
   _frozenWater: {fileID: 4954022143767521026, guid: 77282f2adb1ab3b42a8d86b13b33776b, type: 3}
+  _frozenBlock: {fileID: 7272356606137895712, guid: a7ad03de2e7c2974488dd8c043c104ae, type: 3}
   _groundLayers:
     serializedVersion: 2
     m_Bits: 0

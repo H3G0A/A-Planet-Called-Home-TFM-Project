@@ -18,7 +18,7 @@ public abstract class OrbBehaviour : MonoBehaviour
 
     private void Start() //Destroy after a while if has not collided
     {
-        Destroy(this.gameObject, 3);
+        Invoke(nameof(DestroySelf), 1);
     }
 
     protected virtual void OnCollisionEnter(Collision collision)
@@ -37,4 +37,9 @@ public abstract class OrbBehaviour : MonoBehaviour
     }
 
     protected abstract void ApplyEffect(Collision collision);
+
+    protected void DestroySelf()
+    {
+        Destroy(this.gameObject);
+    }
 }

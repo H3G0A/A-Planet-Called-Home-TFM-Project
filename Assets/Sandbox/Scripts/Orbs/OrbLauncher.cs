@@ -21,8 +21,6 @@ public class OrbLauncher : MonoBehaviour
     [SerializeField] List<GameObject> _chargedOrbs;
     
     [Space(10)]
-    [SerializeField] TMP_Text _orbText;
-    [SerializeField] TMP_Text _orbWeigthText;
     [SerializeField] bool _augmentWeigthOrb;
 
 
@@ -62,6 +60,9 @@ public class OrbLauncher : MonoBehaviour
     // Timers
     private float _fireRateDelta = 0;
 
+    // Orbs
+    private DispersionOrb _firedDispersion;
+
 
     void Awake()
     {
@@ -80,9 +81,7 @@ public class OrbLauncher : MonoBehaviour
 
         _selectedOrb = _chargedOrbs[0];
         _indexOrb = 0;
-        ChangeOrbText();
         ChangeOrbRotation();
-        ChangeAugmentText();
     }
 
     void Update()
@@ -144,6 +143,14 @@ public class OrbLauncher : MonoBehaviour
     {
         if (!IsEnabled) return;
 
+        //First, if a dispersion orb has already been shot, make it explode
+        if (_selectedOrb.GetComponent<OrbBehaviour>().ID == (int)GlobalParameters.Orbs.DISPERSION &&
+            _firedDispersion != null)
+        {
+            _firedDispersion.Activate();
+            return;
+        }
+
         // By default nothing has been hit, so simulate a far point
         Vector3 _forceDirection = _mainCamera.ScreenToWorldPoint(new(Screen.width / 2, Screen.height / 2, 100)) - _firePoint.transform.position;
 
@@ -156,22 +163,30 @@ public class OrbLauncher : MonoBehaviour
             _forceDirection = _hit.point - _firePoint.transform.position;
         }
 
+        
         // If not on cooldown, shoot
         if (_fireRateDelta <= 0)
         {
             _audioSource.PlayOneShot(_shootingSound);
             InstantiateOrb(_forceDirection);
         }
+
     }
 
     void InstantiateOrb(Vector3 _forceDirection)
     {
         // Instantiate and give initial speed boost
         GameObject _orbInstance = GameObject.Instantiate(_selectedOrb, _firePoint.position, _firePoint.rotation);
+
         if (_orbInstance.GetComponent<WeigthOrb>() != null)
         {
             _orbInstance.GetComponent<WeigthOrb>().changeAugment(_augmentWeigthOrb);
         }
+        else if (_orbInstance.GetComponent<OrbBehaviour>().ID == (int)GlobalParameters.Orbs.DISPERSION)
+        {
+            _firedDispersion = _orbInstance.GetComponent<DispersionOrb>();
+        }
+
         Vector3 _forceVector = _forceDirection.normalized * _force;
         Rigidbody _rb = _orbInstance.GetComponent<Rigidbody>();
         _rb.AddForce(_forceVector, ForceMode.Impulse);
@@ -201,7 +216,6 @@ public class OrbLauncher : MonoBehaviour
         }
         Debug.Log("Next Value Orb:" + ctx.ReadValue<float>());
         _selectedOrb = _chargedOrbs[_indexOrb];
-        ChangeOrbText();
         ChangeOrbRotation();
     }
 
@@ -213,7 +227,6 @@ public class OrbLauncher : MonoBehaviour
         _indexLastOrb = _indexOrb;
         _indexOrb = (int) ctx.ReadValue<float>();   
         _selectedOrb = _chargedOrbs[_indexOrb];
-        ChangeOrbText();
         ChangeOrbRotation();
     }
 
@@ -228,22 +241,7 @@ public class OrbLauncher : MonoBehaviour
             {
                 
             }
-            ChangeAugmentText();
         } 
-    }
-
-    private void ChangeOrbText(){
-        switch(_indexOrb){
-            case 0:
-                _orbText.text = "Orbe de dispersión";
-                break;
-            case 1:
-                _orbText.text = "Orbe de hielo";
-                break;
-            case 2:
-                _orbText.text = "Orbe de gravedad";
-                break;
-        }
     }
 
     private void ChangeOrbRotation(){
@@ -287,13 +285,5 @@ public class OrbLauncher : MonoBehaviour
                 break;
         }
         _cilinderOrb.transform.Rotate(newRotation);
-    }
-
-    private void ChangeAugmentText(){
-        if(_augmentWeigthOrb){
-            _orbWeigthText.text = "Aumento de peso";
-        }else{
-            _orbWeigthText.text = "Reducción de peso";
-        }
     }
 }
