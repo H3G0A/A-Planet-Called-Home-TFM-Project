@@ -12,9 +12,9 @@ public class DispersionOrb : OrbBehaviour
     [SerializeField] float _radius;
     [SerializeField] bool _diagonalPush = true;
     [SerializeField] bool _verticalPush = false;
-    [SerializeField] float _explosionTimer = 1f;
 
-    GameObject _collisionObject = null;
+    Collision _collisionObject = null;
+    Vector3 _collisionOffset;
 
     ImpactReceiver _impactReceiver;
     CharacterController _charController;
@@ -22,15 +22,24 @@ public class DispersionOrb : OrbBehaviour
 
     public override int ID { get; protected set; } = (int)GlobalParameters.Orbs.DISPERSION;
 
-
+    private void Update()
+    {
+        StickToParent();
+    }
 
     protected override void OnCollisionEnter(Collision collision)
     {
+        // Expand the death timer of the object once has collided
+        CancelInvoke(nameof(DestroySelf));
+        Invoke(nameof(ApplyEffect), 7);
+
         this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
         this.gameObject.GetComponent<Collider>().enabled = false;
 
-        _collisionObject = collision.gameObject;
-        StartCoroutine(DelayedEffect(collision));
+        _collisionObject = collision;
+        _collisionOffset = collision.gameObject.transform.position - this.transform.position;
+        _audioSource.PlayOneShot(_stickSound);
+
     }
 
     protected override void ApplyEffect(Collision collision) //The orb pushes all objects inside radius away
@@ -43,7 +52,7 @@ public class DispersionOrb : OrbBehaviour
             if(rb != null) //Range hits RigidBody
             {
                 //Only move the object if the orb has not collided with its top face directly
-                if(_collisionObject != _collider.gameObject || collision.GetContact(0).normal != Vector3.down)
+                if(collision.gameObject != _collider.gameObject || collision.GetContact(0).normal != Vector3.down)
                 {
                     if (_collider.CompareTag(GlobalParameters.DISPLACE_BOX_TAG))
                     {
@@ -107,17 +116,17 @@ public class DispersionOrb : OrbBehaviour
         return _forceDirection.normalized;
     }
 
-    ///////////////////////////////////////////////////////////////
-    
-    private IEnumerator DelayedEffect(Collision collision)
+    private void StickToParent()
     {
-        this.transform.SetParent(collision.transform);
-        _audioSource.PlayOneShot(_stickSound);
+        if(_collisionObject != null)
+        {
+            this.transform.position = _collisionObject.transform.position - _collisionOffset;
+        }
+    }
 
-        _audioSource.PlayOneShot(_beepSound);
-        yield return new WaitForSeconds(_explosionTimer);
-
-        ApplyEffect(collision);
+    public void Activate()
+    {
+        ApplyEffect(_collisionObject);
         Destroy(gameObject);
     }
 }
