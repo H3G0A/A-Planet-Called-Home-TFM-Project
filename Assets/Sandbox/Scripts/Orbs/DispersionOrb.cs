@@ -29,9 +29,9 @@ public class DispersionOrb : OrbBehaviour
 
     protected override void OnCollisionEnter(Collision collision)
     {
-        // Expand the death timer of the object once has collided
+        // Object wont dissapear once collided, but will automatically apply its effect after some time
         CancelInvoke(nameof(DestroySelf));
-        Invoke(nameof(ApplyEffect), 7);
+        Invoke(nameof(Activate), 7);
 
         this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
         this.gameObject.GetComponent<Collider>().enabled = false;

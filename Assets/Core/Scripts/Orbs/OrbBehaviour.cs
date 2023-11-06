@@ -18,7 +18,7 @@ public abstract class OrbBehaviour : MonoBehaviour
 
     private void Start() //Destroy after a while if has not collided
     {
-        Invoke(nameof(DestroySelf), 3);
+        Invoke(nameof(DestroySelf), 1);
     }
 
     protected virtual void OnCollisionEnter(Collision collision)
