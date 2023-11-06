@@ -126,7 +126,10 @@ public class DispersionOrb : OrbBehaviour
 
     public void Activate()
     {
-        ApplyEffect(_collisionObject);
-        Destroy(gameObject);
+        if (_collisionObject is not null)
+        {
+            ApplyEffect(_collisionObject);
+            Destroy(gameObject);
+        }
     }
 }
