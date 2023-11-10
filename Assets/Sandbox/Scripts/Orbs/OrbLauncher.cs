@@ -170,13 +170,14 @@ public class OrbLauncher : MonoBehaviour
 
     public void AimAction(InputAction.CallbackContext ctx)
     {
-        bool aimAction = ctx.ReadValue<float>() == 1;
+        float aimAction = ctx.ReadValue<float>();
 
+        Debug.Log(ctx.action.WasPressedThisFrame());
         if(WaitingForDispersionOrb() && ctx.action.WasPressedThisFrame())
         {
             ShootOrb();
         }
-        else if(_fireRateDelta <= 0 && aimAction)
+        else if(_fireRateDelta <= 0 && aimAction > 0.5)
         {
             _isAiming = true;
         }
@@ -210,7 +211,7 @@ public class OrbLauncher : MonoBehaviour
     {
         bool wasAiming = _trajectoryPrediction.HidePrediction();
 
-        if (ctx.action.WasReleasedThisFrame() && !WaitingForDispersionOrb() && wasAiming)
+        if (!WaitingForDispersionOrb() && wasAiming)
             ShootOrb();
     }
 
