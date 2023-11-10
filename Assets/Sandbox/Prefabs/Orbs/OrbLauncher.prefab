@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3674210042753416167}
   - component: {fileID: 3674210042753416166}
   - component: {fileID: 3674210042753416164}
+  - component: {fileID: 4718216461798247677}
   m_Layer: 0
   m_Name: OrbLauncher
   m_TagString: Untagged
@@ -106,8 +107,6 @@ MonoBehaviour:
   - {fileID: 3763091816190321520, guid: fbc8c6956626b1d48bbb724b1da96332, type: 3}
   - {fileID: 8844603512878802888, guid: b0d919d4b48061745b51560fe4396cc3, type: 3}
   - {fileID: 6016317886622445584, guid: e303382b79774d948bfcbb9f1634ec15, type: 3}
-  _orbText: {fileID: 0}
-  _orbWeigthText: {fileID: 0}
   _augmentWeigthOrb: 0
   _firePoint: {fileID: 3674210043524229222}
   _mainCamera: {fileID: 0}
@@ -119,10 +118,25 @@ MonoBehaviour:
   _rotationSpeed: 0
   _firstOrbCapsule: {fileID: 0}
   _secondOrbCapsule: {fileID: 0}
-  _thirdOrbCapsule: {fileID: 0}
+  _thirdOrbCapsuleHiggerGravity: {fileID: 0}
+  _thirdOrbCapsuleLesserGravity: {fileID: 0}
   _shootingSound: {fileID: 0}
   _orbChangeSound: {fileID: 0}
   _changeGravityModeSound: {fileID: 0}
+--- !u!114 &4718216461798247677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3674210042753416187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da9f49fc3e5032046a864a65cc20a602, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _orb: {fileID: 0}
+  _initialForce: {x: 0, y: 0, z: 0}
 --- !u!1 &3674210043524229241
 GameObject:
   m_ObjectHideFlags: 0

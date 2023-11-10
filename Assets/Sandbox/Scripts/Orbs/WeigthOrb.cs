@@ -12,12 +12,12 @@ public class WeigthOrb : OrbBehaviour
     protected override void ApplyEffect(Collision collision) //The orb change the weigth of the object that impacts.
     {        
         GameObject objectCollision = collision.gameObject;
-        Rigidbody rb = objectCollision.GetComponent<Rigidbody>();
+        Rigidbody collisionRb = objectCollision.GetComponent<Rigidbody>();
         if(objectCollision.tag.Equals(GlobalParameters.DISPLACE_BOX_TAG)){
             if(_augment){
-                rb.constraints = RigidbodyConstraints.FreezePosition;
+                collisionRb.constraints = RigidbodyConstraints.FreezePosition;
             }else{
-                rb.constraints = RigidbodyConstraints.FreezeRotation;
+                collisionRb.constraints = RigidbodyConstraints.FreezeRotation;
             }
         }
         if(objectCollision.tag.Equals(GlobalParameters.ELEVATOR_TAG)){

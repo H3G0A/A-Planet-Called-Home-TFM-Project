@@ -95,7 +95,9 @@ public class PlayerInputController : MonoBehaviour
 
         //////////////////////// ORB LAUNCHER INPUTS ////////////////////////////////
         // SHOOTING
-        _shootAction.performed += _launcherController.ShootOrb;
+        _shootAction.performed += _launcherController.AimAction;
+        _shootAction.canceled += _launcherController.AimAction;
+        _shootAction.canceled += _launcherController.ShootAction;
 
         // ROTATE WEAPON CHANGE
         _changeOrb.performed += _launcherController.ChangeOrb;
@@ -133,7 +135,9 @@ public class PlayerInputController : MonoBehaviour
 
         //////////////////////// ORB LAUNCHER INPUTS ////////////////////////////////
         // SHOOTING
-        _shootAction.performed -= _launcherController.ShootOrb;
+        _shootAction.performed -= _launcherController.AimAction;
+        _shootAction.canceled -= _launcherController.AimAction;
+        _shootAction.canceled -= _launcherController.ShootAction;
 
         // ROTATE WEAPON CHANGE
         _changeOrb.performed -= _launcherController.ChangeOrb;
