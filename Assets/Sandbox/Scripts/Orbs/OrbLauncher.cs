@@ -28,6 +28,7 @@ public class OrbLauncher : MonoBehaviour
     [SerializeField] Transform _firePoint;
     [SerializeField] Camera _mainCamera;
     [SerializeField] LayerMask _layersToAim;
+    [SerializeField] OrbTrajectoryPrediction _trajectoryPrediction;
 
 
     [Header("Player")]
@@ -63,11 +64,26 @@ public class OrbLauncher : MonoBehaviour
     // Orbs
     private DispersionOrb _firedDispersion;
 
+    // Controls
+    PlayerInputController _inputController;
+    bool _isAiming = false;
+
+    private void OnEnable()
+    {
+        Application.onBeforeRender += TakeAim;
+    }
+
+    private void OnDisable()
+    {
+        Application.onBeforeRender -= TakeAim;
+    }
 
     void Awake()
     {
+        _inputController = GetComponentInParent<PlayerInputController>();
         _audioSource = GetComponent<AudioSource>();
-        // Make launcher point at the middle of the screen
+
+        // Position launcher point at the middle of the screen
         transform.LookAt(_mainCamera.ScreenToWorldPoint(new(Screen.width / 2, Screen.height / 2, 100)));
         transform.Rotate(90, 0, 0); // This rotation is only for the launcher's placeholder cylinder
     }
@@ -139,38 +155,85 @@ public class OrbLauncher : MonoBehaviour
         }
     }
 
-    public void ShootOrb(InputAction.CallbackContext ctx)
+    internal void TakeAim()
+    {
+        if (!IsEnabled || !_isAiming || WaitingForDispersionOrb()) return;
+
+        OrbBehaviour orb = _selectedOrb.GetComponent<OrbBehaviour>();
+        Rigidbody orbRb = _selectedOrb.GetComponent<Rigidbody>();
+
+        float g = orb.Gravity;
+        Vector3 v0 = GetForceDirection() * _force / orbRb.mass;
+
+        _trajectoryPrediction.DrawPrediction(g, v0);
+    }
+
+    public void AimAction(InputAction.CallbackContext ctx)
+    {
+        bool aimAction = ctx.ReadValue<float>() == 1;
+
+        if(WaitingForDispersionOrb() && ctx.action.WasPressedThisFrame())
+        {
+            ShootOrb();
+        }
+        else if(_fireRateDelta <= 0 && aimAction)
+        {
+            _isAiming = true;
+        }
+        else
+        { 
+            _isAiming = false; 
+        }
+    }
+
+    public void ShootOrb()
     {
         if (!IsEnabled) return;
 
         //First, if a dispersion orb has already been shot, make it explode
-        if (_selectedOrb.GetComponent<OrbBehaviour>().ID == (int)GlobalParameters.Orbs.DISPERSION &&
-            _firedDispersion != null)
+        if (WaitingForDispersionOrb())
         {
             _firedDispersion.Activate();
             return;
         }
 
-        // By default nothing has been hit, so simulate a far point
-        Vector3 _forceDirection = _mainCamera.ScreenToWorldPoint(new(Screen.width / 2, Screen.height / 2, 100)) - _firePoint.transform.position;
-
-        // Raycast from camera to get impact point and shoot accordingly
-        bool _inRangeCollision = Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out RaycastHit _hit, _range, _layersToAim, QueryTriggerInteraction.Ignore);
-
-        // If something was hit shoot the orb in it's direction
-        if (_inRangeCollision)
-        {
-            _forceDirection = _hit.point - _firePoint.transform.position;
-        }
-
-        
         // If not on cooldown, shoot
         if (_fireRateDelta <= 0)
         {
             _audioSource.PlayOneShot(_shootingSound);
-            InstantiateOrb(_forceDirection);
+            InstantiateOrb(GetForceDirection());
         }
 
+    }
+
+    public void ShootAction(InputAction.CallbackContext ctx)
+    {
+        bool wasAiming = _trajectoryPrediction.HidePrediction();
+
+        if (ctx.action.WasReleasedThisFrame() && !WaitingForDispersionOrb() && wasAiming)
+            ShootOrb();
+    }
+
+    private bool WaitingForDispersionOrb()
+    {
+        return _selectedOrb.GetComponent<OrbBehaviour>().ID == (int)GlobalParameters.Orbs.DISPERSION && _firedDispersion != null;
+    }
+
+    private Vector3 GetForceDirection()
+    {
+        // By default nothing has been hit, so simulate a far point
+        Vector3 _forceDirection = _mainCamera.ScreenToWorldPoint(new(Screen.width / 2, Screen.height / 2, 100)) - _firePoint.transform.position;
+
+        //// Raycast from camera to get impact point and shoot accordingly
+        //bool _inRangeCollision = Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out RaycastHit _hit, _range, _layersToAim, QueryTriggerInteraction.Ignore);
+
+        //// If something was hit shoot the orb in it's direction
+        //if (_inRangeCollision)
+        //{
+        //    _forceDirection = _hit.point - _firePoint.transform.position;
+        //};
+
+        return _forceDirection.normalized;
     }
 
     void InstantiateOrb(Vector3 _forceDirection)
@@ -187,7 +250,7 @@ public class OrbLauncher : MonoBehaviour
             _firedDispersion = _orbInstance.GetComponent<DispersionOrb>();
         }
 
-        Vector3 _forceVector = _forceDirection.normalized * _force;
+        Vector3 _forceVector = _forceDirection * _force;
         Rigidbody _rb = _orbInstance.GetComponent<Rigidbody>();
         _rb.AddForce(_forceVector, ForceMode.Impulse);
 
@@ -217,6 +280,8 @@ public class OrbLauncher : MonoBehaviour
         Debug.Log("Next Value Orb:" + ctx.ReadValue<float>());
         _selectedOrb = _chargedOrbs[_indexOrb];
         ChangeOrbRotation();
+
+        if(WaitingForDispersionOrb()) _trajectoryPrediction.HidePrediction();
     }
 
     public void ChangeOrbDirectly(InputAction.CallbackContext ctx){

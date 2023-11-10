@@ -13,7 +13,8 @@ public class DispersionOrb : OrbBehaviour
     [SerializeField] bool _diagonalPush = true;
     [SerializeField] bool _verticalPush = false;
 
-    Collision _collisionObject = null;
+    GameObject _parent = null;
+    ContactPoint _collisionContact;
     Vector3 _collisionOffset;
 
     ImpactReceiver _impactReceiver;
@@ -36,23 +37,23 @@ public class DispersionOrb : OrbBehaviour
         this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
         this.gameObject.GetComponent<Collider>().enabled = false;
 
-        _collisionObject = collision;
+        _parent = collision.gameObject;
+        _collisionContact = collision.GetContact(0);
         _collisionOffset = collision.gameObject.transform.position - this.transform.position;
         _audioSource.PlayOneShot(_stickSound);
-
     }
 
-    protected override void ApplyEffect(Collision collision) //The orb pushes all objects inside radius away
+    private void ApplyEffect() //The orb pushes all objects inside radius away
     {
         Collider[] _colliders = Physics.OverlapSphere(transform.position, _radius); //Store every collider in range
         
         foreach(Collider _collider in _colliders)
         {
-            Rigidbody rb = _collider.GetComponent<Rigidbody>();
-            if(rb != null) //Range hits RigidBody
+            Rigidbody colliderRb = _collider.GetComponent<Rigidbody>();
+            if(colliderRb != null) //Range hits RigidBody
             {
                 //Only move the object if the orb has not collided with its top face directly
-                if(collision.gameObject != _collider.gameObject || collision.GetContact(0).normal != Vector3.down)
+                if(_parent != _collider.gameObject || _collisionContact.normal != Vector3.up)
                 {
                     if (_collider.CompareTag(GlobalParameters.DISPLACE_BOX_TAG))
                     {
@@ -60,7 +61,7 @@ public class DispersionOrb : OrbBehaviour
                     }
 
                     Vector3 _forceDirection = CalculateForceDirection(this.transform.position, _collider.transform.position);
-                    rb.AddForce(_forceDirection * _force, ForceMode.Impulse);
+                    colliderRb.AddForce(_forceDirection * _force, ForceMode.Impulse);
                 }
             }
             else if (_collider.gameObject.CompareTag(GlobalParameters.PLAYER_TAG)) //Range hits player
@@ -118,18 +119,23 @@ public class DispersionOrb : OrbBehaviour
 
     private void StickToParent()
     {
-        if(_collisionObject != null)
+        if (_parent != null)
         {
-            this.transform.position = _collisionObject.transform.position - _collisionOffset;
+            this.transform.position = _parent.transform.position - _collisionOffset;
         }
     }
 
     public void Activate()
     {
-        if (_collisionObject is not null)
+        if (_parent is not null)
         {
-            ApplyEffect(_collisionObject);
+            ApplyEffect();
             Destroy(gameObject);
         }
+    }
+
+    protected override void ApplyEffect(Collision collision)
+    {
+        return;
     }
 }

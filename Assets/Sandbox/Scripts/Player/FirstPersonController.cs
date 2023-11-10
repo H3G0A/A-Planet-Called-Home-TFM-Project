@@ -227,7 +227,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 		ManageMassIndicator();
     }
 
-    void LateUpdate()
+    private void LateUpdate()
     {
 		CameraRotation();
     }
