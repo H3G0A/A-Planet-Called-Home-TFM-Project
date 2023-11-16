@@ -2,12 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using static GlobalParameters;
 
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] GameObject _menuCanvas;
+    [SerializeField] GameObject _firstSelected;
+    [SerializeField] CursorLockMode _cursorState;
     AudioSource _audioSource;
 
     PlayerControls _input;
@@ -51,10 +54,11 @@ public class PauseMenu : MonoBehaviour
 
         // Save current mouse state and unlock it to navigate menu
         _lastState = Cursor.lockState;
-        Cursor.lockState = CursorLockMode.None;
+        Cursor.lockState = _cursorState;
 
         // Show pause menu
         _menuCanvas.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(_firstSelected);
     }
 
     private void DisableMenu()
