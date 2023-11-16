@@ -42,6 +42,7 @@ public static class GlobalParameters
     public const string CHANGEORBWEIGTH_ACTION = "ChangeOrbWeigth";
     public const string CHANGEORBDIRECTLY_ACTION = "ChangeOrbDirectly";
     public const string CHANGE_WEIGHT_ACTION = "Change Weight";
+    public const string Pause_MENU_ACTION = "PauseMenu";
 
     // ACTION MAPS
     public const string PLAYER_GROUND_MAP = "Ground";

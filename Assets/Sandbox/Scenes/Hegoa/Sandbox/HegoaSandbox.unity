@@ -1731,6 +1731,38 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 8616685848737228376, guid: 3a3af90c341bfad48b7e091090deddab, type: 3}
+      propertyPath: m_ActionEvents.Array.size
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8616685848737228376, guid: 3a3af90c341bfad48b7e091090deddab, type: 3}
+      propertyPath: m_ActionEvents.Array.data[10].m_ActionId
+      value: 5b643d1b-8166-476c-886d-b2a0f7b325d2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8616685848737228376, guid: 3a3af90c341bfad48b7e091090deddab, type: 3}
+      propertyPath: m_ActionEvents.Array.data[11].m_ActionId
+      value: 0ce21695-30ee-438e-b89d-3c6f053bd7d0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8616685848737228376, guid: 3a3af90c341bfad48b7e091090deddab, type: 3}
+      propertyPath: m_ActionEvents.Array.data[10].m_ActionName
+      value: Menus/Confirm[/DualShock4GamepadHID/buttonSouth]
+      objectReference: {fileID: 0}
+    - target: {fileID: 8616685848737228376, guid: 3a3af90c341bfad48b7e091090deddab, type: 3}
+      propertyPath: m_ActionEvents.Array.data[11].m_ActionName
+      value: Menus/UpDownSelect[/DualShock4GamepadHID/dpad/up,/DualShock4GamepadHID/dpad/down,/DualShock4GamepadHID/leftStick/up,/DualShock4GamepadHID/leftStick/down]
+      objectReference: {fileID: 0}
+    - target: {fileID: 8616685848737228376, guid: 3a3af90c341bfad48b7e091090deddab, type: 3}
+      propertyPath: m_ActionEvents.Array.data[0].m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8616685848737228376, guid: 3a3af90c341bfad48b7e091090deddab, type: 3}
+      propertyPath: m_ActionEvents.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8616685848737228376, guid: 3a3af90c341bfad48b7e091090deddab, type: 3}
+      propertyPath: m_ActionEvents.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8997996947095583982, guid: 3a3af90c341bfad48b7e091090deddab, type: 3}
       propertyPath: m_RootOrder
       value: 2

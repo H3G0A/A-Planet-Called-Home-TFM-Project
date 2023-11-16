@@ -47,6 +47,7 @@ public class PauseMenu : MonoBehaviour
         // Pause game
         _isActive = true;
         GameManager.Instance.PauseGame();
+        _input.Menus.Enable();
 
         // Save current mouse state and unlock it to navigate menu
         _lastState = Cursor.lockState;
@@ -61,6 +62,7 @@ public class PauseMenu : MonoBehaviour
         // Resume game
         _isActive = false;
         GameManager.Instance.ResumeGame();
+        _input.Menus.Disable();
 
         // Return to previous mouse state
         Cursor.lockState = _lastState;
@@ -96,15 +98,19 @@ public class PauseMenu : MonoBehaviour
     private void EnableInput()
     {
         // Without PlayerInput component, every action map has to be explicitly enabled and disabled
-        _input.Menus.Enable();
+        _input.Ground.Enable();
 
-        _input.Menus.Escape.performed += ToggleMenu;
+        _input.Ground.PauseMenu.performed += ToggleMenu;
+
+        _input.Menus.ResumeGame.performed += ToggleMenu;
     }
 
     private void DisableInput()
     {
-        _input.Menus.Disable();
+        _input.Ground.PauseMenu.performed -= ToggleMenu;
 
-        _input.Menus.Escape.performed -= ToggleMenu;
+        _input.Menus.ResumeGame.performed -= ToggleMenu;
     }
+
+
 }
