@@ -22,10 +22,10 @@ public class DataPersistenceManager : MonoBehaviour
 
     private void Awake()
     {
-#if !UNITY_EDITOR
-        _initializeDataIfNull = false;
-        _useDataPersistence = true;
-#endif
+        #if !UNITY_EDITOR
+            _initializeDataIfNull = false;
+            _useDataPersistence = true;
+        #endif
 
         Initialize();
         _dataHandler = new FileDataHandler(Application.persistentDataPath, fileName);

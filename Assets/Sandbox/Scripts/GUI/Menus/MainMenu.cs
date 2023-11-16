@@ -2,27 +2,32 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 using static GlobalParameters;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] GameObject _continueButton;
+    [SerializeField] Button _continueButton;
     AudioSource _audioSource;
 
+
     private void Awake()
-    {
+    {   
         _audioSource = GetComponent<AudioSource>();
+
     }
 
     private void Start()
     {
         if (DataPersistenceManager.Instance.HasGameData())
         {
-            _continueButton.SetActive(true);
+            _continueButton.interactable = true;
         }
         else
         {
-            _continueButton.SetActive(false);
+            _continueButton.interactable = false;
+            _continueButton.GetComponentInChildren<TextMeshProUGUI>().alpha = .15f;
         }
     }
 

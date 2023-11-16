@@ -69,7 +69,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""id"": ""dc429925-c20b-4659-b4aa-3f007ed804a8"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Press(behavior=2)"",
                     ""initialStateCheck"": true
                 },
                 {
@@ -107,64 +107,18 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PauseMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""d0ff34dc-7993-4162-ad55-896f7939365e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": ""WASD"",
-                    ""id"": ""c1f3ea60-35ee-4bff-8572-971e4f488838"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""eacca528-500d-4922-8a01-532d86bcffb6"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""b2b06bee-afa6-4b59-babd-2af4f45ee9a6"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""a67639fb-7f5f-4d1b-beed-c1aee53fa5ac"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""1d0ab378-327c-4460-a0e3-8063d0b02653"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
                 {
                     ""name"": """",
                     ""id"": ""b92681bb-6d76-413f-ac6a-fefccf476e06"",
@@ -172,6 +126,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": ""InvertVector2(invertX=false),ScaleVector2(x=0.05,y=0.05)"",
                     ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4f6f3105-6aac-4a2e-990d-611f3275a7f3"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": ""InvertVector2(invertX=false),ScaleVector2"",
+                    ""groups"": ""Controller"",
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -189,6 +154,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""6347c67e-e471-41ef-928d-105c1ac5ae99"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""cef5dd30-f992-4e88-9a5c-284dba28bfb5"",
                     ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
@@ -200,11 +176,44 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""83dc9038-51e8-4fe2-a136-9fe4b24f551c"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""Sprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c3300e6d-43c9-4990-91af-26d8391d226a"",
+                    ""path"": ""<Gamepad>/leftStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Sprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""1e41e8e4-dda4-4a62-91f1-def27b275eb0"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0226e75c-372f-44dc-bb64-0d872bae81ba"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
                     ""action"": ""Shoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -227,6 +236,28 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": ""Scale(factor=-1)"",
                     ""groups"": """",
+                    ""action"": ""ChangeOrb"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""57c5c9d7-6a12-4e91-9b62-e4bbfec3fa9f"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale"",
+                    ""groups"": ""Controller"",
+                    ""action"": ""ChangeOrb"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8e7524da-c0d0-442c-a342-1383b4ebfbdf"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=-1)"",
+                    ""groups"": ""Controller"",
                     ""action"": ""ChangeOrb"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -296,6 +327,94 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""ChangeOrbDirectly"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""WASD"",
+                    ""id"": ""c1f3ea60-35ee-4bff-8572-971e4f488838"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""eacca528-500d-4922-8a01-532d86bcffb6"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""b2b06bee-afa6-4b59-babd-2af4f45ee9a6"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""a67639fb-7f5f-4d1b-beed-c1aee53fa5ac"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""1d0ab378-327c-4460-a0e3-8063d0b02653"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""75781f06-ffe2-460b-9691-0f83d87365eb"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dec88de2-1554-4cc4-a59d-a959b242fe70"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""PauseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aca12a2d-c181-42f6-90db-967f10268d7a"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -304,7 +423,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
             ""id"": ""e8cdb09b-39fc-47fe-a38f-da64a51d6057"",
             ""actions"": [
                 {
-                    ""name"": ""Escape"",
+                    ""name"": ""ResumeGame"",
                     ""type"": ""Button"",
                     ""id"": ""faca21b0-46f2-4610-8b78-e91e9fade7de"",
                     ""expectedControlType"": ""Button"",
@@ -320,8 +439,19 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Escape"",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""ResumeGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8b954a0b-1c85-4ba1-b953-5e4ea4e1c908"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""ResumeGame"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -344,6 +474,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isOR"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Controller"",
+            ""bindingGroup"": ""Controller"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Gamepad>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
         }
     ]
 }");
@@ -358,9 +499,10 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Ground_ChangeOrbWeigth = m_Ground.FindAction("ChangeOrbWeigth", throwIfNotFound: true);
         m_Ground_ChangeWeight = m_Ground.FindAction("Change Weight", throwIfNotFound: true);
         m_Ground_ChangeOrbDirectly = m_Ground.FindAction("ChangeOrbDirectly", throwIfNotFound: true);
+        m_Ground_PauseMenu = m_Ground.FindAction("PauseMenu", throwIfNotFound: true);
         // Menus
         m_Menus = asset.FindActionMap("Menus", throwIfNotFound: true);
-        m_Menus_Escape = m_Menus.FindAction("Escape", throwIfNotFound: true);
+        m_Menus_ResumeGame = m_Menus.FindAction("ResumeGame", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -429,6 +571,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Ground_ChangeOrbWeigth;
     private readonly InputAction m_Ground_ChangeWeight;
     private readonly InputAction m_Ground_ChangeOrbDirectly;
+    private readonly InputAction m_Ground_PauseMenu;
     public struct GroundActions
     {
         private @PlayerControls m_Wrapper;
@@ -442,6 +585,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @ChangeOrbWeigth => m_Wrapper.m_Ground_ChangeOrbWeigth;
         public InputAction @ChangeWeight => m_Wrapper.m_Ground_ChangeWeight;
         public InputAction @ChangeOrbDirectly => m_Wrapper.m_Ground_ChangeOrbDirectly;
+        public InputAction @PauseMenu => m_Wrapper.m_Ground_PauseMenu;
         public InputActionMap Get() { return m_Wrapper.m_Ground; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -478,6 +622,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @ChangeOrbDirectly.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnChangeOrbDirectly;
                 @ChangeOrbDirectly.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnChangeOrbDirectly;
                 @ChangeOrbDirectly.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnChangeOrbDirectly;
+                @PauseMenu.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnPauseMenu;
+                @PauseMenu.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnPauseMenu;
+                @PauseMenu.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnPauseMenu;
             }
             m_Wrapper.m_GroundActionsCallbackInterface = instance;
             if (instance != null)
@@ -509,6 +656,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @ChangeOrbDirectly.started += instance.OnChangeOrbDirectly;
                 @ChangeOrbDirectly.performed += instance.OnChangeOrbDirectly;
                 @ChangeOrbDirectly.canceled += instance.OnChangeOrbDirectly;
+                @PauseMenu.started += instance.OnPauseMenu;
+                @PauseMenu.performed += instance.OnPauseMenu;
+                @PauseMenu.canceled += instance.OnPauseMenu;
             }
         }
     }
@@ -517,12 +667,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     // Menus
     private readonly InputActionMap m_Menus;
     private IMenusActions m_MenusActionsCallbackInterface;
-    private readonly InputAction m_Menus_Escape;
+    private readonly InputAction m_Menus_ResumeGame;
     public struct MenusActions
     {
         private @PlayerControls m_Wrapper;
         public MenusActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Escape => m_Wrapper.m_Menus_Escape;
+        public InputAction @ResumeGame => m_Wrapper.m_Menus_ResumeGame;
         public InputActionMap Get() { return m_Wrapper.m_Menus; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -532,16 +682,16 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_MenusActionsCallbackInterface != null)
             {
-                @Escape.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnEscape;
-                @Escape.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnEscape;
-                @Escape.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnEscape;
+                @ResumeGame.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnResumeGame;
+                @ResumeGame.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnResumeGame;
+                @ResumeGame.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnResumeGame;
             }
             m_Wrapper.m_MenusActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @Escape.started += instance.OnEscape;
-                @Escape.performed += instance.OnEscape;
-                @Escape.canceled += instance.OnEscape;
+                @ResumeGame.started += instance.OnResumeGame;
+                @ResumeGame.performed += instance.OnResumeGame;
+                @ResumeGame.canceled += instance.OnResumeGame;
             }
         }
     }
@@ -555,6 +705,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
             return asset.controlSchemes[m_KeyboardMouseSchemeIndex];
         }
     }
+    private int m_ControllerSchemeIndex = -1;
+    public InputControlScheme ControllerScheme
+    {
+        get
+        {
+            if (m_ControllerSchemeIndex == -1) m_ControllerSchemeIndex = asset.FindControlSchemeIndex("Controller");
+            return asset.controlSchemes[m_ControllerSchemeIndex];
+        }
+    }
     public interface IGroundActions
     {
         void OnMove(InputAction.CallbackContext context);
@@ -566,9 +725,10 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnChangeOrbWeigth(InputAction.CallbackContext context);
         void OnChangeWeight(InputAction.CallbackContext context);
         void OnChangeOrbDirectly(InputAction.CallbackContext context);
+        void OnPauseMenu(InputAction.CallbackContext context);
     }
     public interface IMenusActions
     {
-        void OnEscape(InputAction.CallbackContext context);
+        void OnResumeGame(InputAction.CallbackContext context);
     }
 }
