@@ -109,6 +109,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""02dc86d5-4014-4281-ab86-e0a827192550"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""PauseMenu"",
                     ""type"": ""Button"",
                     ""id"": ""d0ff34dc-7993-4162-ad55-896f7939365e"",
@@ -415,6 +424,28 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""PauseMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3f6e650c-fe7e-4df7-b32d-919c1bdc5741"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""744b16eb-4bc9-4b60-87dd-7db4d9347f79"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -499,6 +530,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Ground_ChangeOrbWeigth = m_Ground.FindAction("ChangeOrbWeigth", throwIfNotFound: true);
         m_Ground_ChangeWeight = m_Ground.FindAction("Change Weight", throwIfNotFound: true);
         m_Ground_ChangeOrbDirectly = m_Ground.FindAction("ChangeOrbDirectly", throwIfNotFound: true);
+        m_Ground_Interact = m_Ground.FindAction("Interact", throwIfNotFound: true);
         m_Ground_PauseMenu = m_Ground.FindAction("PauseMenu", throwIfNotFound: true);
         // Menus
         m_Menus = asset.FindActionMap("Menus", throwIfNotFound: true);
@@ -571,6 +603,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Ground_ChangeOrbWeigth;
     private readonly InputAction m_Ground_ChangeWeight;
     private readonly InputAction m_Ground_ChangeOrbDirectly;
+    private readonly InputAction m_Ground_Interact;
     private readonly InputAction m_Ground_PauseMenu;
     public struct GroundActions
     {
@@ -585,6 +618,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @ChangeOrbWeigth => m_Wrapper.m_Ground_ChangeOrbWeigth;
         public InputAction @ChangeWeight => m_Wrapper.m_Ground_ChangeWeight;
         public InputAction @ChangeOrbDirectly => m_Wrapper.m_Ground_ChangeOrbDirectly;
+        public InputAction @Interact => m_Wrapper.m_Ground_Interact;
         public InputAction @PauseMenu => m_Wrapper.m_Ground_PauseMenu;
         public InputActionMap Get() { return m_Wrapper.m_Ground; }
         public void Enable() { Get().Enable(); }
@@ -622,6 +656,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @ChangeOrbDirectly.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnChangeOrbDirectly;
                 @ChangeOrbDirectly.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnChangeOrbDirectly;
                 @ChangeOrbDirectly.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnChangeOrbDirectly;
+                @Interact.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnInteract;
+                @Interact.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnInteract;
+                @Interact.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnInteract;
                 @PauseMenu.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnPauseMenu;
                 @PauseMenu.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnPauseMenu;
                 @PauseMenu.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnPauseMenu;
@@ -656,6 +693,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @ChangeOrbDirectly.started += instance.OnChangeOrbDirectly;
                 @ChangeOrbDirectly.performed += instance.OnChangeOrbDirectly;
                 @ChangeOrbDirectly.canceled += instance.OnChangeOrbDirectly;
+                @Interact.started += instance.OnInteract;
+                @Interact.performed += instance.OnInteract;
+                @Interact.canceled += instance.OnInteract;
                 @PauseMenu.started += instance.OnPauseMenu;
                 @PauseMenu.performed += instance.OnPauseMenu;
                 @PauseMenu.canceled += instance.OnPauseMenu;
@@ -725,6 +765,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnChangeOrbWeigth(InputAction.CallbackContext context);
         void OnChangeWeight(InputAction.CallbackContext context);
         void OnChangeOrbDirectly(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
         void OnPauseMenu(InputAction.CallbackContext context);
     }
     public interface IMenusActions

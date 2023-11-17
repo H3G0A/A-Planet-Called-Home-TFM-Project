@@ -172,7 +172,6 @@ public class OrbLauncher : MonoBehaviour
     {
         float aimAction = ctx.ReadValue<float>();
 
-        Debug.Log(ctx.action.WasPressedThisFrame());
         if(WaitingForDispersionOrb() && ctx.action.WasPressedThisFrame())
         {
             ShootOrb();
