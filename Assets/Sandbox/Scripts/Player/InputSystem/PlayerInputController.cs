@@ -12,6 +12,7 @@ public class PlayerInputController : MonoBehaviour
     public Vector2 Look { get; private set; }
     public bool Sprint { get; private set; }
     public bool Jump { get; set; }
+    public bool Interact { get; set; }
 
     // Orb Launcher
     OrbLauncher _launcherController;
@@ -25,6 +26,7 @@ public class PlayerInputController : MonoBehaviour
     InputAction _jumpAction;
     InputAction _sprintAction;
     InputAction _changeWeightAction;
+    InputAction _interactAction;
 
     // Orb Launcher Input Actions
     InputAction _shootAction;
@@ -45,6 +47,7 @@ public class PlayerInputController : MonoBehaviour
         _sprintAction = _playerInput.actions[SPRINT_ACTION];
         _jumpAction = _playerInput.actions[JUMP_ACTION];
         _changeWeightAction = _playerInput.actions[CHANGE_WEIGHT_ACTION];
+        _interactAction = _playerInput.actions[INTERACT_ACTION];
 
         //ORB LAUNCHER INPUTS
         _shootAction = _playerInput.actions[SHOOT_ACTION];
@@ -91,6 +94,9 @@ public class PlayerInputController : MonoBehaviour
 
         // CHANGE WEIGHT
         _changeWeightAction.performed += _playerController.ChangeWeight;
+
+        // INTERACT
+        _interactAction.performed += SetInteract;
 
 
         //////////////////////// ORB LAUNCHER INPUTS ////////////////////////////////
@@ -168,5 +174,10 @@ public class PlayerInputController : MonoBehaviour
     void SetJump(InputAction.CallbackContext ctx)
     {
         Jump = true;
+    }
+
+    void SetInteract(InputAction.CallbackContext ctx)
+    {
+        Interact = true;
     }
 }

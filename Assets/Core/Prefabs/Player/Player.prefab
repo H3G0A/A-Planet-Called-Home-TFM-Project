@@ -283,6 +283,7 @@ GameObject:
   - component: {fileID: 285370555}
   - component: {fileID: 1236055}
   - component: {fileID: 1148824889810656823}
+  - component: {fileID: 2518593955774517572}
   - component: {fileID: 5189177417038716992}
   m_Layer: 6
   m_Name: Player
@@ -392,6 +393,14 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: faca21b0-46f2-4610-8b78-e91e9fade7de
     m_ActionName: Menus/Escape[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 02dc86d5-4014-4281-ab86-e0a827192550
+    m_ActionName: Ground/Interact[/Keyboard/f]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d0ff34dc-7993-4162-ad55-896f7939365e
+    m_ActionName: Ground/PauseMenu[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Ground
@@ -496,6 +505,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8f484d1e9ef72e409f6ee5e9a616de4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2518593955774517572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8616685848737228372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9270e41e2a17a64db4274447a01dab3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _radius: 4
+  _layers:
+    serializedVersion: 2
+    m_Bits: 1024
+  _cameraRoot: {fileID: 4135013735270702856}
+  _range: 2
+  _drawGizmos: 0
 --- !u!82 &5189177417038716992
 AudioSource:
   m_ObjectHideFlags: 0

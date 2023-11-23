@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using static GlobalParameters;
 
-public class UnlockOrb : MonoBehaviour
+public class UnlockOrb : MonoBehaviour, IInteractable
 {
     [SerializeField] Orbs _orbToUnlock;
     [SerializeField] AudioClip _orbPickupSound;
+    [SerializeField] GameObject _orbMesh;
 
-    private void OnTriggerEnter(Collider other)
+    public void TriggerInteraction()
     {
-        if (other.CompareTag(PLAYER_TAG))
-        {
-            AudioSource.PlayClipAtPoint(_orbPickupSound, this.transform.position);
+        AudioSource.PlayClipAtPoint(_orbPickupSound, this.transform.position);
 
-            GameManager.Instance.EnableOrb(_orbToUnlock);
-            this.gameObject.SetActive(false);
-        }
+        GameManager.Instance.EnableOrb(_orbToUnlock);
+
+        gameObject.layer = 0;
+        _orbMesh.SetActive(false);
     }
 }
