@@ -44,15 +44,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abdef0a800b6fd444a780cdb67eceb53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CurrentControlScheme: KeyboardMouse
+  CanInteract: 0
   PlayerInputController_: {fileID: 0}
   OrbLauncher_: {fileID: 0}
   FirstPersonController_: {fileID: 0}
-  PlayerController: {fileID: 0}
+  PlayerController_: {fileID: 0}
+  InteractionHUD_: {fileID: 0}
   CurrentLevel: 0
   OrbStash:
   - Prefab: {fileID: 3763091816190321520, guid: fbc8c6956626b1d48bbb724b1da96332, type: 3}
     Available: 1
   - Prefab: {fileID: 6016317886622445584, guid: e303382b79774d948bfcbb9f1634ec15, type: 3}
-    Available: 0
+    Available: 1
   - Prefab: {fileID: 8844603512878802888, guid: b0d919d4b48061745b51560fe4396cc3, type: 3}
-    Available: 0
+    Available: 1

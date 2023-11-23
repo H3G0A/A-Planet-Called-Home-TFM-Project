@@ -15261,14 +15261,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game Manager
       objectReference: {fileID: 0}
-    - target: {fileID: 7290132790930238399, guid: 20f99f286c60e1a449dea90e077b721c, type: 3}
-      propertyPath: OrbStash.Array.data[1].Available
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7290132790930238399, guid: 20f99f286c60e1a449dea90e077b721c, type: 3}
-      propertyPath: OrbStash.Array.data[2].Available
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 20f99f286c60e1a449dea90e077b721c, type: 3}
 --- !u!1001 &2535727221627116563
