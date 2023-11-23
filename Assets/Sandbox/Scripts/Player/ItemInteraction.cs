@@ -56,11 +56,24 @@ public class ItemInteraction : MonoBehaviour
 
     private void Interact()
     {
-        if (!CheckInRadius()) return;
-
-        if (CheckInFront() && _inputController.Interact)
+        if (!CheckInRadius())
         {
-            _detectedObj.TriggerInteraction();
+            GameManager.Instance.SetInteractPromptActive(false);
+            return;
+        }
+
+        if (CheckInFront())
+        {
+            GameManager.Instance.SetInteractPromptActive(true);
+
+            if (_inputController.Interact)
+            {
+                _detectedObj.TriggerInteraction();
+            }
+        }
+        else
+        {
+            GameManager.Instance.SetInteractPromptActive(false);
         }
         
         _inputController.Interact = false;

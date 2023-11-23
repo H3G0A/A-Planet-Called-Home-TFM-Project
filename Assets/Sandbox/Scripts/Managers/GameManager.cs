@@ -6,10 +6,14 @@ using UnityEngine;
 public class GameManager : MonoBehaviour, IDataPersistence
 {
     public bool GamePaused { get; private set; }
+    public string CurrentControlScheme;
+    public bool CanInteract = false;
+
     public PlayerInputController PlayerInputController_;
     public OrbLauncher OrbLauncher_;
     public FirstPersonController FirstPersonController_;
-    public CharacterController PlayerController;
+    public CharacterController PlayerController_;
+    public InteractionHUD InteractionHUD_;
    
     public GlobalParameters.GameLevels CurrentLevel;
 
@@ -25,10 +29,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
    
     public static GameManager Instance { get; private set; }
+
     private void Awake()
     {
         Initialize();
+        
         GamePaused = false;
+
     }
 
     
@@ -56,7 +63,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         }
         else if (Instance != this)
         {
-            //If gameObject is active it's LoadData method will be called on scene load along with the persistente manager's
+            //If gameObject is active it's LoadData method will be called on scene load along with the persistence manager's
             gameObject.SetActive(false);
             Destroy(gameObject);
         }
@@ -158,5 +165,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
                 data.ActiveOrbs.Add(orbId);
             }
         }
+    }
+
+    public void SetInteractPromptActive(bool active)
+    {
+        InteractionHUD_.SetPromptActive(active);
     }
 }

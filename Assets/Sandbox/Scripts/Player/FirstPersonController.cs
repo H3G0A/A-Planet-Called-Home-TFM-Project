@@ -191,7 +191,7 @@ public class FirstPersonController : MonoBehaviour, IDataPersistence
 	void Start()
     {
 		GameManager.Instance.FirstPersonController_ = this;
-		GameManager.Instance.PlayerController = _controller;
+		GameManager.Instance.PlayerController_ = _controller;
 
 		_impactReceiver.ChangeMass(PlayerWeight);
 		_heatPercentage = 0.00f;
