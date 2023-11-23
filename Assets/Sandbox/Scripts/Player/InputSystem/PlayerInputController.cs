@@ -75,7 +75,8 @@ public class PlayerInputController : MonoBehaviour
     void EnableInputCallbacks()
     {
         _playerInput.ActivateInput();
-        
+        GameManager.Instance.CurrentControlScheme = _playerInput.currentControlScheme;
+
         //////////////////////// PLAYER INPUTS ////////////////////////////////
         // MOVE
         _moveAction.performed += SetMove;
@@ -155,6 +156,19 @@ public class PlayerInputController : MonoBehaviour
         _changeOrbWeigth.performed -= _launcherController.ChangeOrbWeigth;
     }
 
+    //This version does not work
+
+    //void SetScheme(PlayerInput input)
+    //{
+    //    Debug.Log("Current Scheme: " + input.currentControlScheme);
+    //    GameManager.Instance.CurrentControlScheme = input.currentControlScheme;
+    //}
+
+    public void SetScheme()
+    {
+        Debug.Log("Current Scheme: " + _playerInput.currentControlScheme);
+        GameManager.Instance.CurrentControlScheme = _playerInput.currentControlScheme;
+    }
 
     void SetMove(InputAction.CallbackContext ctx)
     {

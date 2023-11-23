@@ -49,6 +49,10 @@ public static class GlobalParameters
     public const string PLAYER_WATER_SURFACE_MAP = "Water Surface";
     public const string PLAYER_UNDERWATER_MAP = "Underwater";
 
+    // CONTROL SCHEMES
+    public const string KEYBOARD_SCHEME = "KeyboardMouse";
+    public const string CONTROLLER_SCHEME = "Controller";
+
     // ORBS ID
     public enum Orbs { DISPERSION = 0, ICE = 1, WEIGHT = 2 };
 }
