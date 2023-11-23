@@ -612,7 +612,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _menuCanvas: {fileID: 412165386068993944}
   _firstSelected: {fileID: 6039277778738219933}
-  _cursorState: 1
+  _cursorState: 0
 --- !u!82 &2276500804762297738
 AudioSource:
   m_ObjectHideFlags: 0
