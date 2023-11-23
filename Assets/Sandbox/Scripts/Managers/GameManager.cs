@@ -6,7 +6,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour, IDataPersistence
 {
     public bool GamePaused { get; private set; }
-    public string CurrentControlScheme;
+    public string CurrentControlScheme = GlobalParameters.KEYBOARD_SCHEME;
     public bool CanInteract = false;
 
     public PlayerInputController PlayerInputController_;

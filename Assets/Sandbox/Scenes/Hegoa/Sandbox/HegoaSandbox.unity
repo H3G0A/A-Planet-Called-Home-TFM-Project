@@ -1781,6 +1781,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2518593955774517572, guid: 3a3af90c341bfad48b7e091090deddab, type: 3}
+      propertyPath: _drawGizmos
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2518593955774517572, guid: 3a3af90c341bfad48b7e091090deddab, type: 3}
       propertyPath: _showGizmos
       value: 1
       objectReference: {fileID: 0}
@@ -10228,17 +10232,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ccd4b8cf0f6e82749ba2ce133bad017f, type: 3}
   m_PrefabInstance: {fileID: 1460654158}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1467326687 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7290132790930238399, guid: 20f99f286c60e1a449dea90e077b721c, type: 3}
-  m_PrefabInstance: {fileID: 1920229911100364008}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abdef0a800b6fd444a780cdb67eceb53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1479749111
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13786,28 +13779,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 34207044e2e24864dbddd6df7f290b6b, type: 3}
---- !u!1 &1866361463 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1946753260582443202, guid: fb72c222d52f40a4eb5e803dc9aae767, type: 3}
-  m_PrefabInstance: {fileID: 2040671761}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1866361464
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1866361463}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 437fb4af24c170f48a2fb499abdd6323, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnLink:
-    m_PersistentCalls:
-      m_Calls:
-      - {m_Target: {fileID: 1467326687}, m_TargetAssemblyTypeName: GameManager, Assembly-CSharp, m_MethodName: set_HUD, m_Mode: 2, m_Arguments: {m_ObjectArgument: {fileID: 1866361463}, m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine, m_IntArgument: 0, m_FloatArgument: 0, m_StringArgument: , m_BoolArgument: 0}, m_CallState: 2}
-    m_CallsDirty: 1
 --- !u!1 &1922343862
 GameObject:
   m_ObjectHideFlags: 0
@@ -15290,14 +15261,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game Manager
       objectReference: {fileID: 0}
-    - target: {fileID: 7290132790930238399, guid: 20f99f286c60e1a449dea90e077b721c, type: 3}
-      propertyPath: OrbStash.Array.data[1].Available
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7290132790930238399, guid: 20f99f286c60e1a449dea90e077b721c, type: 3}
-      propertyPath: OrbStash.Array.data[2].Available
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 20f99f286c60e1a449dea90e077b721c, type: 3}
 --- !u!1001 &2535727221627116563
@@ -15411,6 +15374,10 @@ PrefabInstance:
     - target: {fileID: 7431900084434130531, guid: d11b0f407aea3734abc85a3b0dd91747, type: 3}
       propertyPath: m_Name
       value: Pause Menu
+      objectReference: {fileID: 0}
+    - target: {fileID: 9096263254451813871, guid: d11b0f407aea3734abc85a3b0dd91747, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d11b0f407aea3734abc85a3b0dd91747, type: 3}

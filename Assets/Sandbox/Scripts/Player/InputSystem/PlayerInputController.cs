@@ -60,6 +60,7 @@ public class PlayerInputController : MonoBehaviour
     {
         //Set reference in GameManager
         GameManager.Instance.PlayerInputController_ = this;
+        //SetScheme();
     }
 
     void OnEnable()
@@ -166,7 +167,6 @@ public class PlayerInputController : MonoBehaviour
 
     public void SetScheme()
     {
-        Debug.Log("Current Scheme: " + _playerInput.currentControlScheme);
         GameManager.Instance.CurrentControlScheme = _playerInput.currentControlScheme;
     }
 
