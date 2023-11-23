@@ -15,7 +15,6 @@ public class MainMenu : MonoBehaviour
     private void Awake()
     {   
         _audioSource = GetComponent<AudioSource>();
-
     }
 
     private void Start()
