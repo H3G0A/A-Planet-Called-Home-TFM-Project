@@ -1,0 +1,15 @@
+Hola, esta es una prueba para comprobar que es posible pasar el contenido de un archivo .txt a un objeto del tipo TextMeshPro de Unity.
+
+A continuación, algunos caracteres especiales: ` + " ' ´ ! ¡ ¿ ? ¨
+
+Espero que todo haya salido bien.
+
+
+
+
+
+
+
+
+
+Atte. Hegoa Ria.

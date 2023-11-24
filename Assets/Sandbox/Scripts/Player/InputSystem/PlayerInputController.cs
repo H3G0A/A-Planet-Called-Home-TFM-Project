@@ -60,7 +60,6 @@ public class PlayerInputController : MonoBehaviour
     {
         //Set reference in GameManager
         GameManager.Instance.PlayerInputController_ = this;
-        //SetScheme();
     }
 
     void OnEnable()
@@ -99,6 +98,7 @@ public class PlayerInputController : MonoBehaviour
 
         // INTERACT
         _interactAction.performed += SetInteract;
+        _interactAction.canceled += SetInteract;
 
 
         //////////////////////// ORB LAUNCHER INPUTS ////////////////////////////////
@@ -139,6 +139,10 @@ public class PlayerInputController : MonoBehaviour
 
         // CHANGE WEIGHT
         _changeWeightAction.performed -= _playerController.ChangeWeight;
+
+        // INTERACT
+        _interactAction.performed -= SetInteract;
+        _interactAction.canceled -= SetInteract;
 
 
         //////////////////////// ORB LAUNCHER INPUTS ////////////////////////////////
@@ -192,6 +196,6 @@ public class PlayerInputController : MonoBehaviour
 
     void SetInteract(InputAction.CallbackContext ctx)
     {
-        Interact = true;
+        Interact = ctx.action.WasPerformedThisFrame();
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class ItemInteraction : MonoBehaviour
 {
@@ -18,18 +19,29 @@ public class ItemInteraction : MonoBehaviour
     [SerializeField] bool _drawGizmos = false;
 
     // Scripts
-    PlayerInputController _inputController;
+    PlayerControls _input;
     IInteractable _detectedObj;
+
+    bool _canInteract = false;
 
 
     private void Awake()
     {
-        _inputController = GetComponent<PlayerInputController>();
+        _input = new PlayerControls();
+    }
+    private void OnEnable()
+    {
+        EnableInput();
+    }
+
+    private void OnDisable()
+    {
+        DisableInput();
     }
 
     private void Update()
     {
-        Interact();
+        InteractPrompt();
     }
 
     private bool CheckInRadius()
@@ -54,30 +66,55 @@ public class ItemInteraction : MonoBehaviour
         return wasDetected;
     }
 
-    private void Interact()
+    private void InteractPrompt()
     {
         if (!CheckInRadius())
         {
-            GameManager.Instance.SetInteractPromptActive(false);
+            SetPrompt(false);
             return;
         }
 
         if (CheckInFront())
         {
-            GameManager.Instance.SetInteractPromptActive(true);
-
-            if (_inputController.Interact)
-            {
-                _detectedObj.TriggerInteraction();
-            }
+            SetPrompt(true);
         }
         else
         {
-            GameManager.Instance.SetInteractPromptActive(false);
+            SetPrompt(false);
         }
-        
-        _inputController.Interact = false;
     }
+
+    private void SetPrompt(bool enabled)
+    {
+        GameManager.Instance.SetInteractPromptActive(enabled);
+        _canInteract = enabled;
+    }
+
+    private void Interact(InputAction.CallbackContext ctx)
+    {
+        if (!ctx.action.WasPerformedThisFrame()) return;
+
+        if (GameManager.Instance._HUDTextNote.activeSelf)
+        {
+            GameManager.Instance.HideNote();
+        }
+        else
+        {
+            _detectedObj.TriggerInteraction();
+        }
+    }
+
+    private void EnableInput()
+    {
+        _input.Ground.Enable();
+        _input.Ground.Interact.performed += Interact;
+    }
+
+    private void DisableInput()
+    {
+        _input.Ground.Interact.performed -= Interact;
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////
     private void OnDrawGizmos()
