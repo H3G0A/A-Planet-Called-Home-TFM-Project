@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour, IDataPersistence
 {
@@ -16,6 +17,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public InteractionHUD InteractionHUD_;
    
     public GlobalParameters.GameLevels CurrentLevel;
+
+    public GameObject _HUDTextNote;
+
+    int _pauseCounter;
 
     [Serializable]
     public class Orb
@@ -77,6 +82,9 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void PauseGame()
     {
         GamePaused = true;
+        
+        // No need to pause again if it was already paused
+        if(_pauseCounter++ > 0) return;
 
         // Stop all time based events
         _lastTimeScale = Time.timeScale;
@@ -92,12 +100,23 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void ResumeGame()
     {
+        // Do not resume until every element that pauses the game dissapears
+        if(--_pauseCounter > 0) return;
+
         GamePaused = false;
         Time.timeScale = _lastTimeScale;
 
         if (PlayerInputController_ != null) PlayerInputController_.enabled = true;
 
+        _pauseCounter = 0;
+
         AudioListener.pause = false;
+    }
+
+    public void ForceResumeGame()
+    {
+        _pauseCounter = 0;
+        ResumeGame();
     }
 
     public void EnableOrb(GlobalParameters.Orbs orbName)
@@ -170,5 +189,31 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void SetInteractPromptActive(bool active)
     {
         InteractionHUD_.SetPromptActive(active);
+    }
+
+    public void ReadNote(string _text)
+    {
+        PauseGame();
+        _HUDTextNote.GetComponentInChildren<TextMeshProUGUI>().text = _text;
+        _HUDTextNote.SetActive(true);
+    }
+
+    public void HideNote()
+    {
+        ResumeGame();
+        _HUDTextNote.SetActive(false);
+    }
+
+    public void LinkObject(GameObject obj)
+    {
+        switch (obj.tag)
+        {
+            case GlobalParameters.HUD_TEXT_NOTE_TAG:
+                _HUDTextNote = obj;
+                break;
+
+            default:
+                break;
+        };
     }
 }

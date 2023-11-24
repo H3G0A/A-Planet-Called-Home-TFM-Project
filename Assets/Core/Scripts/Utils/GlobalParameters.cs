@@ -9,7 +9,7 @@ public static class GlobalParameters
     public enum Scenes { MainMenu, NewGameCinematic, Fungi_Spawn, Fungi_DispersionOrb, Fungi_IceOrb, Fungi_End, Heat_Spawn, Heat_Caves, Heat_End, EndGameCinematic };
     public enum GameLevels { Fungi_Spawn, Fungi_DispersionOrb, Fungi_IceOrb, Fungi_End, Heat_Spawn, Heat_Caves, Heat_End }
 
-    // TAGS
+    ///////////////////////// TAGS
     public const string ORB_TAG = "Orb";
     public const string PLAYER_TAG = "Player";
     public const string ICE_TAG = "Ice";
@@ -22,6 +22,9 @@ public static class GlobalParameters
     public const string WORLD_BOUNDS_TAG = "WorldBounds";
     public const string WET_FLOOR_TAG = "WetFloor";
     public const string WATERFALL_TAG = "Waterfall";
+
+    // HUD
+    public const string HUD_TEXT_NOTE_TAG = "HUDTextNote";
 
     // LAYERS
     public const int GROUND_LAYER = 3;

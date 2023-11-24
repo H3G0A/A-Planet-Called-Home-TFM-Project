@@ -16,6 +16,7 @@ TagManager:
   - WorldBounds
   - WetFloor
   - Waterfall
+  - HUDTextNote
   layers:
   - Default
   - TransparentFX
